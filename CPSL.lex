@@ -39,15 +39,17 @@ write|WRITE {std::cout << "TOKEN::WRITE" << std::endl;}
 
 [a-zA-Z][a-zA-Z0-9_]* {std::cout << "TOKEN:ID" << std::endl;}
 
-\+ {std::cout << "TOKEN::DELIM" << std::endl;}
-\- {std::cout << "TOKEN::DELIM" << std::endl;}
-\* {std::cout << "TOKEN::DELIM" << std::endl;}
-\/ {std::cout << "TOKEN::DELIM" << std::endl;}
-\& {std::cout << "TOKEN::DELIM" << std::endl;}
-\| {std::cout << "TOKEN::DELIM" << std::endl;}
-\~ {std::cout << "TOKEN::DELIM" << std::endl;}
-\= {std::cout << "TOKEN::DELIM" << std::endl;}
-\<\> {std::cout << "TOKEN::DELIM" << std::endl;}
+[ \t\n]* {std::cout << "TOKEN::DELIM" << std::endl;}
+
+\+ {std::cout << "TOKEN::OP_PLUS" << std::endl;}
+\- {std::cout << "TOKEN::OP_MINUS" << std::endl;}
+\* {std::cout << "TOKEN::OP_MULTIPLY" << std::endl;}
+\/ {std::cout << "TOKEN::OP_DIVIDE" << std::endl;}
+\& {std::cout << "TOKEN::OP_AND" << std::endl;}
+\| {std::cout << "TOKEN::OP_OR" << std::endl;}
+\~ {std::cout << "TOKEN::OP_NOT" << std::endl;}
+\= {std::cout << "TOKEN::OP_EQUAL" << std::endl;}
+\<\> {std::cout << "TOKEN::OP_NEQUAL" << std::endl;}
 \< {std::cout << "TOKEN::DELIM" << std::endl;}
 \<= {std::cout << "TOKEN::DELIM" << std::endl;}
 \> {std::cout << "TOKEN::DELIM" << std::endl;}
@@ -76,12 +78,9 @@ write|WRITE {std::cout << "TOKEN::WRITE" << std::endl;}
 
 \$.*$ {std::cout << "COMMENT" << std::endl;}
 
-[\s\n]* {}
-
 %%
 
 int main()
 {
-  printf("Give me your input:\n");
   yylex();
 }
