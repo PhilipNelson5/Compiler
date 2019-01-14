@@ -1,0 +1,2 @@
+Do we need to use word boundaries on the regular expressions?
+  ex: 0x should not recognize as TOKEN::NUM_CONST TOKEN::ID
