@@ -70,12 +70,13 @@ write|WRITE {std::cout << "TOKEN::WRITE" << std::endl;}
 
 \'.\' {std::cout << "TOKEN::CHAR" << std::endl;}
 \'\\[nrbtf]\' {std::cout << "TOKEN::CHAR" << std::endl;}
+\'\\.\' {std::cout << "TOKEN::CHAR" << std::endl;}
 
 \"(\\.|[^"\\])*\" {std::cout << "TOKEN::STRING" << std::endl;}
 
 \$.*$ {std::cout << "COMMENT" << std::endl;}
 
-[\s]* {}
+[\s\n]* {}
 
 %%
 
