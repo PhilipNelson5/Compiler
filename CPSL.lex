@@ -65,7 +65,7 @@ write|WRITE {std::cout << "TOKEN::WRITE" << std::endl;}
 := {std::cout << "TOKEN::DELIM" << std::endl;}
 \% {std::cout << "TOKEN::DELIM" << std::endl;}
 
-0[0-9]+ {std::cout << "TOKEN::NUM_CONST_OCT" << std::endl;}
+0[0-7]+ {std::cout << "TOKEN::NUM_CONST_OCT" << std::endl;}
 0[xX][a-fA-F0-9]+ {std::cout << "TOKEN::NUM_CONST_HEX" << std::endl;}
 0[bB][01]+ {std::cout << "TOKEN::NUM_CONST_BIN" << std::endl;}
 [0-9]+ {std::cout << "TOKEN::NUM_CONST_DEC" << std::endl;}
