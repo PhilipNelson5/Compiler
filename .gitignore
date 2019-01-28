@@ -30,3 +30,16 @@
 *.exe
 *.out
 *.app
+
+# Flex
+lex.yy.c
+ 
+# Bison
+parser.tab.c
+parser.tab.h
+
+# cmake
+Makefile
+CMakeCache.txt
+CMakFiles/*
+cmake_installs.cmake
