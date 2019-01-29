@@ -45,5 +45,5 @@ parser.cpp
 # cmake
 Makefile
 CMakeCache.txt
-CMakFiles/*
-cmake_installs.cmake
+CMakeFiles/*
+cmake_install.cmake
