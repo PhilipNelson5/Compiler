@@ -30,6 +30,7 @@
 *.exe
 *.out
 *.app
+cpsl
 
 # Flex
 lex.yy.c
@@ -37,6 +38,8 @@ lex.yy.c
 # Bison
 parser.tab.c
 parser.tab.h
+parser.hpp
+parser.cpp
 
 # cmake
 Makefile
