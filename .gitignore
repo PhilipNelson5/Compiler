@@ -34,6 +34,7 @@ cpsl
 
 # Flex
 lex.yy.c
+scanner.cpp
  
 # Bison
 parser.tab.c
