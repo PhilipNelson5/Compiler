@@ -2,8 +2,17 @@
 #include <cstdlib>
 
 #include "parser.hpp"
+
 extern "C" int yylex();
+
+unsigned int yycolumn = 1;
+
+#define YY_USER_ACTION \
+  yycolumn += yyleng;
+
 %}
+
+%option yylineno noyywrap
 
 %%
 
@@ -81,6 +90,8 @@ write|WRITE           { return WRITE_T; }
                         
 \$.*$                 { }
                         
-[ \t\n]*              { }
-                        
+[ \t]*                { }
+
+[\n]                  { yycolumn = 1; }
+
 %%
