@@ -37,38 +37,36 @@ var|VAR {std::cout << "TOKEN::VAR" << std::endl;}
 while|WHILE {std::cout << "TOKEN::WHILE" << std::endl;}
 write|WRITE {std::cout << "TOKEN::WRITE" << std::endl;}
 
-[a-zA-Z][a-zA-Z0-9_]* {std::cout << "TOKEN:ID" << std::endl;}
+[a-zA-Z][a-zA-Z0-9_]* {std::cout << "TOKEN::ID" << std::endl;}
 
-[ \t\n]* {std::cout << "TOKEN::DELIM" << std::endl;}
+\+ {std::cout << "TOKEN::PLUS" << std::endl;}
+\- {std::cout << "TOKEN::MINUS" << std::endl;}
+\* {std::cout << "TOKEN::MULTIPLY" << std::endl;}
+\/ {std::cout << "TOKEN::DIVIDE" << std::endl;}
+\& {std::cout << "TOKEN::AND" << std::endl;}
+\| {std::cout << "TOKEN::OR" << std::endl;}
+\~ {std::cout << "TOKEN::NOT" << std::endl;}
+\= {std::cout << "TOKEN::EQUAL" << std::endl;}
+\<\> {std::cout << "TOKEN::NEQUAL" << std::endl;}
+\< {std::cout << "TOKEN::LT" << std::endl;}
+\<= {std::cout << "TOKEN::LTE" << std::endl;}
+\> {std::cout << "TOKEN::GT" << std::endl;}
+\>= {std::cout << "TOKEN::GTE" << std::endl;}
+\. {std::cout << "TOKEN::FULL_STOP" << std::endl;}
+, {std::cout << "TOKEN::COMMA" << std::endl;}
+: {std::cout << "TOKEN::COLON" << std::endl;}
+; {std::cout << "TOKEN::SEMI_COLON" << std::endl;}
+\( {std::cout << "TOKEN::OPEN_PAREN" << std::endl;}
+\) {std::cout << "TOKEN::CLOSE_PAREN" << std::endl;}
+\[ {std::cout << "TOKEN::OPEN_BRACKET" << std::endl;}
+\] {std::cout << "TOKEN::CLOSE_BRACKET" << std::endl;}
+:= {std::cout << "TOKEN::ASSIGN" << std::endl;}
+\% {std::cout << "TOKEN::MOD" << std::endl;}
 
-\+ {std::cout << "TOKEN::OP_PLUS" << std::endl;}
-\- {std::cout << "TOKEN::OP_MINUS" << std::endl;}
-\* {std::cout << "TOKEN::OP_MULTIPLY" << std::endl;}
-\/ {std::cout << "TOKEN::OP_DIVIDE" << std::endl;}
-\& {std::cout << "TOKEN::OP_AND" << std::endl;}
-\| {std::cout << "TOKEN::OP_OR" << std::endl;}
-\~ {std::cout << "TOKEN::OP_NOT" << std::endl;}
-\= {std::cout << "TOKEN::OP_EQUAL" << std::endl;}
-\<\> {std::cout << "TOKEN::OP_NEQUAL" << std::endl;}
-\< {std::cout << "TOKEN::DELIM" << std::endl;}
-\<= {std::cout << "TOKEN::DELIM" << std::endl;}
-\> {std::cout << "TOKEN::DELIM" << std::endl;}
-\>= {std::cout << "TOKEN::DELIM" << std::endl;}
-\. {std::cout << "TOKEN::DELIM" << std::endl;}
-, {std::cout << "TOKEN::DELIM" << std::endl;}
-: {std::cout << "TOKEN::DELIM" << std::endl;}
-; {std::cout << "TOKEN::DELIM" << std::endl;}
-\( {std::cout << "TOKEN::DELIM" << std::endl;}
-\) {std::cout << "TOKEN::DELIM" << std::endl;}
-\[ {std::cout << "TOKEN::DELIM" << std::endl;}
-\] {std::cout << "TOKEN::DELIM" << std::endl;}
-:= {std::cout << "TOKEN::DELIM" << std::endl;}
-\% {std::cout << "TOKEN::DELIM" << std::endl;}
-
-0[0-7]+ {std::cout << "TOKEN::NUM_CONST_OCT" << std::endl;}
-0[xX][a-fA-F0-9]+ {std::cout << "TOKEN::NUM_CONST_HEX" << std::endl;}
-0[bB][01]+ {std::cout << "TOKEN::NUM_CONST_BIN" << std::endl;}
-[0-9]+ {std::cout << "TOKEN::NUM_CONST_DEC" << std::endl;}
+0[0-7]+ {std::cout << "TOKEN::NUMBER" << std::endl;}
+0[xX][a-fA-F0-9]+ {std::cout << "TOKEN::NUMBER" << std::endl;}
+0[bB][01]+ {std::cout << "TOKEN::NUMBER" << std::endl;}
+[0-9]+ {std::cout << "TOKEN::NUMBER" << std::endl;}
 
 \'.\' {std::cout << "TOKEN::CHAR" << std::endl;}
 \'\\[nrbtf]\' {std::cout << "TOKEN::CHAR" << std::endl;}
@@ -77,6 +75,9 @@ write|WRITE {std::cout << "TOKEN::WRITE" << std::endl;}
 \"(\\.|[^"\\])*\" {std::cout << "TOKEN::STRING" << std::endl;}
 
 \$.*$ {std::cout << "COMMENT" << std::endl;}
+
+[ \t\n]* {}
+
 
 %%
 
