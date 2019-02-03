@@ -1,4 +1,5 @@
 Do we need to use word boundaries on the regular expressions?
+
   ex: 0x should not recognize as TOKEN::NUM_CONST TOKEN::ID
   ANSWER: That is not a lexical error, it is a syntactic error
 
@@ -20,3 +21,5 @@ How should the executable be named etc?
           Make your own command line flags for debugging
 
 Empty records are legal in CPSL and c/c++. What is an empty record or struct good for?
+
+Does every nonterminal symbol need a type?

@@ -86,9 +86,62 @@ void yyerror(const char*);
 %token STRING_T
 
 %type <int_val>  NUMBER_T
-%type <int_val>  Expression
 %type <char_val> CHAR_T
 %type <str_val>  ID_T
+
+%type <int_val> Program
+%type <int_val> OptConstDecls
+%type <int_val> ConstDeclList
+%type <int_val> ConstDecl
+%type <int_val> OptProcedureAndFunctionDeclList
+%type <int_val> ProcedureAndFunctionDeclList
+%type <int_val> ProcedureDecl
+%type <int_val> FunctionDecl
+%type <int_val> FormalParameters
+%type <int_val> FormalParameterList
+%type <int_val> FormalParameter
+%type <int_val> Body
+%type <int_val> Block
+%type <int_val> OptTypeDecls
+%type <int_val> TypeDeclList
+%type <int_val> TypeDecl
+%type <int_val> Type
+%type <int_val> SimpleType
+%type <int_val> RecordType
+%type <int_val> OptFieldList
+%type <int_val> FieldList
+%type <int_val> Field
+%type <int_val> ArrayType
+%type <int_val> IdentList
+%type <int_val> OptIdentList
+%type <int_val> OptVariableDecls
+%type <int_val> StatementSequence
+%type <int_val> OptStatmentList
+%type <int_val> StatementList
+%type <int_val> Statement
+%type <int_val> Assignment
+%type <int_val> IfStatement
+%type <int_val> OptElseIfStatementList
+%type <int_val> ElseIfStatementList
+%type <int_val> OptElseStatement
+%type <int_val> WhileStatement
+%type <int_val> RepeatStatement
+%type <int_val> ForStatement
+%type <int_val> StopStatement
+%type <int_val> ReturnStatement
+%type <int_val> ReadStatement
+%type <int_val> OptLValueList
+%type <int_val> WriteStatement
+%type <int_val> ExpressionList
+%type <int_val> OptExpressionList
+%type <int_val> ProcedureCall
+%type <int_val> NullStatement
+%type <int_val> Expression
+%type <int_val> LValue
+%type <int_val> OptMemberAccessOrSubscriptList
+%type <int_val> MemberAccessOrSubscriptList
+%type <int_val> MemberAccess
+%type <int_val> Subscript
 
 %right     UNARY_MINUS_T
 %left      MULTIPLY_T DIVIDE_T MOD_T
@@ -286,16 +339,7 @@ OptExpressionList : OptExpressionList COMMA_T Expression {}
                   | /* λ */ {}
                   ;
 
-ProcedureCall     : ID_T OPEN_PAREN_T OptArg OptArgList CLOSE_PAREN_T {}
-                  ;
-
-OptArg            : Expression {}
-                  | /* λ */ {}
-                  ;
-
-OptArgList        : OptArgList COMMA_T Expression {}
-                  | COMMA_T Expression {}
-                  | /* λ */ {}
+ProcedureCall     : ID_T OPEN_PAREN_T ExpressionList CLOSE_PAREN_T {}
                   ;
 
 NullStatement     : /* λ */ {}

@@ -5,7 +5,7 @@ extern int yydebug;
 
 int main()
 {
-  //yydebug = 1;
+  yydebug = 1;
   symbol_table.enter_scope();
   yyparse();
 };
