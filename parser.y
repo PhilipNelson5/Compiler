@@ -6,6 +6,7 @@
 #include "symbol_table.hpp"
 
 #define YYERROR_VERBOSE 1
+#define DEBUG 1
 
 extern "C" int yylex();
 extern char * yytext;
@@ -13,7 +14,7 @@ extern unsigned int yylineno;
 extern unsigned int yycolumn;
 void yyerror(const char*);
 %}
-
+%define parse.trace
 %union
 {
   int int_val;
@@ -190,7 +191,7 @@ FieldList         : FieldList Field {}
 Field             : IdentList COLON_T Type SEMI_COLON_T {}
                   ;
 
-ArrayType         : ARRAY_T OPEN_BRACKET_T Expression COLON_T CLOSE_BRACKET_T OF_T Type {}
+ArrayType         : ARRAY_T OPEN_BRACKET_T Expression COLON_T Expression CLOSE_BRACKET_T OF_T Type {}
                   ;
 
 IdentList         : ID_T OptIdentList {}
@@ -245,7 +246,8 @@ ElseIfStatementList    : ElseIfStatementList ELSEIF_T Expression THEN_T Statemen
                        | ELSEIF_T Expression THEN_T StatementSequence {}
                        ;
 
-OptElseStatement       :  ELSE_T StatementSequence END_T {}
+OptElseStatement       :  ELSE_T StatementSequence {}
+                       | /* λ */ {}
                        ;
 
 WhileStatement    : WHILE_T Expression DO_T StatementSequence END_T {}
@@ -255,7 +257,7 @@ RepeatStatement   : REPEAT_T StatementSequence UNTIL_T Expression {}
                   ;
 
 ForStatement      : FOR_T ID_T ASSIGN_T Expression TO_T Expression DO_T StatementSequence END_T {}
-                  | FOR_T ID_T ASSIGN_T Expression TO_T Expression DOWNTO_T StatementSequence END_T {}
+                  | FOR_T ID_T ASSIGN_T Expression DOWNTO_T Expression DO_T StatementSequence END_T {}
                   ;
 
 StopStatement     : STOP_T {}
