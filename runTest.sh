@@ -4,16 +4,6 @@ GREEN='\033[0;32m'
 RESET='\033[0m'
 
 file=$(find test -type f | grep --invert-match '/lexical/' | grep $1 | head -n 1)
-echo $file
-printf '━%.0s' $(seq 1 $(tput cols))
-echo ""
-
-cat -n $file
-
-printf '━%.0s' $(seq 1 $(tput cols))
-echo ""
-echo ""
-
 output=$(./cpsl < ${file} 2>&1)
 
 if [[ -z ${output} ]]; then
@@ -23,4 +13,14 @@ else
   echo "${output}"
 fi
 
+echo ""
+
+echo $file
+printf '━%.0s' $(seq 1 $(tput cols))
+echo ""
+
+cat -n $file
+
+printf '━%.0s' $(seq 1 $(tput cols))
+echo ""
 echo ""
