@@ -14,7 +14,9 @@ extern unsigned int yylineno;
 extern unsigned int yycolumn;
 void yyerror(const char*);
 %}
+
 %define parse.trace
+
 %union
 {
   int int_val;
