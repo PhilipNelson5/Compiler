@@ -91,6 +91,8 @@ void yyerror(const char*);
 %type <char_val> CHAR_T
 %type <str_val>  ID_T
 
+%type <int_val> COMMA_T
+
 %type <int_val> Program
 %type <int_val> OptConstDecls
 %type <int_val> ConstDeclList
@@ -345,7 +347,11 @@ ExpressionList    : ExpressionList COMMA_T Expression {}
                   | COMMA_T Expression {}
                   ;
 
-ProcedureCall     : ID_T OPEN_PAREN_T  OptExpressionList CLOSE_PAREN_T {}
+ProcedureCall     : ID_T OPEN_PAREN_T ProcedureArgList CLOSE_PAREN_T {}
+                  ;
+
+ProcedureArgList  : Expression OptExpressionList
+                  | /* λ */ {}
                   ;
 
 NullStatement     : /* λ */ {}
