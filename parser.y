@@ -112,8 +112,8 @@ void yyerror(const char*);
 %type <int_val> FieldList
 %type <int_val> Field
 %type <int_val> ArrayType
-%type <int_val> IdentList
 %type <int_val> OptIdentList
+%type <int_val> IdentList
 %type <int_val> OptVariableDecls
 %type <int_val> StatementSequence
 %type <int_val> OptStatmentList
@@ -131,9 +131,10 @@ void yyerror(const char*);
 %type <int_val> ReturnStatement
 %type <int_val> ReadStatement
 %type <int_val> OptLValueList
+%type <int_val> LValueList
 %type <int_val> WriteStatement
-%type <int_val> ExpressionList
 %type <int_val> OptExpressionList
+%type <int_val> ExpressionList
 %type <int_val> ProcedureCall
 %type <int_val> NullStatement
 %type <int_val> Expression
@@ -199,9 +200,9 @@ FormalParameterList             : FormalParameterList SEMI_COLON_T FormalParamet
                                 | FormalParameter {}
                                 ;
 
-FormalParameter                 : VAR_T IdentList COLON_T Type {}
-                                | REF_T IdentList COLON_T Type {}
-                                |       IdentList COLON_T Type {}
+FormalParameter                 : VAR_T ID_T OptIdentList COLON_T Type {}
+                                | REF_T ID_T OptIdentList COLON_T Type {}
+                                |       ID_T OptIdentList COLON_T Type {}
                                 ;
 
 Body                            : OptConstDecls OptTypeDecls OptVariableDecls Block {}
@@ -241,18 +242,18 @@ FieldList         : FieldList Field {}
                   | Field {}
                   ;
 
-Field             : IdentList COLON_T Type SEMI_COLON_T {}
+Field             : ID_T OptIdentList COLON_T Type SEMI_COLON_T {}
                   ;
 
 ArrayType         : ARRAY_T OPEN_BRACKET_T Expression COLON_T Expression CLOSE_BRACKET_T OF_T Type {}
                   ;
 
-IdentList         : ID_T OptIdentList {}
+OptIdentList      : IdentList {}
+                  | /* λ */ {}
                   ;
 
-OptIdentList      : COMMA_T ID_T OptIdentList {}
-                  | COMMA_T ID_T {}
-                  | /* λ */ {}
+IdentList         : IdentList COMMA_T ID_T
+                  | COMMA_T ID_T
                   ;  
 
 /* 3.1.4 Variable Declerations */
@@ -323,23 +324,26 @@ ReturnStatement   : RETURN_T {}
 ReadStatement     : READ_T OPEN_PAREN_T LValue OptLValueList CLOSE_PAREN_T {}
                   ;
 
-OptLValueList     : OptLValueList COMMA_T LValue {}
+OptLValueList     : LValueList {}
+                  | /* λ */ {}
+                  ;
+
+LValueList        : LValueList COMMA_T LValue {}
                   | COMMA_T LValue {}
+                  ;
+
+WriteStatement    : WRITE_T OPEN_PAREN_T Expression OptExpressionList CLOSE_PAREN_T {}
+                  ;
+
+OptExpressionList : ExpressionList
                   | /* λ */ {}
                   ;
 
-WriteStatement    : WRITE_T OPEN_PAREN_T ExpressionList CLOSE_PAREN_T {}
-                  ;
-
-ExpressionList    : Expression OptExpressionList
-                  ;
-
-OptExpressionList : OptExpressionList COMMA_T Expression {}
+ExpressionList    : ExpressionList COMMA_T Expression {}
                   | COMMA_T Expression {}
-                  | /* λ */ {}
                   ;
 
-ProcedureCall     : ID_T OPEN_PAREN_T ExpressionList CLOSE_PAREN_T {}
+ProcedureCall     : ID_T OPEN_PAREN_T  OptExpressionList CLOSE_PAREN_T {}
                   ;
 
 NullStatement     : /* λ */ {}
