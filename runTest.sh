@@ -9,9 +9,9 @@ printf '━%.0s' $(seq 1 $(tput cols))
 echo ""
 
 cat -n $file
-echo ""
 
 printf '━%.0s' $(seq 1 $(tput cols))
+echo ""
 echo ""
 
 output=$(./cpsl < ${file} 2>&1)

@@ -5,20 +5,21 @@ RESET='\033[0m'
 passed=0;
 tests=0;
 for file in $(find test -type f | grep --invert-match '/lexical/'); do
-  printf '━%.0s' $(seq 1 $(tput cols))
-  echo ""
-
   output=$(./cpsl < ${file} 2>&1)
 
   if [[ -z ${output} ]]; then
     echo -e "$GREEN[ PASS ]$RESET cpsl < ${file}"
     ((++passed))
   else
+    #printf '━%.0s' $(seq 1 $(tput cols))
+    #echo ""
+
     echo -e "$RED[ FAIL ]$RESET cpsl < ${file}"
     echo "${output}"
+
+    echo ""
   fi
 
-  echo ""
   ((++tests))
 done
 
