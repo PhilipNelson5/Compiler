@@ -1,5 +1,4 @@
 Do we need to use word boundaries on the regular expressions?
-
   ex: 0x should not recognize as TOKEN::NUM_CONST TOKEN::ID
   ANSWER: That is not a lexical error, it is a syntactic error
 
@@ -10,9 +9,8 @@ What tokens do we define for delimiters?
   ANSWER: Provide as much detail from the parser as possible,
           everything should just get its own token
 
-Can we talk about how the language is defined in the CPSL doc and the bison syntax?
-
 You use ?, *, + in the CPSL doc, does bison support this or do we need to express this another way.
+  ANSWER: NO
 
 How should the executable be named etc?
   ANSWER: cpsl < in.cpsl > out.asm
@@ -21,5 +19,9 @@ How should the executable be named etc?
           Make your own command line flags for debugging
 
 Empty records are legal in CPSL and c/c++. What is an empty record or struct good for?
+  ANSWER: Tag types.
 
 Does every nonterminal symbol need a type?
+  ANSWER: Yes, for explicitly building the tree they will be node types.
+
+Is it a bad idea for the register pool to be a private static vector of registers with static functions that modify it?
