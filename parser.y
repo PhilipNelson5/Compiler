@@ -162,20 +162,24 @@ void yyerror(const char*);
 /* List postfix means one or more (+) */
 /* OptList means zero or more     (*) */
 
-Program           : OptConstDecls OptTypeDecls OptVariableDecls OptProcedureAndFunctionDeclList Block DOT_T {}
-                  ;
+Program                         : OptConstDecls
+                                  OptTypeDecls
+                                  OptVariableDecls
+                                  OptProcedureAndFunctionDeclList
+                                  Block DOT_T {}
+                                ;
 
 /* 3.1.1 Constant Declerations */
-OptConstDecls     : CONST_T ConstDeclList {}
-                  | /* λ */ {}
-                  ;
+OptConstDecls                   : CONST_T ConstDeclList {}
+                                | /* λ */ {}
+                                ;
 
-ConstDeclList     : ConstDeclList ConstDecl {}
-                  | ConstDecl {}
-                  ;
+ConstDeclList                   : ConstDeclList ConstDecl {}
+                                | ConstDecl {}
+                                ;
 
-ConstDecl         : ID_T EQUAL_T Expression SEMI_COLON_T {}
-                  ;
+ConstDecl                       : ID_T EQUAL_T Expression SEMI_COLON_T {}
+                                ;
 
 /* 3.1.2 Procedure and Function Declarations */
 OptProcedureAndFunctionDeclList : ProcedureAndFunctionDeclList {}
@@ -188,12 +192,16 @@ ProcedureAndFunctionDeclList    : ProcedureAndFunctionDeclList ProcedureDecl  {}
                                 | FunctionDecl {}
                                 ;
 
-ProcedureDecl                   : PROCEDURE_T ID_T OPEN_PAREN_T FormalParameters CLOSE_PAREN_T SEMI_COLON_T FORWARD_T SEMI_COLON_T {}
-                                | PROCEDURE_T ID_T OPEN_PAREN_T FormalParameters CLOSE_PAREN_T SEMI_COLON_T Body SEMI_COLON_T {}
+ProcedureDecl                   : PROCEDURE_T ID_T OPEN_PAREN_T FormalParameters CLOSE_PAREN_T
+                                    SEMI_COLON_T FORWARD_T SEMI_COLON_T {}
+                                | PROCEDURE_T ID_T OPEN_PAREN_T FormalParameters CLOSE_PAREN_T
+                                    SEMI_COLON_T Body SEMI_COLON_T {}
                                 ;
 
-FunctionDecl                    : FUNCTION_T ID_T OPEN_PAREN_T FormalParameters CLOSE_PAREN_T COLON_T Type SEMI_COLON_T FORWARD_T SEMI_COLON_T  {}
-                                | FUNCTION_T ID_T OPEN_PAREN_T FormalParameters CLOSE_PAREN_T COLON_T Type SEMI_COLON_T Body SEMI_COLON_T {}
+FunctionDecl                    : FUNCTION_T ID_T OPEN_PAREN_T FormalParameters CLOSE_PAREN_T
+                                    COLON_T Type SEMI_COLON_T FORWARD_T SEMI_COLON_T  {}
+                                | FUNCTION_T ID_T OPEN_PAREN_T FormalParameters CLOSE_PAREN_T
+                                    COLON_T Type SEMI_COLON_T Body SEMI_COLON_T {}
                                 ;
 
 FormalParameters                : FormalParameterList  {}
@@ -216,194 +224,199 @@ Block                           : BEGIN_T StatementSequence END_T {}
                                 ;
 
 /* 3.1.3 Type Declerations */
-OptTypeDecls      : TYPE_T TypeDeclList {}
-                  | /* λ */ {}
-                  ;
+OptTypeDecls                    : TYPE_T TypeDeclList {}
+                                | /* λ */ {}
+                                ;
 
-TypeDeclList      : TypeDeclList TypeDecl {}
-                  | TypeDecl {}
-                  ;
+TypeDeclList                    : TypeDeclList TypeDecl {}
+                                | TypeDecl {}
+                                ;
 
-TypeDecl          : ID_T EQUAL_T Type SEMI_COLON_T {}
-                  ;
+TypeDecl                        : ID_T EQUAL_T Type SEMI_COLON_T {}
+                                ;
 
-Type              : SimpleType {}
-                  | RecordType {}
-                  | ArrayType {}
-                  ;
+Type                            : SimpleType {}
+                                | RecordType {}
+                                | ArrayType {}
+                                ;
 
-SimpleType        : ID_T {}
-                  ;
+SimpleType                      : ID_T {}
+                                ;
 
-RecordType        : RECORD_T OptFieldList END_T {}
-                  ;
+RecordType                      : RECORD_T OptFieldList END_T {}
+                                ;
 
-OptFieldList      : FieldList {}
-                  | /* λ */ {}
-                  ;
+OptFieldList                    : FieldList {}
+                                | /* λ */ {}
+                                ;
 
-FieldList         : FieldList Field {}
-                  | Field {}
-                  ;
+FieldList                       : FieldList Field {}
+                                | Field {}
+                                ;
 
-Field             : ID_T OptIdentList COLON_T Type SEMI_COLON_T {}
-                  ;
+Field                           : ID_T OptIdentList COLON_T Type SEMI_COLON_T {}
+                                ;
 
-ArrayType         : ARRAY_T OPEN_BRACKET_T Expression COLON_T Expression CLOSE_BRACKET_T OF_T Type {}
-                  ;
+ArrayType                       : ARRAY_T
+                                  OPEN_BRACKET_T Expression COLON_T Expression CLOSE_BRACKET_T
+                                  OF_T Type {}
+                                ;
 
-OptIdentList      : IdentList {}
-                  | /* λ */ {}
-                  ;
+OptIdentList                    : IdentList {}
+                                | /* λ */ {}
+                                ;
 
-IdentList         : IdentList COMMA_T ID_T
-                  | COMMA_T ID_T
-                  ;  
+IdentList                       : IdentList COMMA_T ID_T
+                                | COMMA_T ID_T
+                                ;  
 
 /* 3.1.4 Variable Declerations */
-OptVariableDecls  : VAR_T FieldList {}
-                  | /* λ */ {}
-                  ;
+OptVariableDecls                : VAR_T FieldList {}
+                                | /* λ */ {}
+                                ;
 
 /* 3.2   CPSL Statements */
-StatementSequence : Statement OptStatmentList {}
-                  ;
+StatementSequence               : Statement OptStatmentList {}
+                                ;
 
-OptStatmentList   : StatementList {}
-                  | /* λ */ {}
-                  ;
+OptStatmentList                 : StatementList {}
+                                | /* λ */ {}
+                                ;
 
-StatementList     : StatementList SEMI_COLON_T Statement {}
-                  | SEMI_COLON_T Statement {}
-                  ;
+StatementList                   : StatementList SEMI_COLON_T Statement {}
+                                | SEMI_COLON_T Statement {}
+                                ;
 
-Statement         : Assignment {}
-                  | IfStatement {}
-                  | WhileStatement {}
-                  | RepeatStatement {}
-                  | ForStatement {}
-                  | StopStatement {}
-                  | ReturnStatement {}
-                  | ReadStatement {}
-                  | WriteStatement {}
-                  | ProcedureCall {}
-                  | NullStatement {}
-                  ;
+Statement                       : Assignment {}
+                                | IfStatement {}
+                                | WhileStatement {}
+                                | RepeatStatement {}
+                                | ForStatement {}
+                                | StopStatement {}
+                                | ReturnStatement {}
+                                | ReadStatement {}
+                                | WriteStatement {}
+                                | ProcedureCall {}
+                                | NullStatement {}
+                                ;
 
-Assignment        : LValue ASSIGN_T Expression {}
-                  ;
+Assignment                      : LValue ASSIGN_T Expression {}
+                                ;
 
-IfStatement            : IF_T Expression THEN_T StatementSequence OptElseIfStatementList OptElseStatement END_T {}
-                       ;
+IfStatement                     : IF_T Expression THEN_T StatementSequence
+                                    OptElseIfStatementList OptElseStatement END_T {}
+                                ;
 
-OptElseIfStatementList : ElseIfStatementList {}
-                       | /* λ */ {}
-                       ;
+OptElseIfStatementList          : ElseIfStatementList {}
+                                | /* λ */ {}
+                                ;
 
-ElseIfStatementList    : ElseIfStatementList ELSEIF_T Expression THEN_T StatementSequence {}
-                       | ELSEIF_T Expression THEN_T StatementSequence {}
-                       ;
+ElseIfStatementList             : ElseIfStatementList ELSEIF_T Expression THEN_T StatementSequence {}
+                                | ELSEIF_T Expression THEN_T StatementSequence {}
+                                ;
 
-OptElseStatement       :  ELSE_T StatementSequence {}
-                       | /* λ */ {}
-                       ;
+OptElseStatement                :  ELSE_T StatementSequence {}
+                                | /* λ */ {}
+                                ;
 
-WhileStatement    : WHILE_T Expression DO_T StatementSequence END_T {}
-                  ;
+WhileStatement                  : WHILE_T Expression DO_T StatementSequence END_T {}
+                                ;
 
-RepeatStatement   : REPEAT_T StatementSequence UNTIL_T Expression {}
-                  ;
+RepeatStatement                 : REPEAT_T StatementSequence UNTIL_T Expression {}
+                                ;
 
-ForStatement      : FOR_T ID_T ASSIGN_T Expression TO_T Expression DO_T StatementSequence END_T {}
-                  | FOR_T ID_T ASSIGN_T Expression DOWNTO_T Expression DO_T StatementSequence END_T {}
-                  ;
+ForStatement                    : FOR_T ID_T ASSIGN_T Expression TO_T Expression
+                                    DO_T StatementSequence END_T {}
+                                | FOR_T ID_T ASSIGN_T Expression DOWNTO_T Expression
+                                    DO_T StatementSequence END_T {}
+                                ;
 
-StopStatement     : STOP_T {}
-                  ;
+StopStatement                   : STOP_T {}
+                                ;
 
-ReturnStatement   : RETURN_T {}
-                  | RETURN_T Expression {}
-                  ;
+ReturnStatement                 : RETURN_T {}
+                                | RETURN_T Expression {}
+                                ;
 
-ReadStatement     : READ_T OPEN_PAREN_T LValue OptLValueList CLOSE_PAREN_T {}
-                  ;
+ReadStatement                   : READ_T OPEN_PAREN_T LValue OptLValueList CLOSE_PAREN_T {}
+                                ;
 
-OptLValueList     : LValueList {}
-                  | /* λ */ {}
-                  ;
+OptLValueList                   : LValueList {}
+                                | /* λ */ {}
+                                ;
 
-LValueList        : LValueList COMMA_T LValue {}
-                  | COMMA_T LValue {}
-                  ;
+LValueList                      : LValueList COMMA_T LValue {}
+                                | COMMA_T LValue {}
+                                ;
 
-WriteStatement    : WRITE_T OPEN_PAREN_T Expression OptExpressionList CLOSE_PAREN_T {}
-                  ;
+WriteStatement                  : WRITE_T OPEN_PAREN_T Expression OptExpressionList CLOSE_PAREN_T {}
+                                ;
 
-OptExpressionList : ExpressionList
-                  | /* λ */ {}
-                  ;
+OptExpressionList               : ExpressionList
+                                | /* λ */ {}
+                                ;
 
-ExpressionList    : ExpressionList COMMA_T Expression {}
-                  | COMMA_T Expression {}
-                  ;
+ExpressionList                  : ExpressionList COMMA_T Expression {}
+                                | COMMA_T Expression {}
+                                ;
 
-ProcedureCall     : ID_T OPEN_PAREN_T ProcedureArgList CLOSE_PAREN_T {}
-                  ;
+ProcedureCall                   : ID_T OPEN_PAREN_T ProcedureArgList CLOSE_PAREN_T {}
+                                ;
 
-ProcedureArgList  : Expression OptExpressionList
-                  | /* λ */ {}
-                  ;
+ProcedureArgList                : Expression OptExpressionList
+                                | /* λ */ {}
+                                ;
 
-NullStatement     : /* λ */ {}
-                  ;
+NullStatement                   : /* λ */ {}
+                                ;
 
 /* 3.3   Expressions */
 
-Expression        : Expression OR_T Expression {}
-                  | Expression AND_T Expression {}
-                  | Expression EQUAL_T Expression {}
-                  | Expression NEQUAL_T Expression {}
-                  | Expression LTE_T Expression {}
-                  | Expression GTE_T Expression {}
-                  | Expression LT_T Expression {}
-                  | Expression GT_T Expression {}
-                  | Expression PLUS_T Expression {}
-                  | Expression MINUS_T Expression {} {}
-                  | Expression MULTIPLY_T Expression {}
-                  | Expression DIVIDE_T Expression {}
-                  | Expression MOD_T Expression {}
-                  | NOT_T Expression {}
-                  | MINUS_T Expression %prec UNARY_MINUS_T {}
-                  | OPEN_PAREN_T Expression CLOSE_PAREN_T {}
-                  | ProcedureCall {}
-                  | CHR_T OPEN_PAREN_T Expression CLOSE_PAREN_T {}
-                  | ORD_T OPEN_PAREN_T Expression CLOSE_PAREN_T {}
-                  | PRED_T OPEN_PAREN_T Expression CLOSE_PAREN_T {}
-                  | SUCC_T OPEN_PAREN_T Expression CLOSE_PAREN_T {}
-                  | LValue {}
-                  | NUMBER_T {}
-                  | STRING_T {}
-                  | CHAR_T {}
-                  ;
+Expression                      : Expression OR_T Expression {}
+                                | Expression AND_T Expression {}
+                                | Expression EQUAL_T Expression {}
+                                | Expression NEQUAL_T Expression {}
+                                | Expression LTE_T Expression {}
+                                | Expression GTE_T Expression {}
+                                | Expression LT_T Expression {}
+                                | Expression GT_T Expression {}
+                                | Expression PLUS_T Expression {}
+                                | Expression MINUS_T Expression {} {}
+                                | Expression MULTIPLY_T Expression {}
+                                | Expression DIVIDE_T Expression {}
+                                | Expression MOD_T Expression {}
+                                | NOT_T Expression {}
+                                | MINUS_T Expression %prec UNARY_MINUS_T {}
+                                | OPEN_PAREN_T Expression CLOSE_PAREN_T {}
+                                | ProcedureCall {}
+                                | CHR_T OPEN_PAREN_T Expression CLOSE_PAREN_T {}
+                                | ORD_T OPEN_PAREN_T Expression CLOSE_PAREN_T {}
+                                | PRED_T OPEN_PAREN_T Expression CLOSE_PAREN_T {}
+                                | SUCC_T OPEN_PAREN_T Expression CLOSE_PAREN_T {}
+                                | LValue {}
+                                | NUMBER_T {}
+                                | STRING_T {}
+                                | CHAR_T {}
+                                ;
 
-LValue            : ID_T OptMemberAccessOrSubscriptList {}
-                  ;
+LValue                          : ID_T OptMemberAccessOrSubscriptList {}
+                                ;
 
-OptMemberAccessOrSubscriptList : MemberAccessOrSubscriptList {}
-                               | /* λ */ {}
-                               ;
+OptMemberAccessOrSubscriptList  : MemberAccessOrSubscriptList {}
+                                | /* λ */ {}
+                                ;
 
-MemberAccessOrSubscriptList    : MemberAccessOrSubscriptList MemberAccess {}
-                               | MemberAccessOrSubscriptList Subscript {}
-                               | MemberAccess {}
-                               | Subscript {}
-                               ;
+MemberAccessOrSubscriptList     : MemberAccessOrSubscriptList MemberAccess {}
+                                | MemberAccessOrSubscriptList Subscript {}
+                                | MemberAccess {}
+                                | Subscript {}
+                                ;
 
-MemberAccess                   : DOT_T ID_T {}
-                               ;
+MemberAccess                    : DOT_T ID_T {}
+                                ;
 
-Subscript                      : OPEN_BRACKET_T Expression CLOSE_BRACKET_T {}
-                               ;
+Subscript                       : OPEN_BRACKET_T Expression CLOSE_BRACKET_T {}
+                                ;
 
 
 %%
