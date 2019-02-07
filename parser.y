@@ -3,7 +3,7 @@
 #include <cstring>
 #include <map>
 
-#include "symbol_table.hpp"
+#include "src/symbol_table.hpp"
 
 #define YYERROR_VERBOSE 1
 #define DEBUG 1
@@ -266,8 +266,8 @@ OptIdentList                    : IdentList {}
                                 | /* λ */ {}
                                 ;
 
-IdentList                       : IdentList COMMA_T ID_T
-                                | COMMA_T ID_T
+IdentList                       : IdentList COMMA_T ID_T {}
+                                | COMMA_T ID_T {}
                                 ;  
 
 /* 3.1.4 Variable Declerations */
@@ -381,7 +381,7 @@ Expression                      : Expression OR_T Expression {}
                                 | Expression LT_T Expression {}
                                 | Expression GT_T Expression {}
                                 | Expression PLUS_T Expression {}
-                                | Expression MINUS_T Expression {} {}
+                                | Expression MINUS_T Expression {}
                                 | Expression MULTIPLY_T Expression {}
                                 | Expression DIVIDE_T Expression {}
                                 | Expression MOD_T Expression {}

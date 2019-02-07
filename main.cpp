@@ -1,4 +1,4 @@
-#include "symbol_table.hpp"
+#include "src/symbol_table.hpp"
 
 extern int yyparse();
 extern int yydebug;

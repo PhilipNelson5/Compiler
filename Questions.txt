@@ -25,3 +25,5 @@ Does every nonterminal symbol need a type?
   ANSWER: Yes, for explicitly building the tree they will be node types.
 
 Is it a bad idea for the register pool to be a private static vector of registers with static functions that modify it?
+
+Is it ok to have a class defined entirely in header files?
