@@ -26,6 +26,14 @@
 *.a
 *.lib
 
+# Compressed Files
+*.zip
+*.tar
+*.gz
+
+# Build Artifacts
+build/*
+
 # Executables
 *.exe
 *.out
