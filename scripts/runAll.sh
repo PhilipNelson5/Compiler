@@ -5,7 +5,7 @@ RESET='\033[0m'
 passed=0;
 tests=0;
 for file in $(find test -type f | grep --invert-match '/lexical/'); do
-  output=$(./cpsl < ${file} 2>&1)
+  output=$(build/cpsl < ${file} 2>&1)
 
   if [[ -z ${output} ]]; then
     echo -e "$GREEN[ PASS ]$RESET cpsl < ${file}"
