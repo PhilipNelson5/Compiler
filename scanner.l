@@ -1,14 +1,17 @@
 %{
 #include <cstdlib>
+#include <string>
 
 #include "parser.hpp"
 
 extern "C" int yylex();
 
 unsigned int yycolumn = 1;
+std::string yylinetxt = "";
 
 #define YY_USER_ACTION \
-  yycolumn += yyleng;
+  yycolumn += yyleng;  \
+  yylinetxt += yytext;
 
 %}
 
@@ -92,6 +95,6 @@ write|WRITE           { return WRITE_T; }
                         
 [ \t]*                { }
 
-[\n]                  { yycolumn = 1; }
+[\n]                  { yycolumn = 1; yylinetxt = "";}
 
 %%

@@ -1,7 +1,9 @@
 %{
 #include <iostream>
+#include <string>
 #include <cstring>
 #include <map>
+#include <sstream>
 
 #include "src/symbol_table.hpp"
 
@@ -10,6 +12,7 @@
 
 extern "C" int yylex();
 extern char * yytext;
+extern std::string yylinetxt;
 extern unsigned int yylineno;
 extern unsigned int yycolumn;
 void yyerror(const char*);
@@ -43,6 +46,7 @@ void yyerror(const char*);
 %token PROCEDURE_T
 %token READ_T
 %token RECORD_T
+
 %token REF_T
 %token REPEAT_T
 %token RETURN_T
@@ -423,6 +427,26 @@ Subscript                       : OPEN_BRACKET_T Expression CLOSE_BRACKET_T {}
 
 void yyerror(const char* msg)
 {
+  std::string restofline;
+  std::getline(std::cin, restofline);
+
   std::cerr << msg << std::endl;
-  std::cerr << yylineno << ":" << yycolumn - strlen(yytext) << " " << yytext << std::endl;
+
+  std::stringstream ss;
+  ss << yylineno << ":" << yycolumn - strlen(yytext) << " " ;
+
+  std::cerr << ss.str();
+  std::cerr << yylinetxt << restofline << std::endl;
+
+  for(auto i = 0u; i < ss.str().length(); ++i)
+  {
+    std::cout << " ";
+  }
+
+  for(auto i = 0u; i < yylinetxt.length()-1; ++i)
+  {
+    std::cout << "~";
+  }
+
+  std::cout << "^" << std::endl;
 }
