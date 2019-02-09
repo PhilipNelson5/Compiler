@@ -5,8 +5,6 @@
 #include <map>
 #include <sstream>
 
-#include "src/symbol_table.hpp"
-
 #define YYERROR_VERBOSE 1
 #define DEBUG 1
 
