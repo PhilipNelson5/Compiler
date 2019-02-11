@@ -15,6 +15,31 @@ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
 
 set(cpsl_srcs
   main.cpp
+
+  src/AddNode.cpp
+  src/AddNode.hpp
+  src/AssignmentStatementNode.cpp
+  src/AssignmentStatementNode.hpp
+  src/ExpressionNode.cpp
+  src/ExpressionNode.hpp
+  src/IntegerConstantNode.cpp
+  src/IntegerConstantNode.hpp
+  src/ListNode.hpp
+  src/LvalueNode.cpp
+  src/LvalueNode.hpp
+  src/Node.hpp
+  src/ProgramNode.cpp
+  src/ProgramNode.hpp
+  src/RegisterPool.cpp
+  src/RegisterPool.hpp
+  src/StatementNode.hpp
+  #src/symbol_table.cpp
+  #src/symbol_table.hpp
+  src/VariableDeclarationNode.cpp
+  src/VariableDeclarationNode.hpp
+  src/WriteStatementNode.cpp
+  src/WriteStatementNode.hpp
+
   ${BISON_Parser_OUTPUTS}
   ${FLEX_Scanner_OUTPUTS}
 )

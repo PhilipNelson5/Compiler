@@ -1,9 +1,20 @@
 %{
-#include <iostream>
-#include <string>
 #include <cstring>
+#include <iostream>
 #include <map>
+#include <memory>
 #include <sstream>
+#include <string>
+
+#include "src/Node.hpp"
+#include "src/ExpressionNode.hpp"
+#include "src/StatementNode.hpp"
+#include "src/ListNode.hpp"
+#include "src/LvalueNode.hpp"
+#include "src/WriteStatementNode.hpp"
+#include "src/IntegerConstantNode.hpp"
+#include "src/ProgramNode.hpp"
+#include "src/VariableDeclarationNode.hpp"
 
 #define YYERROR_VERBOSE 1
 #define DEBUG 1
@@ -13,7 +24,9 @@ extern char * yytext;
 extern std::string yylinetxt;
 extern unsigned int yylineno;
 extern unsigned int yycolumn;
+extern std::shared_ptr<ProgramNode> programNode;
 void yyerror(const char*);
+
 %}
 
 %define parse.trace
@@ -23,6 +36,13 @@ void yyerror(const char*);
   int int_val;
   char char_val;
   char * str_val;
+  Node * node;
+  ExpressionNode * expressionNode;
+  LvalueNode * lvalue;
+  ListNode<ExpressionNode> * expressionList;
+  ListNode<VariableDeclarationNode> * varDelcList;
+  ListNode<StatementNode> * statementList;
+  WriteStatementNode * writeStatementNode;
 }
 
 %token ARRAY_T
@@ -95,60 +115,60 @@ void yyerror(const char*);
 
 %type <int_val> COMMA_T
 
-%type <int_val> Program
-%type <int_val> OptConstDecls
-%type <int_val> ConstDeclList
-%type <int_val> ConstDecl
-%type <int_val> OptProcedureAndFunctionDeclList
-%type <int_val> ProcedureAndFunctionDeclList
-%type <int_val> ProcedureDecl
-%type <int_val> FunctionDecl
-%type <int_val> FormalParameters
-%type <int_val> FormalParameterList
-%type <int_val> FormalParameter
-%type <int_val> Body
-%type <int_val> Block
-%type <int_val> OptTypeDecls
-%type <int_val> TypeDeclList
-%type <int_val> TypeDecl
-%type <int_val> Type
-%type <int_val> SimpleType
-%type <int_val> RecordType
-%type <int_val> OptFieldList
-%type <int_val> FieldList
-%type <int_val> Field
-%type <int_val> ArrayType
-%type <int_val> OptIdentList
-%type <int_val> IdentList
-%type <int_val> OptVariableDecls
-%type <int_val> StatementSequence
-%type <int_val> OptStatmentList
-%type <int_val> StatementList
-%type <int_val> Statement
-%type <int_val> Assignment
-%type <int_val> IfStatement
-%type <int_val> OptElseIfStatementList
-%type <int_val> ElseIfStatementList
-%type <int_val> OptElseStatement
-%type <int_val> WhileStatement
-%type <int_val> RepeatStatement
-%type <int_val> ForStatement
-%type <int_val> StopStatement
-%type <int_val> ReturnStatement
-%type <int_val> ReadStatement
-%type <int_val> OptLValueList
-%type <int_val> LValueList
-%type <int_val> WriteStatement
-%type <int_val> OptExpressionList
-%type <int_val> ExpressionList
-%type <int_val> ProcedureCall
-%type <int_val> NullStatement
-%type <int_val> Expression
-%type <int_val> LValue
-%type <int_val> OptMemberAccessOrSubscriptList
-%type <int_val> MemberAccessOrSubscriptList
-%type <int_val> MemberAccess
-%type <int_val> Subscript
+%type <node> Program
+%type <node> OptConstDecls
+%type <node> ConstDeclList
+%type <node> ConstDecl
+%type <node> OptProcedureAndFunctionDeclList
+%type <node> ProcedureAndFunctionDeclList
+%type <node> ProcedureDecl
+%type <node> FunctionDecl
+%type <node> FormalParameters
+%type <node> FormalParameterList
+%type <node> FormalParameter
+%type <node> Body
+%type <statementList> Block
+%type <node> OptTypeDecls
+%type <node> TypeDeclList
+%type <node> TypeDecl
+%type <node> Type
+%type <node> SimpleType
+%type <node> RecordType
+%type <node> OptFieldList
+%type <node> FieldList
+%type <node> Field
+%type <node> ArrayType
+%type <node> OptIdentList
+%type <node> IdentList
+%type <varDelcList> OptVariableDecls
+%type <node> StatementSequence
+%type <node> OptStatmentList
+%type <node> StatementList
+%type <node> Statement
+%type <node> Assignment
+%type <node> IfStatement
+%type <node> OptElseIfStatementList
+%type <node> ElseIfStatementList
+%type <node> OptElseStatement
+%type <node> WhileStatement
+%type <node> RepeatStatement
+%type <node> ForStatement
+%type <node> StopStatement
+%type <node> ReturnStatement
+%type <node> ReadStatement
+%type <node> OptLValueList
+%type <node> LValueList
+%type <writeStatementNode> WriteStatement
+%type <expressionList> OptExpressionList
+%type <expressionList> ExpressionList
+%type <node> ProcedureCall
+%type <node> NullStatement
+%type <expressionNode> Expression
+%type <lvalue> LValue
+%type <node> OptMemberAccessOrSubscriptList
+%type <node> MemberAccessOrSubscriptList
+%type <node> MemberAccess
+%type <node> Subscript
 
 %right     UNARY_MINUS_T
 %left      MULTIPLY_T DIVIDE_T MOD_T
@@ -168,12 +188,16 @@ Program                         : OptConstDecls
                                   OptTypeDecls
                                   OptVariableDecls
                                   OptProcedureAndFunctionDeclList
-                                  Block DOT_T {}
+                                  Block DOT_T
+                                  {
+                                    /*programNode = new ProgramNode($1, $2, $3, $4, $5);*/
+                                    programNode = std::make_shared<ProgramNode>($3, $5);
+                                  }
                                 ;
 
 /* 3.1.1 Constant Declerations */
-OptConstDecls                   : CONST_T ConstDeclList {}
-                                | /* λ */ {}
+OptConstDecls                   : CONST_T ConstDeclList { $$ = nullptr; }
+                                | /* λ */ { $$ = nullptr; }
                                 ;
 
 ConstDeclList                   : ConstDeclList ConstDecl {}
@@ -184,8 +208,8 @@ ConstDecl                       : ID_T EQUAL_T Expression SEMI_COLON_T {}
                                 ;
 
 /* 3.1.2 Procedure and Function Declarations */
-OptProcedureAndFunctionDeclList : ProcedureAndFunctionDeclList {}
-                                | /* λ */ {}
+OptProcedureAndFunctionDeclList : ProcedureAndFunctionDeclList { $$ = nullptr; }
+                                | /* λ */ { $$ = nullptr; }
                                 ;
 
 ProcedureAndFunctionDeclList    : ProcedureAndFunctionDeclList ProcedureDecl  {}
@@ -222,12 +246,12 @@ FormalParameter                 : VAR_T ID_T OptIdentList COLON_T Type {}
 Body                            : OptConstDecls OptTypeDecls OptVariableDecls Block {}
                                 ;
 
-Block                           : BEGIN_T StatementSequence END_T {}
+Block                           : BEGIN_T StatementSequence END_T { $$ = nullptr; }
                                 ;
 
 /* 3.1.3 Type Declerations */
-OptTypeDecls                    : TYPE_T TypeDeclList {}
-                                | /* λ */ {}
+OptTypeDecls                    : TYPE_T TypeDeclList { $$ = nullptr; }
+                                | /* λ */ { $$ = nullptr; }
                                 ;
 
 TypeDeclList                    : TypeDeclList TypeDecl {}
@@ -273,8 +297,8 @@ IdentList                       : IdentList COMMA_T ID_T {}
                                 ;  
 
 /* 3.1.4 Variable Declerations */
-OptVariableDecls                : VAR_T FieldList {}
-                                | /* λ */ {}
+OptVariableDecls                : VAR_T FieldList { $$ = nullptr; }
+                                | /* λ */ { $$ = nullptr; }
                                 ;
 
 /* 3.2   CPSL Statements */
@@ -351,21 +375,30 @@ LValueList                      : LValueList COMMA_T LValue {}
                                 | COMMA_T LValue {}
                                 ;
 
-WriteStatement                  : WRITE_T OPEN_PAREN_T Expression OptExpressionList CLOSE_PAREN_T {}
+WriteStatement                  : WRITE_T OPEN_PAREN_T Expression OptExpressionList CLOSE_PAREN_T
+                                  { 
+                                    $$ = new WriteStatementNode($3, $4);
+                                  }
                                 ;
 
-OptExpressionList               : ExpressionList
-                                | /* λ */ {}
+OptExpressionList               : ExpressionList { $$ = $1; }
+                                | /* λ */ { $$ = nullptr; }
                                 ;
 
-ExpressionList                  : ExpressionList COMMA_T Expression {}
-                                | COMMA_T Expression {}
+ExpressionList                  : ExpressionList COMMA_T Expression
+                                  {
+                                    $$ = new ListNode<ExpressionNode>($3, $1);
+                                  }
+                                | COMMA_T Expression
+                                  {
+                                    $$ = new ListNode<ExpressionNode>($2);
+                                  }
                                 ;
 
 ProcedureCall                   : ID_T OPEN_PAREN_T ProcedureArgList CLOSE_PAREN_T {}
                                 ;
 
-ProcedureArgList                : Expression OptExpressionList
+ProcedureArgList                : Expression OptExpressionList {}
                                 | /* λ */ {}
                                 ;
 
@@ -395,17 +428,17 @@ Expression                      : Expression OR_T Expression {}
                                 | ORD_T OPEN_PAREN_T Expression CLOSE_PAREN_T {}
                                 | PRED_T OPEN_PAREN_T Expression CLOSE_PAREN_T {}
                                 | SUCC_T OPEN_PAREN_T Expression CLOSE_PAREN_T {}
-                                | LValue {}
-                                | NUMBER_T {}
+                                | LValue { $$ = $1; }
+                                | NUMBER_T { $$ = new IntegerConstantNode($1); }
                                 | STRING_T {}
                                 | CHAR_T {}
                                 ;
 
-LValue                          : ID_T OptMemberAccessOrSubscriptList {}
+LValue                          : ID_T OptMemberAccessOrSubscriptList { $$ = new LvalueNode($1); }
                                 ;
 
-OptMemberAccessOrSubscriptList  : MemberAccessOrSubscriptList {}
-                                | /* λ */ {}
+OptMemberAccessOrSubscriptList  : MemberAccessOrSubscriptList { $$ = $1; }
+                                | /* λ */ { $$ = nullptr; }
                                 ;
 
 MemberAccessOrSubscriptList     : MemberAccessOrSubscriptList MemberAccess {}

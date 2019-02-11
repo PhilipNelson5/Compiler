@@ -3,10 +3,13 @@
 
 #include "RegisterPool.hpp"
 
+#include <memory>
+
 class Node
 {
 public:
   virtual void emmitSource() = 0;
+  virtual ~Node(){};
   virtual RegisterPool::Register emmit() = 0;
 };
 

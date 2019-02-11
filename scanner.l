@@ -2,8 +2,17 @@
 #include <cstdlib>
 #include <string>
 
-#include "parser.hpp"
+#include "src/Node.hpp"
+#include "src/ExpressionNode.hpp"
+#include "src/StatementNode.hpp"
+#include "src/ListNode.hpp"
+#include "src/LvalueNode.hpp"
+#include "src/WriteStatementNode.hpp"
+#include "src/IntegerConstantNode.hpp"
+#include "src/ProgramNode.hpp"
+#include "src/VariableDeclarationNode.hpp"
 
+#include "parser.hpp"
 extern "C" int yylex();
 
 unsigned int yycolumn = 1;

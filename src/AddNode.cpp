@@ -1,9 +1,17 @@
 #include "AddNode.hpp"
 
-void AddNode::emmitSource() {}
+AddNode::AddNode(ExpressionNode*& left, ExpressionNode*& right)
+  : left(std::shared_ptr<ExpressionNode>(left))
+  , right(std::shared_ptr<ExpressionNode>(right))
+{
+}
 
-RegisterPool::Register emmit()
+void AddNode::emmitSource()
 {
   throw "not implemented";
 }
 
+RegisterPool::Register AddNode::emmit()
+{
+  throw "not implemented";
+}

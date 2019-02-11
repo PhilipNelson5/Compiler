@@ -1,26 +1,30 @@
 #ifndef PROGRAM_NODE_HPP
 #define PROGRAM_NODE_HPP
 
+#include "ListNode.hpp"
 #include "Node.hpp"
+#include "RegisterPool.hpp"
+#include "StatementNode.hpp"
+#include "VariableDeclarationNode.hpp"
 
 #include <memory>
 #include <vector>
 
-using NodeList = std::vector<std::unique_ptr<Node>>;
-using Node_p = std::unique_ptr<Node>;
 
 class ProgramNode : public Node
 {
 public:
-  ProgramNode()
-    : constantDecls{nullptr}
-  {}
+  ProgramNode(ListNode<VariableDeclarationNode>*& vds,
+              ListNode<StatementNode>*& mb);
+  virtual void emmitSource() override;
+  virtual RegisterPool::Register emmit() override;
 
 private:
-  NodeList constantDecls;
-  NodeList typeDecls;
-  NodeList varDecls;
-  NodeList procedureAndFunctionDecls;
+  // std::vector<std::shared_ptr<NodeList> constantDecls;
+  // std::vector<std::shared_ptr<NodeList> typeDecls;
+  std::vector<std::shared_ptr<VariableDeclarationNode>> varDecls;
+  // std::vector<std::shared_ptr<NodeList> procedureAndFunctionDecls;
+  std::vector<std::shared_ptr<StatementNode>> mainBlock;
 };
 
 #endif
