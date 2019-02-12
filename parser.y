@@ -121,13 +121,10 @@ void yyerror(const char*);
 %type <int_val> OptIdentList
 %type <int_val> IdentList
 %type <int_val> OptVariableDecls
-%type <int_val> StatementSequence
-%type <int_val> OptStatmentList
 %type <int_val> StatementList
 %type <int_val> Statement
 %type <int_val> Assignment
 %type <int_val> IfStatement
-%type <int_val> OptElseIfStatementList
 %type <int_val> ElseIfStatementList
 %type <int_val> OptElseStatement
 %type <int_val> WhileStatement
@@ -136,19 +133,14 @@ void yyerror(const char*);
 %type <int_val> StopStatement
 %type <int_val> ReturnStatement
 %type <int_val> ReadStatement
-%type <int_val> OptLValueList
 %type <int_val> LValueList
 %type <int_val> WriteStatement
-%type <int_val> OptExpressionList
 %type <int_val> ExpressionList
+%type <int_val> OptExpressionList
 %type <int_val> ProcedureCall
 %type <int_val> NullStatement
 %type <int_val> Expression
 %type <int_val> LValue
-%type <int_val> OptMemberAccessOrSubscriptList
-%type <int_val> MemberAccessOrSubscriptList
-%type <int_val> MemberAccess
-%type <int_val> Subscript
 
 %right     UNARY_MINUS_T
 %left      MULTIPLY_T DIVIDE_T MOD_T
@@ -222,7 +214,7 @@ FormalParameter                 : VAR_T ID_T OptIdentList COLON_T Type {}
 Body                            : OptConstDecls OptTypeDecls OptVariableDecls Block {}
                                 ;
 
-Block                           : BEGIN_T StatementSequence END_T {}
+Block                           : BEGIN_T StatementList END_T {}
                                 ;
 
 /* 3.1.3 Type Declerations */
@@ -278,15 +270,8 @@ OptVariableDecls                : VAR_T FieldList {}
                                 ;
 
 /* 3.2   CPSL Statements */
-StatementSequence               : Statement OptStatmentList {}
-                                ;
-
-OptStatmentList                 : StatementList {}
-                                | /* λ */ {}
-                                ;
-
 StatementList                   : StatementList SEMI_COLON_T Statement {}
-                                | SEMI_COLON_T Statement {}
+                                | Statement {}
                                 ;
 
 Statement                       : Assignment {}
@@ -305,32 +290,36 @@ Statement                       : Assignment {}
 Assignment                      : LValue ASSIGN_T Expression {}
                                 ;
 
-IfStatement                     : IF_T Expression THEN_T StatementSequence
-                                    OptElseIfStatementList OptElseStatement END_T {}
+IfStatement                     : IfHeader ThenBody ElseIfStatementList OptElseStatement END_T {}
                                 ;
 
-OptElseIfStatementList          : ElseIfStatementList {}
+IfHeader                        : IF_T Expression {}
+                                ;
+
+ThenBody                        : THEN_T StatementList {}
+                                ;
+
+ElseIfStatementList             : ElseIfStatementList ElseIfHeader ThenBody{}
                                 | /* λ */ {}
                                 ;
 
-ElseIfStatementList             : ElseIfStatementList ELSEIF_T Expression THEN_T StatementSequence {}
-                                | ELSEIF_T Expression THEN_T StatementSequence {}
+ElseIfHeader                    : ELSEIF_T Expression {}
                                 ;
 
-OptElseStatement                :  ELSE_T StatementSequence {}
+OptElseStatement                : ELSE_T StatementList {}
                                 | /* λ */ {}
                                 ;
 
-WhileStatement                  : WHILE_T Expression DO_T StatementSequence END_T {}
+WhileStatement                  : WHILE_T Expression DO_T StatementList END_T {}
                                 ;
 
-RepeatStatement                 : REPEAT_T StatementSequence UNTIL_T Expression {}
+RepeatStatement                 : REPEAT_T StatementList UNTIL_T Expression {}
                                 ;
 
 ForStatement                    : FOR_T ID_T ASSIGN_T Expression TO_T Expression
-                                    DO_T StatementSequence END_T {}
+                                    DO_T StatementList END_T {}
                                 | FOR_T ID_T ASSIGN_T Expression DOWNTO_T Expression
-                                    DO_T StatementSequence END_T {}
+                                    DO_T StatementList END_T {}
                                 ;
 
 StopStatement                   : STOP_T {}
@@ -340,33 +329,25 @@ ReturnStatement                 : RETURN_T {}
                                 | RETURN_T Expression {}
                                 ;
 
-ReadStatement                   : READ_T OPEN_PAREN_T LValue OptLValueList CLOSE_PAREN_T {}
-                                ;
-
-OptLValueList                   : LValueList {}
-                                | /* λ */ {}
+ReadStatement                   : READ_T OPEN_PAREN_T LValueList CLOSE_PAREN_T {}
                                 ;
 
 LValueList                      : LValueList COMMA_T LValue {}
-                                | COMMA_T LValue {}
+                                | LValue {}
                                 ;
 
-WriteStatement                  : WRITE_T OPEN_PAREN_T Expression OptExpressionList CLOSE_PAREN_T {}
+WriteStatement                  : WRITE_T OPEN_PAREN_T ExpressionList CLOSE_PAREN_T {}
                                 ;
 
-OptExpressionList               : ExpressionList
+ProcedureCall                   : ID_T OPEN_PAREN_T OptExpressionList CLOSE_PAREN_T {}
+                                ;
+
+OptExpressionList               : ExpressionList {}
                                 | /* λ */ {}
                                 ;
 
 ExpressionList                  : ExpressionList COMMA_T Expression {}
-                                | COMMA_T Expression {}
-                                ;
-
-ProcedureCall                   : ID_T OPEN_PAREN_T ProcedureArgList CLOSE_PAREN_T {}
-                                ;
-
-ProcedureArgList                : Expression OptExpressionList
-                                | /* λ */ {}
+                                | Expression {}
                                 ;
 
 NullStatement                   : /* λ */ {}
@@ -401,25 +382,10 @@ Expression                      : Expression OR_T Expression {}
                                 | CHAR_T {}
                                 ;
 
-LValue                          : ID_T OptMemberAccessOrSubscriptList {}
+LValue                          : LValue DOT_T ID_T {}
+                                | LValue OPEN_BRACKET_T Expression CLOSE_BRACKET_T {}
+                                | ID_T {}
                                 ;
-
-OptMemberAccessOrSubscriptList  : MemberAccessOrSubscriptList {}
-                                | /* λ */ {}
-                                ;
-
-MemberAccessOrSubscriptList     : MemberAccessOrSubscriptList MemberAccess {}
-                                | MemberAccessOrSubscriptList Subscript {}
-                                | MemberAccess {}
-                                | Subscript {}
-                                ;
-
-MemberAccess                    : DOT_T ID_T {}
-                                ;
-
-Subscript                       : OPEN_BRACKET_T Expression CLOSE_BRACKET_T {}
-                                ;
-
 
 %%
 
