@@ -11,8 +11,7 @@
 class WriteStatementNode : public Node
 {
 public:
-  WriteStatementNode(ExpressionNode*& expr,
-                     ListNode<ExpressionNode>*& exprList);
+  WriteStatementNode(ListNode<ExpressionNode>*& exprList);
   virtual void emmitSource() override;
   virtual RegisterPool::Register emmit() override;
 

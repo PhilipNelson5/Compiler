@@ -2,10 +2,8 @@
 
 #include <iostream>
 
-WriteStatementNode::WriteStatementNode(ExpressionNode*& expr,
-                                       ListNode<ExpressionNode>*& exprList)
+WriteStatementNode::WriteStatementNode(ListNode<ExpressionNode>*& exprList)
 {
-  expressionList.emplace_back(expr);
   for (auto cur = std::make_shared<ListNode<ExpressionNode>>(*exprList);
        cur != nullptr;
        cur = cur->next)
