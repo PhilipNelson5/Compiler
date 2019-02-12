@@ -1,5 +1,7 @@
 #include "ProgramNode.hpp"
 
+#include <iostream>
+
 ProgramNode::ProgramNode(ListNode<VariableDeclarationNode>*& vds,
                          ListNode<StatementNode>*& mBlock)
 {
@@ -22,7 +24,7 @@ ProgramNode::ProgramNode(ListNode<VariableDeclarationNode>*& vds,
 
 void ProgramNode::emmitSource()
 {
-  throw "not implemented";
+  std::cout << "Program Node" << std::endl;
 }
 
 RegisterPool::Register ProgramNode::emmit()

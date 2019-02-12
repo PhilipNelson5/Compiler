@@ -16,7 +16,7 @@ WriteStatementNode::WriteStatementNode(ListNode<ExpressionNode>*& exprList)
 
 void WriteStatementNode::emmitSource()
 {
-  throw "not implemented";
+  std::cout << "Write Statement" << std::endl;
 }
 
 RegisterPool::Register WriteStatementNode::emmit()

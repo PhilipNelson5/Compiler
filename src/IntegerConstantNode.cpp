@@ -1,10 +1,15 @@
 #include "IntegerConstantNode.hpp"
 
+#include <iostream>
+
 IntegerConstantNode::IntegerConstantNode(int value)
   : value(value)
 {}
 
-void IntegerConstantNode::emmitSource() {}
+void IntegerConstantNode::emmitSource()
+{
+  std::cout << "Integer Constant Node" << std::endl;
+}
 
 RegisterPool::Register IntegerConstantNode::emmit()
 {

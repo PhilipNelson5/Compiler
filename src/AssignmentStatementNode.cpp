@@ -1,5 +1,7 @@
 #include "AssignmentStatementNode.hpp"
 
+#include <iostream>
+
 AssignmentStatementNode::AssignmentStatementNode(LvalueNode*& lval,
                                                  ExpressionNode* expr)
   : lval(std::shared_ptr<LvalueNode>(lval))
@@ -8,7 +10,7 @@ AssignmentStatementNode::AssignmentStatementNode(LvalueNode*& lval,
 
 void AssignmentStatementNode::emmitSource()
 {
-  throw "not implemented";
+  std::cout << "Assignment Statement Node" << std::endl;
 }
 
 RegisterPool::Register AssignmentStatementNode::emmit()

@@ -1,5 +1,6 @@
 #include "VariableDeclarationNode.hpp"
 
+#include <iostream>
 #include <string.h>
 
 VariableDeclarationNode::VariableDeclarationNode(ListNode<char*>* identList,
@@ -13,7 +14,10 @@ VariableDeclarationNode::VariableDeclarationNode(ListNode<char*>* identList,
   }
 }
 
-void VariableDeclarationNode::emmitSource() {}
+void VariableDeclarationNode::emmitSource()
+{
+  std::cout << "Variable Declaration Node" << std::endl;
+}
 
 RegisterPool::Register VariableDeclarationNode::emmit()
 {
