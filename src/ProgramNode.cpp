@@ -1,12 +1,13 @@
 #include "ProgramNode.hpp"
 
 #include <iostream>
+#include <memory>
 
 ProgramNode::ProgramNode(ListNode<VariableDeclarationNode>*& vds,
                          ListNode<StatementNode>*& mBlock)
 {
   // Variable Declarations
-  for (auto cur = std::make_shared<ListNode<VariableDeclarationNode>>(*vds);
+  for (auto cur = std::shared_ptr<ListNode<VariableDeclarationNode>>(vds);
        cur != nullptr;
        cur = cur->next)
   {
@@ -14,7 +15,7 @@ ProgramNode::ProgramNode(ListNode<VariableDeclarationNode>*& vds,
   }
 
   // Main Block
-  for (auto cur = std::make_shared<ListNode<StatementNode>>(*mBlock);
+  for (auto cur = std::shared_ptr<ListNode<StatementNode>>(mBlock);
        cur != nullptr;
        cur = cur->next)
   {
@@ -22,9 +23,26 @@ ProgramNode::ProgramNode(ListNode<VariableDeclarationNode>*& vds,
   }
 }
 
-void ProgramNode::emmitSource()
+void ProgramNode::emmitSource(std::string indent)
 {
-  std::cout << "Program Node" << std::endl;
+  // Variable Declarations
+  // ---------------------
+  std::cout << indent << "VAR" << std::endl;
+  for (auto&& varDecl : varDecls)
+  {
+    varDecl->emmitSource(indent + "  ");
+  }
+  std::cout << std::endl;
+
+  // Main Block
+  // ---------------------
+  std::cout << indent << "BEGIN" << std::endl;
+  std::cout << mainBlock.size() << std::endl;
+  for (auto&& statement : mainBlock)
+  {
+    statement->emmitSource(indent + "  ");
+  }
+  std::cout << indent << "END." << std::endl;
 }
 
 RegisterPool::Register ProgramNode::emmit()

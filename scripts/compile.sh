@@ -18,9 +18,9 @@ kwargs="${@:2}"
 
 file=$(find test -type f | grep --invert-match '/lexical/' | grep $1 | head -n 1)
 
-output=$(build/cpsl $kwargs < ${file} 2>&1)
+echo -e "$Cyan[ COMPILING ]$RESET cpsl < ${file}"
 
-  echo -e "$Cyan[ COMPILING ]$RESET cpsl < ${file}"
+build/cpsl $kwargs < ${file}
 
 echo ""
 

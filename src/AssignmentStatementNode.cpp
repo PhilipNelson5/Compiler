@@ -8,9 +8,13 @@ AssignmentStatementNode::AssignmentStatementNode(LvalueNode*& lval,
   , expr(std::shared_ptr<ExpressionNode>(expr))
 {}
 
-void AssignmentStatementNode::emmitSource()
+void AssignmentStatementNode::emmitSource(std::string indent)
 {
-  std::cout << "Assignment Statement Node" << std::endl;
+  std::cout << indent;
+  lval->emmitSource("");
+  std::cout << " := ";
+  expr->emmitSource("");
+  std::cout << ";" << std::endl;
 }
 
 RegisterPool::Register AssignmentStatementNode::emmit()

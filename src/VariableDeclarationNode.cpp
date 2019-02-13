@@ -2,21 +2,29 @@
 
 #include <iostream>
 #include <string.h>
+#include <string>
 
-VariableDeclarationNode::VariableDeclarationNode(ListNode<char*>* identList,
+VariableDeclarationNode::VariableDeclarationNode(ListNode<std::string>* identList,
                                                  char* type)
   : type(type)
 {
-  for (auto cur = std::make_shared<ListNode<char*>>(*identList); cur != nullptr;
+  std::cout << "new VariableDeclarationNode" << std::endl;
+  for (auto cur = std::shared_ptr<ListNode<std::string>>(identList); cur != nullptr;
        cur = cur->next)
   {
-    idents.emplace_back(strdup(*cur->data));
+    idents.push_back(*(cur->data));
+    std::cout << idents.back() << std::endl;
   }
 }
 
-void VariableDeclarationNode::emmitSource()
+void VariableDeclarationNode::emmitSource(std::string indent)
 {
-  std::cout << "Variable Declaration Node" << std::endl;
+  std::cout << indent;
+  for (auto i = 0u; i < idents.size() - 1; ++i)
+  {
+    std::cout << idents[i] << ", ";
+  }
+  std::cout << idents.back() << " : " << type << ";" << std::endl;
 }
 
 RegisterPool::Register VariableDeclarationNode::emmit()

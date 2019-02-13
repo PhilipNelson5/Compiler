@@ -39,10 +39,13 @@ void yyerror(const char*);
   Node * node;
   ExpressionNode * expressionNode;
   LvalueNode * lvalue;
+  VariableDeclarationNode * varDeclNode;
   ListNode<ExpressionNode> * expressionList;
   ListNode<VariableDeclarationNode> * varDelcList;
   ListNode<StatementNode> * statementList;
+  ListNode<std::string> * identList;
   WriteStatementNode * writeStatementNode;
+  StatementNode * statementNode;
 }
 
 %token ARRAY_T
@@ -128,18 +131,19 @@ void yyerror(const char*);
 %type <node> OptTypeDecls
 %type <node> TypeDeclList
 %type <node> TypeDecl
-%type <node> Type
-%type <node> SimpleType
+%type <str_val> Type
+%type <str_val> SimpleType
 %type <node> RecordType
-%type <node> OptFieldList
-%type <node> FieldList
-%type <node> Field
+%type <varDelcList> OptFieldList
+%type <varDelcList> FieldList
+%type <varDeclNode> Field
 %type <node> ArrayType
-%type <node> OptIdentList
-%type <node> IdentList
+%type <identList> IdentList
 %type <varDelcList> OptVariableDecls
-%type <node> StatementList
-%type <node> Statement
+%type <varDelcList> VariableDeclList
+%type <varDeclNode> VariableDecl
+%type <statementList> StatementList
+%type <statementNode> Statement
 %type <node> Assignment
 %type <node> IfStatement
 %type <node> ElseIfStatementList
@@ -227,15 +231,15 @@ FormalParameterList             : FormalParameterList SEMI_COLON_T FormalParamet
                                 | FormalParameter {}
                                 ;
 
-FormalParameter                 : VAR_T ID_T OptIdentList COLON_T Type {}
-                                | REF_T ID_T OptIdentList COLON_T Type {}
-                                |       ID_T OptIdentList COLON_T Type {}
+FormalParameter                 : VAR_T IdentList COLON_T Type {}
+                                | REF_T IdentList COLON_T Type {}
+                                |       IdentList COLON_T Type {}
                                 ;
 
 Body                            : OptConstDecls OptTypeDecls OptVariableDecls Block {}
                                 ;
 
-Block                           : BEGIN_T StatementList END_T { $$ = nullptr; }
+Block                           : BEGIN_T StatementList END_T { $$ = $2; }
                                 ;
 
 /* 3.1.3 Type Declerations */
@@ -250,26 +254,26 @@ TypeDeclList                    : TypeDeclList TypeDecl {}
 TypeDecl                        : ID_T EQUAL_T Type SEMI_COLON_T {}
                                 ;
 
-Type                            : SimpleType {}
+Type                            : SimpleType { $$ = $1;}
                                 | RecordType {}
                                 | ArrayType {}
                                 ;
 
-SimpleType                      : ID_T {}
+SimpleType                      : ID_T { $$ = $1; }
                                 ;
 
 RecordType                      : RECORD_T OptFieldList END_T {}
                                 ;
 
-OptFieldList                    : FieldList {}
-                                | /* λ */ {}
+OptFieldList                    : FieldList { $$ = $1; }
+                                | /* λ */ { $$ = nullptr; }
                                 ;
 
 FieldList                       : FieldList Field {}
                                 | Field {}
                                 ;
 
-Field                           : ID_T OptIdentList COLON_T Type SEMI_COLON_T {}
+Field                           : IdentList COLON_T Type SEMI_COLON_T {}
                                 ;
 
 ArrayType                       : ARRAY_T
@@ -277,22 +281,46 @@ ArrayType                       : ARRAY_T
                                   OF_T Type {}
                                 ;
 
-OptIdentList                    : IdentList {}
-                                | /* λ */ {}
-                                ;
-
-IdentList                       : IdentList COMMA_T ID_T {}
-                                | COMMA_T ID_T {}
+IdentList                       : IdentList COMMA_T ID_T
+                                  {
+                                    $$ = new ListNode<std::string>(new std::string($3), $1);
+                                  }
+                                | ID_T
+                                  {
+                                    $$ = new ListNode<std::string>(new std::string($1));
+                                  }
                                 ;  
 
 /* 3.1.4 Variable Declerations */
-OptVariableDecls                : VAR_T FieldList { $$ = nullptr; }
+OptVariableDecls                : VAR_T VariableDeclList { $$ = $2; }
                                 | /* λ */ { $$ = nullptr; }
                                 ;
 
+VariableDeclList                : VariableDeclList VariableDecl
+                                  {
+                                    $$ = new ListNode<VariableDeclarationNode>($2, $1);
+                                  }
+                                | VariableDecl
+                                  {
+                                    $$ = new ListNode<VariableDeclarationNode>($1);
+                                  }
+                                ;
+
+VariableDecl                    : IdentList COLON_T Type SEMI_COLON_T
+                                  {
+                                    $$ = new VariableDeclarationNode($1, $3);
+                                  }
+                                ;
+
 /* 3.2   CPSL Statements */
-StatementList                   : StatementList SEMI_COLON_T Statement {}
-                                | Statement {}
+StatementList                   : StatementList SEMI_COLON_T Statement
+                                  {
+                                    $$ = new ListNode<StatementNode>($3, $1);
+                                  }
+                                | Statement
+                                  {
+                                    $$ = new ListNode<StatementNode>($1);
+                                  }
                                 ;
 
 Statement                       : Assignment {}
@@ -303,7 +331,7 @@ Statement                       : Assignment {}
                                 | StopStatement {}
                                 | ReturnStatement {}
                                 | ReadStatement {}
-                                | WriteStatement {}
+                                | WriteStatement { $$ = $1; }
                                 | ProcedureCall {}
                                 | NullStatement {}
                                 ;
@@ -414,7 +442,7 @@ Expression                      : Expression OR_T Expression {}
 
 LValue                          : LValue DOT_T ID_T { $$ = nullptr; }
                                 | LValue OPEN_BRACKET_T Expression CLOSE_BRACKET_T { $$ = nullptr; }
-                                | ID_T { $$ = new LvalueNode($1); }
+                                | ID_T { $$ = new LvalueNode($1); delete($1);}
                                 ;
 
 %%

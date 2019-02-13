@@ -12,7 +12,7 @@ class AssignmentStatementNode : public StatementNode
 {
 public:
   AssignmentStatementNode(LvalueNode*& lval, ExpressionNode* expr);
-  virtual void emmitSource() override;
+  virtual void emmitSource(std::string indent) override;
   virtual RegisterPool::Register emmit() override;
 
 private:

@@ -6,9 +6,9 @@ IntegerConstantNode::IntegerConstantNode(int value)
   : value(value)
 {}
 
-void IntegerConstantNode::emmitSource()
+void IntegerConstantNode::emmitSource(std::string indent)
 {
-  std::cout << "Integer Constant Node" << std::endl;
+  std::cout << indent << value << std::endl;
 }
 
 RegisterPool::Register IntegerConstantNode::emmit()

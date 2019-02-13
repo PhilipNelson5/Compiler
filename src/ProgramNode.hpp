@@ -16,7 +16,7 @@ class ProgramNode : public Node
 public:
   ProgramNode(ListNode<VariableDeclarationNode>*& vds,
               ListNode<StatementNode>*& mb);
-  virtual void emmitSource() override;
+  virtual void emmitSource(std::string indent) override;
   virtual RegisterPool::Register emmit() override;
 
 private:

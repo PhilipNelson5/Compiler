@@ -98,7 +98,7 @@ write|WRITE           { return WRITE_T; }
 '.'                   { yylval.char_val = yytext[1]; return CHAR_T; }
 '\\.'                 { yylval.char_val = yytext[1]; return CHAR_T; }
                         
-\"(\\.|[^"\\])*\"     { return STRING_T; }
+\"(\\.|[^"\\])*\"     { yylval.str_val = strdup(yytext); return STRING_T; }
                         
 \$.*$                 { }
                         

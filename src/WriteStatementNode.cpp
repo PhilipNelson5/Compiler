@@ -14,9 +14,9 @@ WriteStatementNode::WriteStatementNode(ListNode<ExpressionNode>*& exprList)
             << " statements" << std::endl;
 }
 
-void WriteStatementNode::emmitSource()
+void WriteStatementNode::emmitSource(std::string indent)
 {
-  std::cout << "Write Statement" << std::endl;
+  std::cout << indent << "Write Statement" << std::endl;
 }
 
 RegisterPool::Register WriteStatementNode::emmit()

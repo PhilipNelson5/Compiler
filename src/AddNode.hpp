@@ -10,7 +10,7 @@ class AddNode : public ExpressionNode
 {
 public:
   AddNode(ExpressionNode*& left, ExpressionNode*& right);
-  virtual void emmitSource() override;
+  virtual void emmitSource(std::string indent) override;
   virtual RegisterPool::Register emmit() override;
 
 private:

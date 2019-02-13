@@ -7,9 +7,9 @@ AddNode::AddNode(ExpressionNode*& left, ExpressionNode*& right)
   , right(std::shared_ptr<ExpressionNode>(right))
 {}
 
-void AddNode::emmitSource()
+void AddNode::emmitSource(std::string indent)
 {
-  std::cout << "Add Node" << std::endl;
+  std::cout << indent << "Add Node" << std::endl;
 }
 
 RegisterPool::Register AddNode::emmit()

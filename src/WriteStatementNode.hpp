@@ -12,7 +12,7 @@ class WriteStatementNode : public Node
 {
 public:
   WriteStatementNode(ListNode<ExpressionNode>*& exprList);
-  virtual void emmitSource() override;
+  virtual void emmitSource(std::string indent) override;
   virtual RegisterPool::Register emmit() override;
 
 private:
