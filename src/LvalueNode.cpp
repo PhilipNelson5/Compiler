@@ -8,7 +8,7 @@ LvalueNode::LvalueNode(std::string ident)
 
 void LvalueNode::emmitSource(std::string indent)
 {
-  std::cout << indent << "Lvalue Node" << std::endl;
+  std::cout << indent << ident;
 }
 
 RegisterPool::Register LvalueNode::emmit()

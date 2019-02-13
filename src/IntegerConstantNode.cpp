@@ -8,7 +8,7 @@ IntegerConstantNode::IntegerConstantNode(int value)
 
 void IntegerConstantNode::emmitSource(std::string indent)
 {
-  std::cout << indent << value << std::endl;
+  std::cout << indent << value;
 }
 
 RegisterPool::Register IntegerConstantNode::emmit()

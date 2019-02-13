@@ -15,6 +15,7 @@
 #include "src/IntegerConstantNode.hpp"
 #include "src/ProgramNode.hpp"
 #include "src/VariableDeclarationNode.hpp"
+#include "src/AssignmentStatementNode.hpp"
 
 #define YYERROR_VERBOSE 1
 #define DEBUG 1
@@ -46,6 +47,7 @@ void yyerror(const char*);
   ListNode<std::string> * identList;
   WriteStatementNode * writeStatementNode;
   StatementNode * statementNode;
+  AssignmentStatementNode * assignmentNode;
 }
 
 %token ARRAY_T
@@ -144,7 +146,7 @@ void yyerror(const char*);
 %type <varDeclNode> VariableDecl
 %type <statementList> StatementList
 %type <statementNode> Statement
-%type <node> Assignment
+%type <assignmentNode> Assignment
 %type <node> IfStatement
 %type <node> ElseIfStatementList
 %type <node> OptElseStatement
@@ -159,7 +161,6 @@ void yyerror(const char*);
 %type <expressionList> OptExpressionList
 %type <expressionList> ExpressionList
 %type <node> ProcedureCall
-%type <node> NullStatement
 %type <expressionNode> Expression
 %type <lvalue> LValue
 
@@ -333,10 +334,10 @@ Statement                       : Assignment {}
                                 | ReadStatement {}
                                 | WriteStatement { $$ = $1; }
                                 | ProcedureCall {}
-                                | NullStatement {}
+                                | { $$ = nullptr; }
                                 ;
 
-Assignment                      : LValue ASSIGN_T Expression {}
+Assignment                      : LValue ASSIGN_T Expression { $$ = new AssignmentStatementNode($1, $3); }
                                 ;
 
 IfStatement                     : IfHeader ThenBody ElseIfStatementList OptElseStatement END_T {}
@@ -408,9 +409,6 @@ ExpressionList                  : ExpressionList COMMA_T Expression
                                   }
                                 ;
 
-NullStatement                   : /* λ */ {}
-                                ;
-
 /* 3.3   Expressions */
 
 Expression                      : Expression OR_T Expression {}
@@ -442,8 +440,8 @@ Expression                      : Expression OR_T Expression {}
 
 LValue                          : LValue DOT_T ID_T { $$ = nullptr; }
                                 | LValue OPEN_BRACKET_T Expression CLOSE_BRACKET_T { $$ = nullptr; }
-                                | ID_T { $$ = new LvalueNode($1); delete($1);}
-                                ;
+                                | ID_T { $$ = new LvalueNode($1); }
+                                 ;
 
 %%
 

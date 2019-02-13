@@ -3,12 +3,12 @@
 
 #include "ExpressionNode.hpp"
 #include "ListNode.hpp"
-#include "Node.hpp"
+#include "StatementNode.hpp"
 
 #include <memory>
 #include <vector>
 
-class WriteStatementNode : public Node
+class WriteStatementNode : public StatementNode
 {
 public:
   WriteStatementNode(ListNode<ExpressionNode>*& exprList);

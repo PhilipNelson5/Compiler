@@ -8,12 +8,10 @@ VariableDeclarationNode::VariableDeclarationNode(ListNode<std::string>* identLis
                                                  char* type)
   : type(type)
 {
-  std::cout << "new VariableDeclarationNode" << std::endl;
   for (auto cur = std::shared_ptr<ListNode<std::string>>(identList); cur != nullptr;
        cur = cur->next)
   {
     idents.push_back(*(cur->data));
-    std::cout << idents.back() << std::endl;
   }
 }
 

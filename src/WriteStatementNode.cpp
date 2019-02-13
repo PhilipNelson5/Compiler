@@ -10,13 +10,16 @@ WriteStatementNode::WriteStatementNode(ListNode<ExpressionNode>*& exprList)
   {
     expressionList.emplace_back(cur->data);
   }
-  std::cout << "Write Statement Node constructed with " << expressionList.size()
-            << " statements" << std::endl;
 }
 
 void WriteStatementNode::emmitSource(std::string indent)
 {
-  std::cout << indent << "Write Statement" << std::endl;
+  std::cout << indent << "write( ";
+  for (auto&& expr : expressionList)
+  {
+    expr->emmitSource("");
+  }
+  std::cout << " );" << std::endl;
 }
 
 RegisterPool::Register WriteStatementNode::emmit()

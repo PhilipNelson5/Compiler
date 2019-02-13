@@ -11,6 +11,7 @@
 #include "src/IntegerConstantNode.hpp"
 #include "src/ProgramNode.hpp"
 #include "src/VariableDeclarationNode.hpp"
+#include "src/AssignmentStatementNode.hpp"
 
 #include "parser.hpp"
 extern "C" int yylex();
