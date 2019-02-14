@@ -6,12 +6,12 @@ LvalueNode::LvalueNode(std::string ident)
   : ident(ident)
 {}
 
-void LvalueNode::emmitSource(std::string indent)
+void LvalueNode::emitSource(std::string indent)
 {
   std::cout << indent << ident;
 }
 
-RegisterPool::Register LvalueNode::emmit()
+RegisterPool::Register LvalueNode::emit()
 {
   throw "not implemented";
 }

@@ -4,14 +4,17 @@
 
 #include "src/Node.hpp"
 #include "src/ExpressionNode.hpp"
-#include "src/StatementNode.hpp"
+#include "src/AssignmentStatementNode.hpp"
+#include "src/CharacterConstantNode.hpp"
+#include "src/ConstantDeclarationNode.hpp"
+#include "src/IntegerConstantNode.hpp"
 #include "src/ListNode.hpp"
 #include "src/LvalueNode.hpp"
-#include "src/WriteStatementNode.hpp"
-#include "src/IntegerConstantNode.hpp"
 #include "src/ProgramNode.hpp"
+#include "src/StatementNode.hpp"
+#include "src/StringConstantNode.hpp"
 #include "src/VariableDeclarationNode.hpp"
-#include "src/AssignmentStatementNode.hpp"
+#include "src/WriteStatementNode.hpp"
 
 #include "parser.hpp"
 extern "C" int yylex();

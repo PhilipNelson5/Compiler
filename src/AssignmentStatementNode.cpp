@@ -8,16 +8,16 @@ AssignmentStatementNode::AssignmentStatementNode(LvalueNode*& lval,
   , expr(std::shared_ptr<ExpressionNode>(expr))
 {}
 
-void AssignmentStatementNode::emmitSource(std::string indent)
+void AssignmentStatementNode::emitSource(std::string indent)
 {
   std::cout << indent;
-  lval->emmitSource("");
+  lval->emitSource("");
   std::cout << " := ";
-  expr->emmitSource("");
+  expr->emitSource("");
   std::cout << ";" << std::endl;
 }
 
-RegisterPool::Register AssignmentStatementNode::emmit()
+RegisterPool::Register AssignmentStatementNode::emit()
 {
   throw "not implemented";
 }

@@ -64,14 +64,14 @@ int main(int argc, char** argv)
     if (f_source)
     {
       if (f_verbose) std::cout << "Emitting Source\n" << std::endl;
-      programNode->emmitSource("");
+      programNode->emitSource("");
     }
     else
     {
       if (f_verbose) std::cout << "Emitting Assembly\n" << std::endl;
       try
       {
-        programNode->emmit();
+        programNode->emit();
       }
       catch (...)
       {

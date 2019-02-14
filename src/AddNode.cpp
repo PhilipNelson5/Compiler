@@ -7,12 +7,12 @@ AddNode::AddNode(ExpressionNode*& left, ExpressionNode*& right)
   , right(std::shared_ptr<ExpressionNode>(right))
 {}
 
-void AddNode::emmitSource(std::string indent)
+void AddNode::emitSource(std::string indent)
 {
   std::cout << indent << "Add Node" << std::endl;
 }
 
-RegisterPool::Register AddNode::emmit()
+RegisterPool::Register AddNode::emit()
 {
   throw "not implemented";
 }

@@ -12,8 +12,8 @@ class AssignmentStatementNode : public StatementNode
 {
 public:
   AssignmentStatementNode(LvalueNode*& lval, ExpressionNode* expr);
-  virtual void emmitSource(std::string indent) override;
-  virtual RegisterPool::Register emmit() override;
+  virtual void emitSource(std::string indent) override;
+  virtual RegisterPool::Register emit() override;
 
 private:
   std::shared_ptr<LvalueNode> lval;

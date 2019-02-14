@@ -3,9 +3,19 @@
 #include <iostream>
 #include <memory>
 
-ProgramNode::ProgramNode(ListNode<VariableDeclarationNode>*& vds,
+ProgramNode::ProgramNode(ListNode<ConstantDeclarationNode>*& cds,
+                         ListNode<VariableDeclarationNode>*& vds,
                          ListNode<StatementNode>*& mBlock)
 {
+  // Constant Declarations
+  // ---------------------
+  for (auto cur = std::shared_ptr<ListNode<ConstantDeclarationNode>>(cds);
+       cur != nullptr;
+       cur = cur->next)
+  {
+    if (cur->data != nullptr) constantDecls.push_back(cur->data);
+  }
+
   // Variable Declarations
   // ---------------------
   for (auto cur = std::shared_ptr<ListNode<VariableDeclarationNode>>(vds);
@@ -23,31 +33,45 @@ ProgramNode::ProgramNode(ListNode<VariableDeclarationNode>*& vds,
   {
     if (cur->data != nullptr) mainBlock.push_back(cur->data);
   }
-
 }
 
-void ProgramNode::emmitSource(std::string indent)
+void ProgramNode::emitSource(std::string indent)
 {
+  // Constant Declarations
+  // ---------------------
+  if (constantDecls.size() > 0u)
+  {
+    std::cout << indent << "CONST" << std::endl;
+    for (auto&& constDecl : constantDecls)
+    {
+      constDecl->emitSource(indent + "  ");
+    }
+    std::cout << std::endl;
+  }
+
   // Variable Declarations
   // ---------------------
-  std::cout << indent << "VAR" << std::endl;
-  for (auto&& varDecl : varDecls)
+  if (varDecls.size() > 0)
   {
-    varDecl->emmitSource(indent + "  ");
+    std::cout << indent << "VAR" << std::endl;
+    for (auto&& varDecl : varDecls)
+    {
+      varDecl->emitSource(indent + "  ");
+    }
+    std::cout << std::endl;
   }
-  std::cout << std::endl;
 
   // Main Block
   // ---------------------
   std::cout << indent << "BEGIN" << std::endl;
   for (auto&& statement : mainBlock)
   {
-    statement->emmitSource(indent + "  ");
+    statement->emitSource(indent + "  ");
   }
   std::cout << indent << "END." << std::endl;
 }
 
-RegisterPool::Register ProgramNode::emmit()
+RegisterPool::Register ProgramNode::emit()
 {
   throw "not implemented";
 }

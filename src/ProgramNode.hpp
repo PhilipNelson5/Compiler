@@ -1,6 +1,7 @@
 #ifndef PROGRAM_NODE_HPP
 #define PROGRAM_NODE_HPP
 
+#include "ConstantDeclarationNode.hpp"
 #include "ListNode.hpp"
 #include "Node.hpp"
 #include "RegisterPool.hpp"
@@ -14,13 +15,14 @@
 class ProgramNode : public Node
 {
 public:
-  ProgramNode(ListNode<VariableDeclarationNode>*& vds,
+  ProgramNode(ListNode<ConstantDeclarationNode>*& cds,
+              ListNode<VariableDeclarationNode>*& vds,
               ListNode<StatementNode>*& mb);
-  virtual void emmitSource(std::string indent) override;
-  virtual RegisterPool::Register emmit() override;
+  virtual void emitSource(std::string indent) override;
+  virtual RegisterPool::Register emit() override;
 
 private:
-  // std::vector<std::shared_ptr<NodeList> constantDecls;
+   std::vector<std::shared_ptr<ConstantDeclarationNode>> constantDecls;
   // std::vector<std::shared_ptr<NodeList> typeDecls;
   std::vector<std::shared_ptr<VariableDeclarationNode>> varDecls;
   // std::vector<std::shared_ptr<NodeList> procedureAndFunctionDecls;

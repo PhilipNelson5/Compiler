@@ -6,12 +6,12 @@ IntegerConstantNode::IntegerConstantNode(int value)
   : value(value)
 {}
 
-void IntegerConstantNode::emmitSource(std::string indent)
+void IntegerConstantNode::emitSource(std::string indent)
 {
   std::cout << indent << value;
 }
 
-RegisterPool::Register IntegerConstantNode::emmit()
+RegisterPool::Register IntegerConstantNode::emit()
 {
   throw "not implemented";
 }

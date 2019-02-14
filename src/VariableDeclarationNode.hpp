@@ -12,8 +12,8 @@ class VariableDeclarationNode : public Node
 {
 public:
   VariableDeclarationNode(ListNode<std::string>* identList, char* type);
-  virtual void emmitSource(std::string indent) override;
-  virtual RegisterPool::Register emmit() override;
+  virtual void emitSource(std::string indent) override;
+  virtual RegisterPool::Register emit() override;
 
 private:
   std::vector<std::string> idents;

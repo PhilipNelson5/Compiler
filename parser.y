@@ -8,14 +8,17 @@
 
 #include "src/Node.hpp"
 #include "src/ExpressionNode.hpp"
-#include "src/StatementNode.hpp"
+#include "src/AssignmentStatementNode.hpp"
+#include "src/CharacterConstantNode.hpp"
+#include "src/ConstantDeclarationNode.hpp"
+#include "src/IntegerConstantNode.hpp"
 #include "src/ListNode.hpp"
 #include "src/LvalueNode.hpp"
-#include "src/WriteStatementNode.hpp"
-#include "src/IntegerConstantNode.hpp"
 #include "src/ProgramNode.hpp"
+#include "src/StatementNode.hpp"
+#include "src/StringConstantNode.hpp"
 #include "src/VariableDeclarationNode.hpp"
-#include "src/AssignmentStatementNode.hpp"
+#include "src/WriteStatementNode.hpp"
 
 #define YYERROR_VERBOSE 1
 #define DEBUG 1
@@ -38,15 +41,17 @@ void yyerror(const char*);
   char char_val;
   char * str_val;
   Node * node;
+  StatementNode * statementNode;
   ExpressionNode * expressionNode;
-  LvalueNode * lvalue;
-  VariableDeclarationNode * varDeclNode;
   ListNode<ExpressionNode> * expressionList;
   ListNode<VariableDeclarationNode> * varDelcList;
   ListNode<StatementNode> * statementList;
   ListNode<std::string> * identList;
+  ListNode<ConstantDeclarationNode> * constDelcList;
+  LvalueNode * lvalue;
+  VariableDeclarationNode * varDeclNode;
+  ConstantDeclarationNode * constDeclNode;
   WriteStatementNode * writeStatementNode;
-  StatementNode * statementNode;
   AssignmentStatementNode * assignmentNode;
 }
 
@@ -115,13 +120,14 @@ void yyerror(const char*);
 %token STRING_T
 
 %type <int_val>  NUMBER_T
+%type <str_val>  STRING_T
 %type <char_val> CHAR_T
 %type <str_val>  ID_T
 
 %type <node> Program
-%type <node> OptConstDecls
-%type <node> ConstDeclList
-%type <node> ConstDecl
+%type <constDelcList> OptConstDecls
+%type <constDelcList> ConstDeclList
+%type <constDeclNode> ConstDecl
 %type <node> OptProcedureAndFunctionDeclList
 %type <node> ProcedureAndFunctionDeclList
 %type <node> ProcedureDecl
@@ -184,21 +190,29 @@ Program                         : OptConstDecls
                                   OptProcedureAndFunctionDeclList
                                   Block DOT_T
                                   {
-                                    /*programNode = new ProgramNode($1, $2, $3, $4, $5);*/
-                                    programNode = std::make_shared<ProgramNode>($3, $5);
+                                    programNode = std::make_shared<ProgramNode>($1, $3, $5);
                                   }
                                 ;
 
 /* 3.1.1 Constant Declerations */
-OptConstDecls                   : CONST_T ConstDeclList { $$ = nullptr; }
+OptConstDecls                   : CONST_T ConstDeclList { $$ = $2; }
                                 | /* λ */ { $$ = nullptr; }
                                 ;
 
-ConstDeclList                   : ConstDeclList ConstDecl {}
-                                | ConstDecl {}
+ConstDeclList                   : ConstDeclList ConstDecl
+                                  {
+                                    $$ = new ListNode<ConstantDeclarationNode>($2, $1);
+                                  }
+                                | ConstDecl
+                                  {
+                                    $$ = new ListNode<ConstantDeclarationNode>($1);
+                                  }
                                 ;
 
-ConstDecl                       : ID_T EQUAL_T Expression SEMI_COLON_T {}
+ConstDecl                       : ID_T EQUAL_T Expression SEMI_COLON_T
+                                  {
+                                    $$ = new ConstantDeclarationNode($1, $3);
+                                  }
                                 ;
 
 /* 3.1.2 Procedure and Function Declarations */
@@ -434,14 +448,14 @@ Expression                      : Expression OR_T Expression {}
                                 | SUCC_T OPEN_PAREN_T Expression CLOSE_PAREN_T {}
                                 | LValue { $$ = $1; }
                                 | NUMBER_T { $$ = new IntegerConstantNode($1); }
-                                | STRING_T {}
-                                | CHAR_T {}
+                                | STRING_T { $$ = new StringConstantNode($1); }
+                                | CHAR_T { $$ = new CharacterConstantNode($1); }
                                 ;
 
 LValue                          : LValue DOT_T ID_T { $$ = nullptr; }
                                 | LValue OPEN_BRACKET_T Expression CLOSE_BRACKET_T { $$ = nullptr; }
                                 | ID_T { $$ = new LvalueNode($1); }
-                                 ;
+                                ;
 
 %%
 

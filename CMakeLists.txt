@@ -20,6 +20,10 @@ set(cpsl_srcs
   src/AddNode.hpp
   src/AssignmentStatementNode.cpp
   src/AssignmentStatementNode.hpp
+  src/CharacterConstantNode.cpp
+  src/CharacterConstantNode.hpp
+  src/ConstantDeclarationNode.cpp
+  src/ConstantDeclarationNode.hpp
   src/ExpressionNode.cpp
   src/ExpressionNode.hpp
   src/IntegerConstantNode.cpp
@@ -32,6 +36,8 @@ set(cpsl_srcs
   src/ProgramNode.hpp
   src/RegisterPool.cpp
   src/RegisterPool.hpp
+  src/StringConstantNode.cpp
+  src/StringConstantNode.hpp
   src/StatementNode.hpp
   #src/symbol_table.cpp
   #src/symbol_table.hpp

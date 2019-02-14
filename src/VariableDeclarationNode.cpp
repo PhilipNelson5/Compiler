@@ -15,7 +15,7 @@ VariableDeclarationNode::VariableDeclarationNode(ListNode<std::string>* identLis
   }
 }
 
-void VariableDeclarationNode::emmitSource(std::string indent)
+void VariableDeclarationNode::emitSource(std::string indent)
 {
   std::cout << indent;
   for (auto i = 0u; i < idents.size() - 1; ++i)
@@ -25,7 +25,7 @@ void VariableDeclarationNode::emmitSource(std::string indent)
   std::cout << idents.back() << " : " << type << ";" << std::endl;
 }
 
-RegisterPool::Register VariableDeclarationNode::emmit()
+RegisterPool::Register VariableDeclarationNode::emit()
 {
   throw "not implemented";
 }

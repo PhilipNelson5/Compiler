@@ -8,9 +8,9 @@
 class Node
 {
 public:
-  virtual void emmitSource(std::string indent) = 0;
+  virtual void emitSource(std::string indent) = 0;
   virtual ~Node(){};
-  virtual RegisterPool::Register emmit() = 0;
+  virtual RegisterPool::Register emit() = 0;
 };
 
 #endif

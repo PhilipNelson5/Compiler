@@ -12,17 +12,19 @@ WriteStatementNode::WriteStatementNode(ListNode<ExpressionNode>*& exprList)
   }
 }
 
-void WriteStatementNode::emmitSource(std::string indent)
+void WriteStatementNode::emitSource(std::string indent)
 {
-  std::cout << indent << "write( ";
-  for (auto&& expr : expressionList)
+  std::cout << indent << "write(";
+  for (auto i = 0u; i < expressionList.size()-1; ++i)
   {
-    expr->emmitSource("");
+    expressionList[i]->emitSource("");
+    std::cout << ", ";
   }
-  std::cout << " );" << std::endl;
+  expressionList.back()->emitSource("");
+  std::cout << ");" << std::endl;
 }
 
-RegisterPool::Register WriteStatementNode::emmit()
+RegisterPool::Register WriteStatementNode::emit()
 {
   throw "not implemented";
 }

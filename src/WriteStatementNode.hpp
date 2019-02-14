@@ -12,8 +12,8 @@ class WriteStatementNode : public StatementNode
 {
 public:
   WriteStatementNode(ListNode<ExpressionNode>*& exprList);
-  virtual void emmitSource(std::string indent) override;
-  virtual RegisterPool::Register emmit() override;
+  virtual void emitSource(std::string indent) override;
+  virtual RegisterPool::Register emit() override;
 
 private:
   std::vector<std::shared_ptr<ExpressionNode>> expressionList;

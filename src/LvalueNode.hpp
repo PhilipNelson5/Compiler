@@ -10,8 +10,8 @@ class LvalueNode : public ExpressionNode
 {
 public:
   LvalueNode(std::string ident);
-  void emmitSource(std::string indent) override;
-  RegisterPool::Register emmit() override;
+  void emitSource(std::string indent) override;
+  RegisterPool::Register emit() override;
   std::string ident;
 };
 
