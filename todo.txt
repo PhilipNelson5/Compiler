@@ -1,0 +1,9 @@
+ S   C
+[X] [ ] assignment.cpsl
+[ ] [ ] badidea.cpsl
+[X] [ ] const_declarations.cpsl
+[ ] [ ] expressions.cpsl
+[X] [ ] hello.cpsl
+[X] [ ] io.cpsl
+[ ] [ ] long_expression.cpsl
+[X] [ ] stop.cpsl
