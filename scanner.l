@@ -13,6 +13,7 @@
 #include "src/ProgramNode.hpp"
 #include "src/ReadStatementNode.hpp"
 #include "src/StatementNode.hpp"
+#include "src/StopStatementNode.hpp"
 #include "src/StringConstantNode.hpp"
 #include "src/VariableDeclarationNode.hpp"
 #include "src/WriteStatementNode.hpp"

@@ -18,6 +18,7 @@
 #include "src/ReadStatementNode.hpp"
 #include "src/StatementNode.hpp"
 #include "src/StringConstantNode.hpp"
+#include "src/StopStatementNode.hpp"
 #include "src/VariableDeclarationNode.hpp"
 #include "src/WriteStatementNode.hpp"
 
@@ -44,18 +45,19 @@ void yyerror(const char*);
   Node * node;
   StatementNode * statementNode;
   ExpressionNode * expressionNode;
+  AssignmentStatementNode * assignmentNode;
+  ConstantDeclarationNode * constDeclNode;
+  LvalueNode * lvalue;
+  ReadStatementNode * readStatementNode;
+  StopStatementNode * stopStatementNode;
+  VariableDeclarationNode * varDeclNode;
+  WriteStatementNode * writeStatementNode;
   ListNode<ExpressionNode> * expressionList;
   ListNode<VariableDeclarationNode> * varDelcList;
   ListNode<StatementNode> * statementList;
   ListNode<std::string> * identList;
   ListNode<ConstantDeclarationNode> * constDelcList;
   ListNode<LvalueNode> * lValueList;
-  LvalueNode * lvalue;
-  VariableDeclarationNode * varDeclNode;
-  ConstantDeclarationNode * constDeclNode;
-  WriteStatementNode * writeStatementNode;
-  ReadStatementNode * readStatementNode;
-  AssignmentStatementNode * assignmentNode;
 }
 
 %token ARRAY_T
@@ -162,7 +164,7 @@ void yyerror(const char*);
 %type <node> WhileStatement
 %type <node> RepeatStatement
 %type <node> ForStatement
-%type <node> StopStatement
+%type <stopStatementNode> StopStatement
 %type <node> ReturnStatement
 %type <readStatementNode> ReadStatement
 %type <lValueList> LValueList
@@ -346,7 +348,7 @@ Statement                       : Assignment {}
                                 | WhileStatement {}
                                 | RepeatStatement {}
                                 | ForStatement {}
-                                | StopStatement {}
+                                | StopStatement { $$ = $1; }
                                 | ReturnStatement {}
                                 | ReadStatement {}
                                 | WriteStatement { $$ = $1; }
@@ -389,7 +391,7 @@ ForStatement                    : FOR_T ID_T ASSIGN_T Expression TO_T Expression
                                     DO_T StatementList END_T {}
                                 ;
 
-StopStatement                   : STOP_T {}
+StopStatement                   : STOP_T { $$ = new StopStatementNode(); }
                                 ;
 
 ReturnStatement                 : RETURN_T {}

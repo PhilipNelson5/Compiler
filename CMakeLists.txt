@@ -41,6 +41,8 @@ set(cpsl_srcs
   src/StringConstantNode.cpp
   src/StringConstantNode.hpp
   src/StatementNode.hpp
+  src/StopStatementNode.cpp
+  src/StopStatementNode.hpp
   #src/symbol_table.cpp
   #src/symbol_table.hpp
   src/VariableDeclarationNode.cpp
