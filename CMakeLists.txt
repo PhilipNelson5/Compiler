@@ -34,6 +34,8 @@ set(cpsl_srcs
   src/Node.hpp
   src/ProgramNode.cpp
   src/ProgramNode.hpp
+  src/ReadStatementNode.cpp
+  src/ReadStatementNode.hpp
   src/RegisterPool.cpp
   src/RegisterPool.hpp
   src/StringConstantNode.cpp

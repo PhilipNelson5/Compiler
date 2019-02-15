@@ -11,6 +11,7 @@
 #include "src/ListNode.hpp"
 #include "src/LvalueNode.hpp"
 #include "src/ProgramNode.hpp"
+#include "src/ReadStatementNode.hpp"
 #include "src/StatementNode.hpp"
 #include "src/StringConstantNode.hpp"
 #include "src/VariableDeclarationNode.hpp"

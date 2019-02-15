@@ -8,14 +8,14 @@ WriteStatementNode::WriteStatementNode(ListNode<ExpressionNode>*& exprList)
        cur != nullptr;
        cur = cur->next)
   {
-    expressionList.emplace_back(cur->data);
+    if (cur->data != nullptr) expressionList.emplace_back(cur->data);
   }
 }
 
 void WriteStatementNode::emitSource(std::string indent)
 {
   std::cout << indent << "write(";
-  for (auto i = 0u; i < expressionList.size()-1; ++i)
+  for (auto i = 0u; i < expressionList.size() - 1; ++i)
   {
     expressionList[i]->emitSource("");
     std::cout << ", ";

@@ -15,6 +15,7 @@
 #include "src/ListNode.hpp"
 #include "src/LvalueNode.hpp"
 #include "src/ProgramNode.hpp"
+#include "src/ReadStatementNode.hpp"
 #include "src/StatementNode.hpp"
 #include "src/StringConstantNode.hpp"
 #include "src/VariableDeclarationNode.hpp"
@@ -48,10 +49,12 @@ void yyerror(const char*);
   ListNode<StatementNode> * statementList;
   ListNode<std::string> * identList;
   ListNode<ConstantDeclarationNode> * constDelcList;
+  ListNode<LvalueNode> * lValueList;
   LvalueNode * lvalue;
   VariableDeclarationNode * varDeclNode;
   ConstantDeclarationNode * constDeclNode;
   WriteStatementNode * writeStatementNode;
+  ReadStatementNode * readStatementNode;
   AssignmentStatementNode * assignmentNode;
 }
 
@@ -161,8 +164,8 @@ void yyerror(const char*);
 %type <node> ForStatement
 %type <node> StopStatement
 %type <node> ReturnStatement
-%type <node> ReadStatement
-%type <node> LValueList
+%type <readStatementNode> ReadStatement
+%type <lValueList> LValueList
 %type <writeStatementNode> WriteStatement
 %type <expressionList> OptExpressionList
 %type <expressionList> ExpressionList
@@ -393,11 +396,20 @@ ReturnStatement                 : RETURN_T {}
                                 | RETURN_T Expression {}
                                 ;
 
-ReadStatement                   : READ_T OPEN_PAREN_T LValueList CLOSE_PAREN_T {}
+ReadStatement                   : READ_T OPEN_PAREN_T LValueList CLOSE_PAREN_T
+                                  {
+                                    $$ = new ReadStatementNode($3);
+                                  }
                                 ;
 
-LValueList                      : LValueList COMMA_T LValue {}
-                                | LValue {}
+LValueList                      : LValueList COMMA_T LValue
+                                  {
+                                    $$ = new ListNode<LvalueNode>($3, $1);
+                                  }
+                                | LValue 
+                                  {
+                                    $$ = new ListNode<LvalueNode>($1);
+                                  }
                                 ;
 
 WriteStatement                  : WRITE_T OPEN_PAREN_T ExpressionList CLOSE_PAREN_T
