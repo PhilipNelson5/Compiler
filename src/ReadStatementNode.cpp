@@ -3,14 +3,8 @@
 #include <iostream>
 
 ReadStatementNode::ReadStatementNode(ListNode<LvalueNode>*& lVals)
-{
-  for (auto cur = std::make_shared<ListNode<LvalueNode>>(*lVals);
-       cur != nullptr;
-       cur = cur->next)
-  {
-    if (cur->data != nullptr) lValues.emplace_back(cur->data);
-  }
-}
+  : lValues(ListNode<LvalueNode>::makeVector(lVals))
+{}
 
 void ReadStatementNode::emitSource(std::string indent)
 {

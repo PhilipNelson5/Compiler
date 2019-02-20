@@ -3,14 +3,8 @@
 #include <iostream>
 
 WriteStatementNode::WriteStatementNode(ListNode<ExpressionNode>*& exprList)
-{
-  for (auto cur = std::make_shared<ListNode<ExpressionNode>>(*exprList);
-       cur != nullptr;
-       cur = cur->next)
-  {
-    if (cur->data != nullptr) expressionList.emplace_back(cur->data);
-  }
-}
+  : expressionList(ListNode<ExpressionNode>::makeVector(exprList))
+{}
 
 void WriteStatementNode::emitSource(std::string indent)
 {

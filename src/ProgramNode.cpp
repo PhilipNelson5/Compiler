@@ -8,41 +8,13 @@ ProgramNode::ProgramNode(ListNode<ConstantDeclarationNode>*& cds,
                          ListNode<VariableDeclarationNode>*& vds,
                          ListNode<StatementNode>*& mBlock)
 {
-  // Constant Declarations
-  // ---------------------
-  for (auto cur = std::shared_ptr<ListNode<ConstantDeclarationNode>>(cds);
-       cur != nullptr;
-       cur = cur->next)
-  {
-    if (cur->data != nullptr) constantDecls.push_back(cur->data);
-  }
+  constantDecls = ListNode<ConstantDeclarationNode>::makeVector(cds);
 
-  // Type Declarations
-  // -----------------
-  for (auto cur = std::shared_ptr<ListNode<TypeDeclarationNode>>(tds);
-       cur != nullptr;
-       cur = cur->next)
-  {
-    if (cur->data != nullptr) typeDecls.push_back(cur->data);
-  }
+  typeDecls = ListNode<TypeDeclarationNode>::makeVector(tds);
 
-  // Variable Declarations
-  // ---------------------
-  for (auto cur = std::shared_ptr<ListNode<VariableDeclarationNode>>(vds);
-       cur != nullptr;
-       cur = cur->next)
-  {
-    if (cur->data != nullptr) varDecls.push_back(cur->data);
-  }
+  varDecls = ListNode<VariableDeclarationNode>::makeVector(vds);
 
-  // Main Block
-  // ----------
-  for (auto cur = std::shared_ptr<ListNode<StatementNode>>(mBlock);
-       cur != nullptr;
-       cur = cur->next)
-  {
-    if (cur->data != nullptr) mainBlock.push_back(cur->data);
-  }
+  mainBlock = ListNode<StatementNode>::makeVector(mBlock);
 }
 
 void ProgramNode::emitSource(std::string indent)
