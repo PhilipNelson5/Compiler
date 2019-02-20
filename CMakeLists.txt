@@ -16,14 +16,20 @@ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
 set(cpsl_srcs
   main.cpp
 
+  #src/symbol_table.cpp
+  #src/symbol_table.hpp
   src/AddNode.cpp
   src/AddNode.hpp
   src/AssignmentStatementNode.cpp
   src/AssignmentStatementNode.hpp
   src/CharacterConstantNode.cpp
   src/CharacterConstantNode.hpp
+  src/CharacterExpressionNode.cpp
+  src/CharacterExpressionNode.hpp
   src/ConstantDeclarationNode.cpp
   src/ConstantDeclarationNode.hpp
+  src/EqualExpressionNode.cpp
+  src/EqualExpressionNode.hpp
   src/ExpressionNode.cpp
   src/ExpressionNode.hpp
   src/IntegerConstantNode.cpp
@@ -32,19 +38,25 @@ set(cpsl_srcs
   src/LvalueNode.cpp
   src/LvalueNode.hpp
   src/Node.hpp
+  src/NotEqualExpressionNode.cpp
+  src/NotEqualExpressionNode.hpp
+  src/OrdinalExpressionNode.cpp
+  src/OrdinalExpressionNode.hpp
   src/ProgramNode.cpp
   src/ProgramNode.hpp
   src/ReadStatementNode.cpp
   src/ReadStatementNode.hpp
   src/RegisterPool.cpp
   src/RegisterPool.hpp
-  src/StringConstantNode.cpp
-  src/StringConstantNode.hpp
+  src/SimpleTypeNode.cpp
+  src/SimpleTypeNode.hpp
   src/StatementNode.hpp
   src/StopStatementNode.cpp
   src/StopStatementNode.hpp
-  #src/symbol_table.cpp
-  #src/symbol_table.hpp
+  src/StringConstantNode.cpp
+  src/StringConstantNode.hpp
+  src/TypeDeclarationNode.cpp
+  src/TypeDeclarationNode.hpp
   src/VariableDeclarationNode.cpp
   src/VariableDeclarationNode.hpp
   src/WriteStatementNode.cpp

@@ -4,6 +4,7 @@
 #include <memory>
 
 ProgramNode::ProgramNode(ListNode<ConstantDeclarationNode>*& cds,
+                         ListNode<TypeDeclarationNode>*& tds,
                          ListNode<VariableDeclarationNode>*& vds,
                          ListNode<StatementNode>*& mBlock)
 {
@@ -14,6 +15,15 @@ ProgramNode::ProgramNode(ListNode<ConstantDeclarationNode>*& cds,
        cur = cur->next)
   {
     if (cur->data != nullptr) constantDecls.push_back(cur->data);
+  }
+
+  // Type Declarations
+  // -----------------
+  for (auto cur = std::shared_ptr<ListNode<TypeDeclarationNode>>(tds);
+       cur != nullptr;
+       cur = cur->next)
+  {
+    if (cur->data != nullptr) typeDecls.push_back(cur->data);
   }
 
   // Variable Declarations
@@ -45,6 +55,18 @@ void ProgramNode::emitSource(std::string indent)
     for (auto&& constDecl : constantDecls)
     {
       constDecl->emitSource(indent + "  ");
+    }
+    std::cout << std::endl;
+  }
+
+  // Type Declarations
+  // ---------------------
+  if (varDecls.size() > 0)
+  {
+    std::cout << indent << "TYPE" << std::endl;
+    for (auto&& typeDecl : typeDecls)
+    {
+      typeDecl->emitSource(indent + "  ");
     }
     std::cout << std::endl;
   }

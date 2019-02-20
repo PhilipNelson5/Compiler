@@ -1,6 +1,6 @@
  S   C
 [X] [ ] assignment.cpsl
-[ ] [ ] badidea.cpsl
+[X] [ ] badidea.cpsl
 [X] [ ] const_declarations.cpsl
 [ ] [ ] expressions.cpsl
 [X] [ ] hello.cpsl

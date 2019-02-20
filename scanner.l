@@ -2,19 +2,29 @@
 #include <cstdlib>
 #include <string>
 
+// abstract node classes
 #include "src/Node.hpp"
+#include "src/StatementNode.hpp"
 #include "src/ExpressionNode.hpp"
+#include "src/TypeNode.hpp"
+
+// concrete node classes
 #include "src/AssignmentStatementNode.hpp"
 #include "src/CharacterConstantNode.hpp"
+#include "src/CharacterExpressionNode.hpp"
 #include "src/ConstantDeclarationNode.hpp"
+#include "src/EqualExpressionNode.hpp"
 #include "src/IntegerConstantNode.hpp"
 #include "src/ListNode.hpp"
 #include "src/LvalueNode.hpp"
+#include "src/NotEqualExpressionNode.hpp"
+#include "src/OrdinalExpressionNode.hpp"
 #include "src/ProgramNode.hpp"
 #include "src/ReadStatementNode.hpp"
-#include "src/StatementNode.hpp"
+#include "src/SimpleTypeNode.hpp"
 #include "src/StopStatementNode.hpp"
 #include "src/StringConstantNode.hpp"
+#include "src/TypeDeclarationNode.hpp"
 #include "src/VariableDeclarationNode.hpp"
 #include "src/WriteStatementNode.hpp"
 

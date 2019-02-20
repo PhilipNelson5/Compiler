@@ -5,7 +5,7 @@
 #include <string>
 
 VariableDeclarationNode::VariableDeclarationNode(ListNode<std::string>* identList,
-                                                 char* type)
+                                                 TypeNode* type)
   : type(type)
 {
   for (auto cur = std::shared_ptr<ListNode<std::string>>(identList); cur != nullptr;
@@ -22,7 +22,9 @@ void VariableDeclarationNode::emitSource(std::string indent)
   {
     std::cout << idents[i] << ", ";
   }
-  std::cout << idents.back() << " : " << type << ";" << std::endl;
+  std::cout << idents.back() << " : ";
+  type->emitSource("");
+  std::cout << ";" << std::endl;
 }
 
 RegisterPool::Register VariableDeclarationNode::emit()

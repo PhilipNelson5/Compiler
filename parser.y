@@ -1,24 +1,33 @@
 %{
 #include <cstring>
 #include <iostream>
-#include <map>
 #include <memory>
 #include <sstream>
 #include <string>
 
+// abstract node classes
 #include "src/Node.hpp"
+#include "src/StatementNode.hpp"
 #include "src/ExpressionNode.hpp"
+#include "src/TypeNode.hpp"
+
+// concrete node classes
 #include "src/AssignmentStatementNode.hpp"
 #include "src/CharacterConstantNode.hpp"
+#include "src/CharacterExpressionNode.hpp"
 #include "src/ConstantDeclarationNode.hpp"
+#include "src/EqualExpressionNode.hpp"
 #include "src/IntegerConstantNode.hpp"
 #include "src/ListNode.hpp"
 #include "src/LvalueNode.hpp"
+#include "src/NotEqualExpressionNode.hpp"
+#include "src/OrdinalExpressionNode.hpp"
 #include "src/ProgramNode.hpp"
 #include "src/ReadStatementNode.hpp"
-#include "src/StatementNode.hpp"
-#include "src/StringConstantNode.hpp"
+#include "src/SimpleTypeNode.hpp"
 #include "src/StopStatementNode.hpp"
+#include "src/StringConstantNode.hpp"
+#include "src/TypeDeclarationNode.hpp"
 #include "src/VariableDeclarationNode.hpp"
 #include "src/WriteStatementNode.hpp"
 
@@ -42,22 +51,29 @@ void yyerror(const char*);
   int int_val;
   char char_val;
   char * str_val;
+
   Node * node;
   StatementNode * statementNode;
   ExpressionNode * expressionNode;
+  TypeNode * typeNode;
+
   AssignmentStatementNode * assignmentNode;
   ConstantDeclarationNode * constDeclNode;
   LvalueNode * lvalue;
   ReadStatementNode * readStatementNode;
+  SimpleTypeNode * simpleTypeNode;
   StopStatementNode * stopStatementNode;
+  TypeDeclarationNode * typeDeclarationNode;
   VariableDeclarationNode * varDeclNode;
   WriteStatementNode * writeStatementNode;
-  ListNode<ExpressionNode> * expressionList;
-  ListNode<VariableDeclarationNode> * varDelcList;
-  ListNode<StatementNode> * statementList;
-  ListNode<std::string> * identList;
+
   ListNode<ConstantDeclarationNode> * constDelcList;
+  ListNode<ExpressionNode> * expressionList;
   ListNode<LvalueNode> * lValueList;
+  ListNode<StatementNode> * statementList;
+  ListNode<TypeDeclarationNode> * typeDeclarationList;
+  ListNode<VariableDeclarationNode> * varDelcList;
+  ListNode<std::string> * identList;
 }
 
 %token ARRAY_T
@@ -141,11 +157,11 @@ void yyerror(const char*);
 %type <node> FormalParameterList
 %type <node> FormalParameter
 %type <statementList> Block
-%type <node> OptTypeDecls
-%type <node> TypeDeclList
-%type <node> TypeDecl
-%type <str_val> Type
-%type <str_val> SimpleType
+%type <typeDeclarationList> OptTypeDecls
+%type <typeDeclarationList> TypeDeclList
+%type <typeDeclarationNode> TypeDecl
+%type <typeNode> Type
+%type <simpleTypeNode> SimpleType
 %type <node> RecordType
 %type <varDelcList> OptFieldList
 %type <varDelcList> FieldList
@@ -195,7 +211,7 @@ Program                         : OptConstDecls
                                   OptProcedureAndFunctionDeclList
                                   Block DOT_T
                                   {
-                                    programNode = std::make_shared<ProgramNode>($1, $3, $5);
+                                    programNode = std::make_shared<ProgramNode>($1, $2, $3, $5);
                                   }
                                 ;
 
@@ -263,15 +279,24 @@ Block                           : BEGIN_T StatementList END_T { $$ = $2; }
                                 ;
 
 /* 3.1.3 Type Declerations */
-OptTypeDecls                    : TYPE_T TypeDeclList { $$ = nullptr; }
+OptTypeDecls                    : TYPE_T TypeDeclList { $$ = $2; }
                                 | /* λ */ { $$ = nullptr; }
                                 ;
 
-TypeDeclList                    : TypeDeclList TypeDecl {}
-                                | TypeDecl {}
+TypeDeclList                    : TypeDeclList TypeDecl
+                                  {
+                                    $$ = new ListNode<TypeDeclarationNode>($2, $1);
+                                  }
+                                | TypeDecl
+                                  {
+                                    $$ = new ListNode<TypeDeclarationNode>($1);
+                                  }
                                 ;
 
-TypeDecl                        : ID_T EQUAL_T Type SEMI_COLON_T {}
+TypeDecl                        : ID_T EQUAL_T Type SEMI_COLON_T
+                                  {
+                                    $$ = new TypeDeclarationNode($1, $3);
+                                  }
                                 ;
 
 Type                            : SimpleType { $$ = $1;}
@@ -279,7 +304,7 @@ Type                            : SimpleType { $$ = $1;}
                                 | ArrayType {}
                                 ;
 
-SimpleType                      : ID_T { $$ = $1; }
+SimpleType                      : ID_T { $$ = new SimpleTypeNode($1); }
                                 ;
 
 RecordType                      : RECORD_T OptFieldList END_T {}
@@ -356,7 +381,10 @@ Statement                       : Assignment {}
                                 | { $$ = nullptr; }
                                 ;
 
-Assignment                      : LValue ASSIGN_T Expression { $$ = new AssignmentStatementNode($1, $3); }
+Assignment                      : LValue ASSIGN_T Expression
+                                  {
+                                    $$ = new AssignmentStatementNode($1, $3);
+                                  }
                                 ;
 
 IfStatement                     : IfHeader ThenBody ElseIfStatementList OptElseStatement END_T {}
@@ -441,8 +469,8 @@ ExpressionList                  : ExpressionList COMMA_T Expression
 
 Expression                      : Expression OR_T Expression {}
                                 | Expression AND_T Expression {}
-                                | Expression EQUAL_T Expression {}
-                                | Expression NEQUAL_T Expression {}
+                                | Expression EQUAL_T Expression { $$ = new EqualExpressionNode($1, $3); }
+                                | Expression NEQUAL_T Expression { $$ = new NotEqualExpressionNode($1, $3); }
                                 | Expression LTE_T Expression {}
                                 | Expression GTE_T Expression {}
                                 | Expression LT_T Expression {}
@@ -456,8 +484,8 @@ Expression                      : Expression OR_T Expression {}
                                 | MINUS_T Expression %prec UNARY_MINUS_T {}
                                 | OPEN_PAREN_T Expression CLOSE_PAREN_T {}
                                 | ProcedureCall {}
-                                | CHR_T OPEN_PAREN_T Expression CLOSE_PAREN_T {}
-                                | ORD_T OPEN_PAREN_T Expression CLOSE_PAREN_T {}
+                                | CHR_T OPEN_PAREN_T Expression CLOSE_PAREN_T { $$ = new CharacterExpressionNode($3); }
+                                | ORD_T OPEN_PAREN_T Expression CLOSE_PAREN_T { $$ = new OrdinalExpressionNode($3); }
                                 | PRED_T OPEN_PAREN_T Expression CLOSE_PAREN_T {}
                                 | SUCC_T OPEN_PAREN_T Expression CLOSE_PAREN_T {}
                                 | LValue { $$ = $1; }
