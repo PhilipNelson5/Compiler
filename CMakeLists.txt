@@ -20,6 +20,18 @@ set(cpsl_srcs
   #src/symbol_table.hpp
   src/AddNode.cpp
   src/AddNode.hpp
+  src/OrNode.cpp
+  src/OrNode.hpp
+  src/NotNode.cpp
+  src/NotNode.hpp
+  src/UnaryMinusNode.cpp
+  src/UnaryMinusNode.hpp
+  src/PredecessorExpressionNode.cpp
+  src/PredecessorExpressionNode.hpp
+  src/SuccessorExpressionNode.cpp
+  src/SuccessorExpressionNode.hpp
+  src/AndNode.cpp
+  src/AndNode.hpp
   src/SubtractNode.cpp
   src/SubtractNode.hpp
   src/MultiplyNode.cpp

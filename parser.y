@@ -12,31 +12,37 @@
 #include "src/TypeNode.hpp"
 
 // concrete node classes
-#include "src/LessThanEqualNode.hpp"
-#include "src/GreaterThanEqualNode.hpp"
-#include "src/GreaterThanNode.hpp"
-#include "src/LessThanNode.hpp"
-#include "src/ModuloNode.hpp"
 #include "src/AddNode.hpp"
+#include "src/AndNode.hpp"
 #include "src/AssignmentStatementNode.hpp"
 #include "src/CharacterConstantNode.hpp"
 #include "src/CharacterExpressionNode.hpp"
 #include "src/ConstantDeclarationNode.hpp"
 #include "src/DivideNode.hpp"
 #include "src/EqualExpressionNode.hpp"
+#include "src/GreaterThanEqualNode.hpp"
+#include "src/GreaterThanNode.hpp"
 #include "src/IntegerConstantNode.hpp"
+#include "src/LessThanEqualNode.hpp"
+#include "src/LessThanNode.hpp"
 #include "src/ListNode.hpp"
 #include "src/LvalueNode.hpp"
+#include "src/ModuloNode.hpp"
 #include "src/MultiplyNode.hpp"
 #include "src/NotEqualExpressionNode.hpp"
+#include "src/NotNode.hpp"
+#include "src/OrNode.hpp"
 #include "src/OrdinalExpressionNode.hpp"
+#include "src/PredecessorExpressionNode.hpp"
 #include "src/ProgramNode.hpp"
 #include "src/ReadStatementNode.hpp"
 #include "src/SimpleTypeNode.hpp"
 #include "src/StopStatementNode.hpp"
 #include "src/StringConstantNode.hpp"
 #include "src/SubtractNode.hpp"
+#include "src/SuccessorExpressionNode.hpp"
 #include "src/TypeDeclarationNode.hpp"
+#include "src/UnaryMinusNode.hpp"
 #include "src/VariableDeclarationNode.hpp"
 #include "src/WriteStatementNode.hpp"
 
@@ -476,31 +482,31 @@ ExpressionList                  : ExpressionList COMMA_T Expression
 
 /* 3.3   Expressions */
 
-Expression                      : Expression OR_T Expression {}
-                                | Expression AND_T Expression {}
-                                | Expression EQUAL_T Expression { $$ = new EqualExpressionNode($1, $3); }
-                                | Expression NEQUAL_T Expression { $$ = new NotEqualExpressionNode($1, $3); }
-                                | Expression LTE_T Expression { $$ = new LessThanEqualNode($1, $3); }
-                                | Expression GTE_T Expression { $$ = new GreaterThanEqualNode($1, $3); }
-                                | Expression LT_T Expression { $$ = new LessThanNode($1, $3); }
-                                | Expression GT_T Expression { $$ = new GreaterThanNode($1, $3); }
-                                | Expression PLUS_T Expression { $$ = new AddNode($1, $3); }
-                                | Expression MINUS_T Expression { $$ = new SubtractNode($1, $3); }
-                                | Expression MULTIPLY_T Expression { $$ = new MultiplyNode($1, $3); }
-                                | Expression DIVIDE_T Expression { $$ = new DivideNode($1, $3); }
-                                | Expression MOD_T Expression { $$ = new ModuloNode($1, $3); }
-                                | NOT_T Expression {}
-                                | MINUS_T Expression %prec UNARY_MINUS_T {}
-                                | OPEN_PAREN_T Expression CLOSE_PAREN_T { $$ = $2; }
-                                | ProcedureCall {}
-                                | CHR_T OPEN_PAREN_T Expression CLOSE_PAREN_T { $$ = new CharacterExpressionNode($3); }
-                                | ORD_T OPEN_PAREN_T Expression CLOSE_PAREN_T { $$ = new OrdinalExpressionNode($3); }
-                                | PRED_T OPEN_PAREN_T Expression CLOSE_PAREN_T {}
-                                | SUCC_T OPEN_PAREN_T Expression CLOSE_PAREN_T {}
-                                | LValue { $$ = $1; }
-                                | NUMBER_T { $$ = new IntegerConstantNode($1); }
-                                | STRING_T { $$ = new StringConstantNode($1); }
-                                | CHAR_T { $$ = new CharacterConstantNode($1); }
+Expression                      : Expression OR_T Expression                   { $$ = new OrNode($1, $3); }
+                                | Expression AND_T Expression                  { $$ = new AndNode($1, $3); }
+                                | Expression EQUAL_T Expression                { $$ = new EqualExpressionNode($1, $3); }
+                                | Expression NEQUAL_T Expression               { $$ = new NotEqualExpressionNode($1, $3); }
+                                | Expression LTE_T Expression                  { $$ = new LessThanEqualNode($1, $3); }
+                                | Expression GTE_T Expression                  { $$ = new GreaterThanEqualNode($1, $3); }
+                                | Expression LT_T Expression                   { $$ = new LessThanNode($1, $3); }
+                                | Expression GT_T Expression                   { $$ = new GreaterThanNode($1, $3); }
+                                | Expression PLUS_T Expression                 { $$ = new AddNode($1, $3); }
+                                | Expression MINUS_T Expression                { $$ = new SubtractNode($1, $3); }
+                                | Expression MULTIPLY_T Expression             { $$ = new MultiplyNode($1, $3); }
+                                | Expression DIVIDE_T Expression               { $$ = new DivideNode($1, $3); }
+                                | Expression MOD_T Expression                  { $$ = new ModuloNode($1, $3); }
+                                | NOT_T Expression                             { $$ = new NotNode($2); }
+                                | MINUS_T Expression %prec UNARY_MINUS_T       { $$ = new UnaryMinusNode($2); }
+                                | OPEN_PAREN_T Expression CLOSE_PAREN_T        { $$ = $2; }
+                                | ProcedureCall                                { }
+                                | CHR_T OPEN_PAREN_T Expression CLOSE_PAREN_T  { $$ = new CharacterExpressionNode($3); }
+                                | ORD_T OPEN_PAREN_T Expression CLOSE_PAREN_T  { $$ = new OrdinalExpressionNode($3); }
+                                | PRED_T OPEN_PAREN_T Expression CLOSE_PAREN_T { $$ = new PredecessorExpressionNode($3); }
+                                | SUCC_T OPEN_PAREN_T Expression CLOSE_PAREN_T { $$ = new SuccessorExpressionNode($3); }
+                                | LValue                                       { $$ = $1; }
+                                | NUMBER_T                                     { $$ = new IntegerConstantNode($1); }
+                                | STRING_T                                     { $$ = new StringConstantNode($1); }
+                                | CHAR_T                                       { $$ = new CharacterConstantNode($1); }
                                 ;
 
 LValue                          : LValue DOT_T ID_T { $$ = nullptr; }
