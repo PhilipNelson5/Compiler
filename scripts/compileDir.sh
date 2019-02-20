@@ -24,6 +24,7 @@ fi
 
 echo "$dir"
 
+clear
 for file in $(ls ${dir});
 do
   path="${dir}/${file}"
@@ -41,7 +42,9 @@ do
   printf '━%.0s' $(seq 1 $(tput cols))
   echo ""
   echo ""
+  read -p "Press enter to continue"
+  clear
 done
 
-exit 1
+exit 0
 
