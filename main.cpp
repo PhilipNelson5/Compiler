@@ -2,6 +2,7 @@ extern int yyparse();
 extern int yydebug;
 
 #include "src/ProgramNode.hpp"
+#include "src/RegisterPool.hpp"
 
 #include <cstring>
 #include <iostream>
@@ -80,10 +81,10 @@ int main(int argc, char** argv)
   }
 
   {
-    auto reg = RegisterPool::RP.getRegister();
-    std::cout << reg.str() << std::endl;
+    auto reg = RegisterPool::getInstance()->getRegister();
+    std::cout << reg << std::endl;
   }
 
-  auto reg = RegisterPool::RP.getRegister();
-  std::cout << reg.str() << std::endl;
+  auto reg = RegisterPool::getInstance()->getRegister();
+  std::cout << reg << std::endl;
 }
