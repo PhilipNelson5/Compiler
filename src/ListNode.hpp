@@ -1,6 +1,7 @@
 #ifndef LIST_NODE_HPP
 #define LIST_NODE_HPP
 
+#include <algorithm>
 #include <memory>
 #include <vector>
 
@@ -26,6 +27,19 @@ public:
     {
       if (cur->data != nullptr) vec.push_back(cur->data);
     }
+    std::reverse(std::begin(vec), std::end(vec));
+    return vec;
+  }
+
+  static std::vector<T> makeDerefVector(ListNode<T>*& list)
+  {
+    std::vector<T> vec;
+    for (auto cur = std::shared_ptr<ListNode<T>>(list); cur != nullptr;
+         cur = cur->next)
+    {
+      if (cur->data != nullptr) vec.push_back(*(cur->data));
+    }
+    std::reverse(std::begin(vec), std::end(vec));
     return vec;
   }
 
