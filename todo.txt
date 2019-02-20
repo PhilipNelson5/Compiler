@@ -2,8 +2,8 @@
 [X] [ ] assignment.cpsl
 [X] [ ] badidea.cpsl
 [X] [ ] const_declarations.cpsl
-[ ] [ ] expressions.cpsl
+[X] [ ] expressions.cpsl
 [X] [ ] hello.cpsl
 [X] [ ] io.cpsl
-[ ] [ ] long_expression.cpsl
+[X] [ ] long_expression.cpsl
 [X] [ ] stop.cpsl

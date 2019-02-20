@@ -1,15 +1,15 @@
-#ifndef ADD_NODE_HPP
-#define ADD_NODE_HPP
+#ifndef SUBTRACT_NODE_HPP
+#define SUBTRACT_NODE_HPP
 
 #include "ExpressionNode.hpp"
 #include "RegisterPool.hpp"
 
 #include <memory>
 
-class AddNode : public ExpressionNode
+class SubtractNode : public ExpressionNode
 {
 public:
-  AddNode(ExpressionNode*& left, ExpressionNode*& right);
+  SubtractNode(ExpressionNode*& left, ExpressionNode*& right);
   virtual void emitSource(std::string indent) override;
   virtual RegisterPool::Register emit() override;
 

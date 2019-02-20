@@ -20,6 +20,22 @@ set(cpsl_srcs
   #src/symbol_table.hpp
   src/AddNode.cpp
   src/AddNode.hpp
+  src/SubtractNode.cpp
+  src/SubtractNode.hpp
+  src/MultiplyNode.cpp
+  src/MultiplyNode.hpp
+  src/DivideNode.cpp
+  src/DivideNode.hpp
+  src/ModuloNode.cpp
+  src/ModuloNode.hpp
+  src/LessThanNode.cpp
+  src/LessThanNode.hpp
+  src/GreaterThanNode.cpp
+  src/GreaterThanNode.hpp
+  src/GreaterThanEqualNode.cpp
+  src/GreaterThanEqualNode.hpp
+  src/LessThanEqualNode.cpp
+  src/LessThanEqualNode.hpp
   src/AssignmentStatementNode.cpp
   src/AssignmentStatementNode.hpp
   src/CharacterConstantNode.cpp

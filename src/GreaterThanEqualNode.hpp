@@ -1,15 +1,15 @@
-#ifndef ADD_NODE_HPP
-#define ADD_NODE_HPP
+#ifndef GREATER_THAN_EQUAL_NODE_HPP
+#define GREATER_THAN_EQUAL_NODE_HPP
 
 #include "ExpressionNode.hpp"
 #include "RegisterPool.hpp"
 
 #include <memory>
 
-class AddNode : public ExpressionNode
+class GreaterThanEqualNode : public ExpressionNode
 {
 public:
-  AddNode(ExpressionNode*& left, ExpressionNode*& right);
+  GreaterThanEqualNode(ExpressionNode*& left, ExpressionNode*& right);
   virtual void emitSource(std::string indent) override;
   virtual RegisterPool::Register emit() override;
 

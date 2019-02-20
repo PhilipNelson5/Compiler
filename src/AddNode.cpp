@@ -3,13 +3,16 @@
 #include <iostream>
 
 AddNode::AddNode(ExpressionNode*& left, ExpressionNode*& right)
-  : left(std::shared_ptr<ExpressionNode>(left))
-  , right(std::shared_ptr<ExpressionNode>(right))
+  : lhs(left)
+  , rhs(right)
 {}
 
 void AddNode::emitSource(std::string indent)
 {
-  std::cout << indent << "Add Node" << std::endl;
+  std::cout << indent;
+  lhs->emitSource("");
+  std::cout << "+";
+  rhs->emitSource("");
 }
 
 RegisterPool::Register AddNode::emit()
