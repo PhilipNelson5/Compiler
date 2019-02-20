@@ -28,5 +28,7 @@ Is it a bad idea for the register pool to be a private static vector of register
   ANSWER: It's your world you are the creator.
 
 Is it ok to have a class defined entirely in header files?
+  ANSWER: Yes, Unity Builds for example, create one giant file for the compiler. Can help with optimization.
 
 Bison does a LR parse so how do you avoid reversing lists?
+  ANSWER: Push back to the list or vector;
