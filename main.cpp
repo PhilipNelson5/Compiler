@@ -78,4 +78,12 @@ int main(int argc, char** argv)
       }
     }
   }
-};
+
+  {
+    auto reg = RegisterPool::RP.getRegister();
+    std::cout << reg.str() << std::endl;
+  }
+
+  auto reg = RegisterPool::RP.getRegister();
+  std::cout << reg.str() << std::endl;
+}
