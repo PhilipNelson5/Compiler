@@ -6,52 +6,45 @@
 #include <string>
 #include <vector>
 
-class RegisterPool
+
+namespace RegisterPool
+{
+class Register
 {
 public:
-  class Register;
+  // constructor
+  Register();
+
+  // move constructor
+  Register(Register&& old);
+
+  // move assignment operator
+  Register& operator=(Register&& reg) = default;
+
+  // destructor
+  ~Register();
+
+  // register name getter
+  std::string toString() const { return name; }
 
 private:
-  static std::unique_ptr<RegisterPool> instance;
+  // deleted copy constructor
+  Register(const Register& reg) = delete;
 
-  std::vector<std::string> pool;
+  // deleted assignment operator
+  Register& operator=(const Register& reg) = delete;
 
-public:
-  class Register
-  {
-  public:
-    // move constructor
-    Register(Register&& old);
+  // initialize the pool
+  void init();
 
-    // destructor
-    ~Register();
+  // Register name
+  std::string name;
 
-    // register name getter
-    std::string toString() const { return name; }
+  // pool of registers
+  static std::vector<std::string> pool;
 
-    // constructor
-    Register(std::string name);
-
-  private:
-    // deleted copy constructor
-    Register(const Register& reg) = delete;
-
-    // deleted assignment operator
-    Register& operator=(Register&& reg) = delete;
-
-    // Register name
-    std::string name;
-
-  }; // class Register
-
-  RegisterPool();
-
-public:
-  static RegisterPool* getInstance();
-
-  Register getRegister();
-
-}; // class RegisterPool
+}; // class Register
+} // namespace RegisterPool
 
 std::ostream& operator<<(std::ostream& o, RegisterPool::Register const& r);
 

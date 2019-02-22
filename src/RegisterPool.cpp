@@ -1,12 +1,39 @@
 #include "RegisterPool.hpp"
 
-// ----------------------------------------------------------------------------
-// Register Pool
-// ----------------------------------------------------------------------------
-std::unique_ptr<RegisterPool> RegisterPool::instance = nullptr;
-
-RegisterPool::RegisterPool():pool()
+namespace RegisterPool
 {
+std::vector<std::string> Register::pool;
+
+Register::Register(Register&& old)
+  : name{old.name}
+{
+  old.name = "$INVALID";
+}
+
+Register::Register()
+{
+  init();
+  name = pool.back();
+  pool.pop_back();
+}
+
+Register::~Register()
+{
+  if (name != "$INVALID")
+  {
+    pool.emplace_back(name);
+  }
+}
+
+void Register::init()
+{
+  static bool initialized = false;
+
+  if (initialized)
+    return;
+  else
+    initialized = true;
+
   pool.reserve(18);
   pool.emplace_back(std::string("$s0"));
   pool.emplace_back(std::string("$s1"));
@@ -27,43 +54,7 @@ RegisterPool::RegisterPool():pool()
   pool.emplace_back(std::string("$t8"));
   pool.emplace_back(std::string("$t9"));
 }
-
-RegisterPool* RegisterPool::getInstance()
-{
-  if(instance == nullptr)
-  {
-    instance = std::make_unique<RegisterPool>();
-  }
-  return instance.get();
-}
-
-RegisterPool::Register RegisterPool::getRegister()
-{
-  auto reg = Register(getInstance()->pool.back());
-  getInstance()->pool.pop_back();
-  return reg;
-}
-
-// ----------------------------------------------------------------------------
-// Register
-// ----------------------------------------------------------------------------
-
-RegisterPool::Register::Register(Register&& old)
-  : name{old.name}
-{
-  old.name = "$INVALID";
-}
-
-RegisterPool::Register::Register(std::string name)
-  : name{name}
-{}
-
-RegisterPool::Register::~Register()
-{
-  if(name!="$INVALID")
-  // instance->pool.push_back(std::move(*this));
-  getInstance()->pool.emplace_back(name);
-}
+} // namespace RegisterPool
 
 std::ostream& operator<<(std::ostream& o, RegisterPool::Register const& r)
 {
