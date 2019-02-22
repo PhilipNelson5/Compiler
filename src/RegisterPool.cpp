@@ -3,40 +3,44 @@
 // ----------------------------------------------------------------------------
 // Register Pool
 // ----------------------------------------------------------------------------
-std::unique_ptr<RegisterPool> RegisterPool::instance
-  = std::make_unique<RegisterPool>();
+std::unique_ptr<RegisterPool> RegisterPool::instance = nullptr;
 
-RegisterPool::RegisterPool()
+RegisterPool::RegisterPool():pool()
 {
-  pool.emplace_back("$s0");
-  pool.emplace_back("$s1");
-  pool.emplace_back("$s2");
-  pool.emplace_back("$s3");
-  pool.emplace_back("$s4");
-  pool.emplace_back("$s5");
-  pool.emplace_back("$s6");
-  pool.emplace_back("$s7");
-  pool.emplace_back("$t0");
-  pool.emplace_back("$t1");
-  pool.emplace_back("$t2");
-  pool.emplace_back("$t3");
-  pool.emplace_back("$t4");
-  pool.emplace_back("$t5");
-  pool.emplace_back("$t6");
-  pool.emplace_back("$t7");
-  pool.emplace_back("$t8");
-  pool.emplace_back("$t9");
+  pool.reserve(18);
+  pool.emplace_back(std::string("$s0"));
+  pool.emplace_back(std::string("$s1"));
+  pool.emplace_back(std::string("$s2"));
+  pool.emplace_back(std::string("$s3"));
+  pool.emplace_back(std::string("$s4"));
+  pool.emplace_back(std::string("$s5"));
+  pool.emplace_back(std::string("$s6"));
+  pool.emplace_back(std::string("$s7"));
+  pool.emplace_back(std::string("$t0"));
+  pool.emplace_back(std::string("$t1"));
+  pool.emplace_back(std::string("$t2"));
+  pool.emplace_back(std::string("$t3"));
+  pool.emplace_back(std::string("$t4"));
+  pool.emplace_back(std::string("$t5"));
+  pool.emplace_back(std::string("$t6"));
+  pool.emplace_back(std::string("$t7"));
+  pool.emplace_back(std::string("$t8"));
+  pool.emplace_back(std::string("$t9"));
 }
 
 RegisterPool* RegisterPool::getInstance()
 {
+  if(instance == nullptr)
+  {
+    instance = std::make_unique<RegisterPool>();
+  }
   return instance.get();
 }
 
 RegisterPool::Register RegisterPool::getRegister()
 {
-  auto reg = std::move(instance->pool.back());
-  instance->pool.pop_back();
+  auto reg = Register(getInstance()->pool.back());
+  getInstance()->pool.pop_back();
   return reg;
 }
 
@@ -56,8 +60,9 @@ RegisterPool::Register::Register(std::string name)
 
 RegisterPool::Register::~Register()
 {
+  if(name!="$INVALID")
   // instance->pool.push_back(std::move(*this));
-  instance->pool.emplace_back(name);
+  getInstance()->pool.emplace_back(name);
 }
 
 std::ostream& operator<<(std::ostream& o, RegisterPool::Register const& r)

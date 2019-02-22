@@ -14,7 +14,7 @@ public:
 private:
   static std::unique_ptr<RegisterPool> instance;
 
-  std::vector<RegisterPool::Register> pool;
+  std::vector<std::string> pool;
 
 public:
   class Register
