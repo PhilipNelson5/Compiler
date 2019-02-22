@@ -1,57 +1,64 @@
 #include "RegisterPool.hpp"
 
-// RegisterPool::Register::Register(RegisterPool::Register&& old)
-//: name{old.str()}
-//{
-// old.name = "";
-//}
-
-RegisterPool::Register::Register(std::string name)
-  : name{name}
-{}
-
-RegisterPool::Register::~Register()
+namespace RegisterPool
 {
-  // RegisterPool::pool.push_back(std::move(*this));
+std::vector<std::string> Register::pool;
+
+Register::Register(Register&& old)
+  : name{old.name}
+{
+  old.name = "$INVALID";
 }
 
-std::string RegisterPool::Register::str() const
+Register::Register()
 {
-  return name;
-}
-
-RegisterPool::Register RegisterPool::getRegister()
-{
-  auto reg = std::move(pool.back());
+  init();
+  name = pool.back();
   pool.pop_back();
-  return reg;
 }
 
-RegisterPool::RegisterPool() {}
+Register::~Register()
+{
+  if (name != "$INVALID")
+  {
+    pool.emplace_back(name);
+  }
+}
 
-std::vector<RegisterPool::Register> RegisterPool::pool{Register("$s0"),
-                                                       Register("$s1"),
-                                                       Register("$s2"),
-                                                       Register("$s3"),
-                                                       Register("$s4"),
-                                                       Register("$s5"),
-                                                       Register("$s6"),
-                                                       Register("$s7"),
-                                                       Register("$t0"),
-                                                       Register("$t1"),
-                                                       Register("$t2"),
-                                                       Register("$t3"),
-                                                       Register("$t4"),
-                                                       Register("$t5"),
-                                                       Register("$t6"),
-                                                       Register("$t7"),
-                                                       Register("$t8"),
-                                                       Register("$t9")};
+void Register::init()
+{
+  static bool initialized = false;
 
+  if (initialized)
+    return;
+  else
+    initialized = true;
 
-// std::ostream& operator<<(std::ostream& o, RegisterPool::Register const& r)
-//{
-// o << r.str();
-// return o;
-//}
+  pool.reserve(18);
+  pool.emplace_back(std::string("$s0"));
+  pool.emplace_back(std::string("$s1"));
+  pool.emplace_back(std::string("$s2"));
+  pool.emplace_back(std::string("$s3"));
+  pool.emplace_back(std::string("$s4"));
+  pool.emplace_back(std::string("$s5"));
+  pool.emplace_back(std::string("$s6"));
+  pool.emplace_back(std::string("$s7"));
+  pool.emplace_back(std::string("$t0"));
+  pool.emplace_back(std::string("$t1"));
+  pool.emplace_back(std::string("$t2"));
+  pool.emplace_back(std::string("$t3"));
+  pool.emplace_back(std::string("$t4"));
+  pool.emplace_back(std::string("$t5"));
+  pool.emplace_back(std::string("$t6"));
+  pool.emplace_back(std::string("$t7"));
+  pool.emplace_back(std::string("$t8"));
+  pool.emplace_back(std::string("$t9"));
+}
+} // namespace RegisterPool
+
+std::ostream& operator<<(std::ostream& o, RegisterPool::Register const& r)
+{
+  o << r.toString();
+  return o;
+}
 

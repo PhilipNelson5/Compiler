@@ -1,51 +1,51 @@
 #ifndef REGISTER_POOL_HPP
 #define REGISTER_POOL_HPP
 
+#include <memory>
 #include <ostream>
 #include <string>
 #include <vector>
 
-class RegisterPool
+
+namespace RegisterPool
+{
+class Register
 {
 public:
-  class Register
-  {
-    friend RegisterPool;
+  // constructor
+  Register();
 
-  public:
-    // move constructor
-    //Register(Register&& old);
+  // move constructor
+  Register(Register&& old);
 
-    // destructor
-    ~Register();
+  // move assignment operator
+  Register& operator=(Register&& reg) = default;
 
-    // register name getter
-    std::string str() const;
+  // destructor
+  ~Register();
 
-  private:
-    // constructor
-    Register(std::string name);
-
-    // deleted copy constructor
-    //Register(const Register& reg) = delete;
-
-    // deleted assignment operator
-    //Register& operator=(Register&& reg) = delete;
-
-    // Register name
-    std::string name;
-
-  }; // Class Register
-
-  friend Register;
-
-public:
-  RegisterPool();
-
-  Register getRegister();
+  // register name getter
+  std::string toString() const { return name; }
 
 private:
-  static std::vector<RegisterPool::Register> pool;
-};
+  // deleted copy constructor
+  Register(const Register& reg) = delete;
+
+  // deleted assignment operator
+  Register& operator=(const Register& reg) = delete;
+
+  // initialize the pool
+  void init();
+
+  // Register name
+  std::string name;
+
+  // pool of registers
+  static std::vector<std::string> pool;
+
+}; // class Register
+} // namespace RegisterPool
+
+std::ostream& operator<<(std::ostream& o, RegisterPool::Register const& r);
 
 #endif
