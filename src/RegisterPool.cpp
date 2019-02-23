@@ -2,12 +2,12 @@
 
 namespace RegisterPool
 {
-std::vector<std::string> Register::pool;
+std::vector<int> Register::pool;
 
 Register::Register(Register&& old)
   : name{old.name}
 {
-  old.name = "$INVALID";
+  old.name = -1;
 }
 
 Register::Register()
@@ -19,7 +19,7 @@ Register::Register()
 
 Register::~Register()
 {
-  if (name != "$INVALID")
+  if (name != -1)
   {
     pool.emplace_back(name);
   }
@@ -35,24 +35,24 @@ void Register::init()
     initialized = true;
 
   pool.reserve(18);
-  pool.emplace_back(std::string("$s0"));
-  pool.emplace_back(std::string("$s1"));
-  pool.emplace_back(std::string("$s2"));
-  pool.emplace_back(std::string("$s3"));
-  pool.emplace_back(std::string("$s4"));
-  pool.emplace_back(std::string("$s5"));
-  pool.emplace_back(std::string("$s6"));
-  pool.emplace_back(std::string("$s7"));
-  pool.emplace_back(std::string("$t0"));
-  pool.emplace_back(std::string("$t1"));
-  pool.emplace_back(std::string("$t2"));
-  pool.emplace_back(std::string("$t3"));
-  pool.emplace_back(std::string("$t4"));
-  pool.emplace_back(std::string("$t5"));
-  pool.emplace_back(std::string("$t6"));
-  pool.emplace_back(std::string("$t7"));
-  pool.emplace_back(std::string("$t8"));
-  pool.emplace_back(std::string("$t9"));
+  pool.emplace_back(8);
+  pool.emplace_back(9);
+  pool.emplace_back(10);
+  pool.emplace_back(11);
+  pool.emplace_back(12);
+  pool.emplace_back(13);
+  pool.emplace_back(14);
+  pool.emplace_back(15);
+  pool.emplace_back(16);
+  pool.emplace_back(17);
+  pool.emplace_back(18);
+  pool.emplace_back(19);
+  pool.emplace_back(20);
+  pool.emplace_back(21);
+  pool.emplace_back(22);
+  pool.emplace_back(23);
+  pool.emplace_back(24);
+  pool.emplace_back(25);
 }
 } // namespace RegisterPool
 

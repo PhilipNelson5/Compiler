@@ -25,7 +25,7 @@ public:
   ~Register();
 
   // register name getter
-  std::string toString() const { return name; }
+  std::string toString() const { return "$" + std::to_string(name); }
 
 private:
   // deleted copy constructor
@@ -38,10 +38,10 @@ private:
   void init();
 
   // Register name
-  std::string name;
+  int name;
 
   // pool of registers
-  static std::vector<std::string> pool;
+  static std::vector<int> pool;
 
 }; // class Register
 } // namespace RegisterPool
