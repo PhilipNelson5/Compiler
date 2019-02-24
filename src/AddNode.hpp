@@ -9,12 +9,13 @@
 class AddNode : public ExpressionNode
 {
 public:
-  void emmitSource() override;
-  RegisterPool::Register emmit() override;
+  AddNode(ExpressionNode*& left, ExpressionNode*& right);
+  virtual void emitSource(std::string indent) override;
+  virtual RegisterPool::Register emit() override;
 
 private:
-  std::unique_ptr<ExpressionNode> left;
-  std::unique_ptr<ExpressionNode> right;
+  std::shared_ptr<ExpressionNode> lhs;
+  std::shared_ptr<ExpressionNode> rhs;
 };
 
 #endif

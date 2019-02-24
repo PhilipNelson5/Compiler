@@ -55,3 +55,6 @@ Makefile
 CMakeCache.txt
 CMakeFiles/*
 cmake_install.cmake
+
+# Compiles Assembly Files
+*.asm

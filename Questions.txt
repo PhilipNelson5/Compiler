@@ -34,3 +34,5 @@
   - ANSWER: Push back to the list or vector;
 
 * Why does adding the operator<< to the header file make multiple definitions?
+
+* Is it okay to print to std::cerr?

@@ -2,8 +2,48 @@
 #include <cstdlib>
 #include <string>
 
-#include "parser.hpp"
+// abstract node classes
+#include "src/Node.hpp"
+#include "src/StatementNode.hpp"
+#include "src/ExpressionNode.hpp"
+#include "src/TypeNode.hpp"
 
+// concrete node classes
+#include "src/AddNode.hpp"
+#include "src/AndNode.hpp"
+#include "src/AssignmentStatementNode.hpp"
+#include "src/CharacterConstantNode.hpp"
+#include "src/CharacterExpressionNode.hpp"
+#include "src/ConstantDeclarationNode.hpp"
+#include "src/DivideNode.hpp"
+#include "src/EqualExpressionNode.hpp"
+#include "src/GreaterThanEqualNode.hpp"
+#include "src/GreaterThanNode.hpp"
+#include "src/IntegerConstantNode.hpp"
+#include "src/LessThanEqualNode.hpp"
+#include "src/LessThanNode.hpp"
+#include "src/ListNode.hpp"
+#include "src/LvalueNode.hpp"
+#include "src/ModuloNode.hpp"
+#include "src/MultiplyNode.hpp"
+#include "src/NotEqualExpressionNode.hpp"
+#include "src/NotNode.hpp"
+#include "src/OrNode.hpp"
+#include "src/OrdinalExpressionNode.hpp"
+#include "src/PredecessorExpressionNode.hpp"
+#include "src/ProgramNode.hpp"
+#include "src/ReadStatementNode.hpp"
+#include "src/SimpleTypeNode.hpp"
+#include "src/StopStatementNode.hpp"
+#include "src/StringConstantNode.hpp"
+#include "src/SubtractNode.hpp"
+#include "src/SuccessorExpressionNode.hpp"
+#include "src/TypeDeclarationNode.hpp"
+#include "src/UnaryMinusNode.hpp"
+#include "src/VariableDeclarationNode.hpp"
+#include "src/WriteStatementNode.hpp"
+
+#include "parser.hpp"
 extern "C" int yylex();
 
 unsigned int yycolumn = 1;
@@ -89,7 +129,7 @@ write|WRITE           { return WRITE_T; }
 '.'                   { yylval.char_val = yytext[1]; return CHAR_T; }
 '\\.'                 { yylval.char_val = yytext[1]; return CHAR_T; }
                         
-\"(\\.|[^"\\])*\"     { return STRING_T; }
+\"(\\.|[^"\\])*\"     { yylval.str_val = strdup(yytext); return STRING_T; }
                         
 \$.*$                 { }
                         
