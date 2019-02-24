@@ -59,7 +59,8 @@ int main(int argc, char** argv)
       }
       catch (const char* msg)
       {
-        std::cout << msg << std::endl;
+        LOG(ERROR) << msg << std::endl;
+        exit(EXIT_FAILURE);
       }
     }
   }

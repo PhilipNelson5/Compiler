@@ -11,5 +11,9 @@ void StopStatementNode::emitSource(std::string indent)
 
 RegisterPool::Register StopStatementNode::emit()
 {
-  throw "not implemented StopStatementNode";
+  std::cout << "li $v0, 10"
+            << " # load exit instruction" << std::endl;
+  std::cout << "syscall" << std::endl;
+
+  return {};
 }

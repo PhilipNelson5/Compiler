@@ -1,12 +1,17 @@
 #include "StringConstantNode.hpp"
+
 #include "SymbolTable.hpp"
 
 #include <iostream>
 
 StringConstantNode::StringConstantNode(std::string string)
-  : ExpressionNode(StringType::get()), string(string)
+  : string(string)
 {}
 
+std::shared_ptr<Type> StringConstantNode::type()
+{
+  return StringType::get();
+}
 void StringConstantNode::emitSource(std::string indent)
 {
   std::cout << indent << string;

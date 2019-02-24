@@ -1,4 +1,5 @@
 #include "CharacterConstantNode.hpp"
+#include "Type.hpp"
 
 #include <iostream>
 #include <string>
@@ -6,6 +7,11 @@
 CharacterConstantNode::CharacterConstantNode(char character)
   : character(character)
 {}
+
+std::shared_ptr<Type> CharacterConstantNode::type()
+{
+  return CharacterType::get();
+}
 
 void CharacterConstantNode::emitSource(std::string indent)
 {

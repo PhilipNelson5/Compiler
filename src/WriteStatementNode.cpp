@@ -25,24 +25,29 @@ RegisterPool::Register WriteStatementNode::emit()
 
   for (auto&& expr : expressionList)
   {
-    if (expr->type == IntegerType::get())
+    auto reg = expr->emit();
+
+    if (expr->type() == IntegerType::get())
     {
-      auto reg = expr->emit();
       std::cout << "li $v0, 1"
                 << " # load print integer instruction" << std::endl;
-      std::cout << "or $a0, $0, " << reg << " # ";
-      emitSource("");
-      std::cout << "syscall" << std::endl;
     }
-    else if (expr->type == StringType::get())
+    else if (expr->type() == CharacterType::get())
     {
-      auto reg = expr->emit();
+      std::cout << "li $v0, 11"
+                << " # load print character instruction" << std::endl;
+    }
+    else if (expr->type() == StringType::get())
+    {
       std::cout << "li $v0, 4"
                 << " # load print string instruction" << std::endl;
-      std::cout << "or $a0, $0, " << reg << " # ";
-      emitSource("");
-      std::cout << "syscall" << std::endl;
     }
+
+    std::cout << "or $a0, $0, " << reg << " # ";
+    std::cout << "write(";
+    expr->emitSource("");
+    std::cout << ")" << std::endl;
+    std::cout << "syscall" << std::endl << std::endl;
   }
 
   return {};

@@ -1,5 +1,6 @@
 #include "SymbolTable.hpp"
 
+#include "IntegerConstantNode.hpp"
 #include "log/easylogging++.h"
 
 #include <iostream>
@@ -8,12 +9,14 @@ SymbolTable symbol_table;
 
 SymbolTable::SymbolTable()
 {
-  variables.emplace_back();
   types.emplace_back();
+
   auto top = types.rbegin();
   top->emplace(std::string("integer"), IntegerType::get());
   top->emplace(std::string("char"), CharacterType::get());
   top->emplace(std::string("string"), StringType::get());
+
+  variables.emplace_back();
 }
 
 std::shared_ptr<Type> SymbolTable::lookupType(std::string id)

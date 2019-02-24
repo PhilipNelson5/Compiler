@@ -2,6 +2,7 @@
 #define SYMBOL_TABLE_HPP
 
 #include "Type.hpp"
+#include "ExpressionNode.hpp"
 
 #include <map>
 #include <memory>
@@ -52,8 +53,8 @@ public:
 
 private:
   std::map<std::string, std::string> strings;
-  std::vector<std::map<std::string, Variable>> variables;
   std::vector<std::map<std::string, std::shared_ptr<Type>>> types;
+  std::vector<std::map<std::string, Variable>> variables;
 
   static constexpr int globalPointer = 28;
 };

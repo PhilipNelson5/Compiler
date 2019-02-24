@@ -8,6 +8,7 @@ class IntegerConstantNode : public ExpressionNode
 {
   public:
   IntegerConstantNode(int value);
+  virtual std::shared_ptr<Type> type() override;
   virtual void emitSource(std::string indent) override;
   virtual RegisterPool::Register emit() override;
 

@@ -1,12 +1,18 @@
 #include "IntegerConstantNode.hpp"
+
 #include "RegisterPool.hpp"
 #include "Type.hpp"
 
 #include <iostream>
 
 IntegerConstantNode::IntegerConstantNode(int value)
-  : ExpressionNode(IntegerType::get()), value(value)
+  : value(value)
 {}
+
+std::shared_ptr<Type> IntegerConstantNode::type()
+{
+  return IntegerType::get();
+}
 
 void IntegerConstantNode::emitSource(std::string indent)
 {
@@ -16,7 +22,7 @@ void IntegerConstantNode::emitSource(std::string indent)
 RegisterPool::Register IntegerConstantNode::emit()
 {
   RegisterPool::Register reg;
-  std::cout << "li " << reg << ", " << value << " # ";
+  std::cout << "li " << reg << ", " << value << " # load ";
   emitSource("");
   std::cout << std::endl;
 

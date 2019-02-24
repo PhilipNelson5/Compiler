@@ -28,8 +28,9 @@ bat output.asm
 echo "java -jar ~/Downloads/Mars4_5.jar output.asm"
 java -jar ~/Downloads/Mars4_5.jar output.asm
 
-echo $file
-printf '━%.0s' $(seq 1 $(tput cols))
+printf '─%.0s' $(seq 1 $(tput cols))
+echo "File:  $file"
+printf '─%.0s' $(seq 1 $(tput cols))
 echo ""
 
 cat -n $file
