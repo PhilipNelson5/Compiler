@@ -20,5 +20,21 @@ void WriteStatementNode::emitSource(std::string indent)
 
 RegisterPool::Register WriteStatementNode::emit()
 {
-  throw "not implemented";
+  std::cout << "\n# ";
+  emitSource("");
+
+  for (auto&& expr : expressionList)
+  {
+    if (expr->type == IntegerType::get())
+    {
+      auto reg = expr->emit();
+      std::cout << "li $v0, 1"
+                << " # load print integer instruction" << std::endl;
+      std::cout << "or $a0, $0, " << reg << " # ";
+      emitSource("");
+      std::cout << "syscall" << std::endl;
+    }
+  }
+
+  return {};
 }

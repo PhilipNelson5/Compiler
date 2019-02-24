@@ -1,9 +1,11 @@
 #include "IntegerConstantNode.hpp"
+#include "RegisterPool.hpp"
+#include "Type.hpp"
 
 #include <iostream>
 
 IntegerConstantNode::IntegerConstantNode(int value)
-  : value(value)
+  : ExpressionNode(IntegerType::get()), value(value)
 {}
 
 void IntegerConstantNode::emitSource(std::string indent)
@@ -13,5 +15,10 @@ void IntegerConstantNode::emitSource(std::string indent)
 
 RegisterPool::Register IntegerConstantNode::emit()
 {
-  throw "not implemented";
+  RegisterPool::Register reg;
+  std::cout << "li " << reg << ", " << value << " # ";
+  emitSource("");
+  std::cout << std::endl;
+
+  return reg;
 }

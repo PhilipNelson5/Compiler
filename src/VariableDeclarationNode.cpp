@@ -1,5 +1,7 @@
 #include "VariableDeclarationNode.hpp"
 
+#include "SymbolTable.hpp"
+
 #include <iostream>
 #include <string.h>
 #include <string>
@@ -25,5 +27,9 @@ void VariableDeclarationNode::emitSource(std::string indent)
 
 RegisterPool::Register VariableDeclarationNode::emit()
 {
-  throw "not implemented";
+  auto pType = symbol_table.lookupType(type->ident);
+  for (auto&& id : idents)
+    symbol_table.storeVariable(id, pType);
+
+  return {};
 }

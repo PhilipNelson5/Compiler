@@ -67,6 +67,24 @@ void ProgramNode::emitSource(std::string indent)
 
 RegisterPool::Register ProgramNode::emit()
 {
-  throw "not implemented";
+  std::cout << ".text" << std::endl;
+  std::cout << "la $gp, GLOBAL_AREA" << std::endl;
+  // Variable Declarations
+  // ---------------------
+  for (auto&& varDecl : varDecls)
+  {
+    varDecl->emit();
+  }
+
+  // Main Block
+  // ---------------------
+  for (auto&& statement : mainBlock)
+  {
+    statement->emit();
+  }
+
+  std::cout << "\n.data" << std::endl;
+  std::cout << "GLOBAL_AREA:" << std::endl;
+  return {};
 }
 

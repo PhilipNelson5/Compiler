@@ -1,5 +1,7 @@
 #include "AssignmentStatementNode.hpp"
 
+#include "SymbolTable.hpp"
+
 #include <iostream>
 
 AssignmentStatementNode::AssignmentStatementNode(LvalueNode*& lval,
@@ -19,5 +21,16 @@ void AssignmentStatementNode::emitSource(std::string indent)
 
 RegisterPool::Register AssignmentStatementNode::emit()
 {
-  throw "not implemented";
+  std::cout << "\n# ";
+  emitSource("");
+
+  auto loc = symbol_table.lookupVariable(lval->ident);
+  auto reg_expr = expr->emit();
+
+  std::cout << "sw " << reg_expr << ", " << loc.getLoc();
+
+  std::cout << " # ";
+  emitSource("");
+
+  return reg_expr;
 }

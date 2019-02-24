@@ -1,5 +1,7 @@
 #include "RegisterPool.hpp"
 
+#include "log/easylogging++.h"
+
 namespace RegisterPool
 {
 std::vector<int> Register::pool;
@@ -13,6 +15,11 @@ Register::Register(Register&& old)
 Register::Register()
 {
   init();
+  if (pool.size() == 0)
+  {
+    LOG(ERROR) << "No more registers available";
+    exit(EXIT_FAILURE);
+  }
   name = pool.back();
   pool.pop_back();
 }

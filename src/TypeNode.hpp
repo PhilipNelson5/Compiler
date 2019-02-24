@@ -5,6 +5,11 @@
 
 class TypeNode : public Node
 {
+public:
+  TypeNode(std::string ident)
+    : ident(ident)
+  {}
+  const std::string ident;
 };
 
 #endif

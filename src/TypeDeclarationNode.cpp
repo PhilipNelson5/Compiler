@@ -16,5 +16,5 @@ void TypeDeclarationNode::emitSource(std::string indent)
 
 RegisterPool::Register TypeDeclarationNode::emit()
 {
-  throw "not implemented";
+  return {};
 }
