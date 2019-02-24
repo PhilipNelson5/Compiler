@@ -44,11 +44,14 @@ public:
   SymbolTable();
   Variable lookupVariable(std::string id);
   std::shared_ptr<Type> lookupType(std::string id);
+  std::string lookupString(std::string str);
   void storeVariable(std::string id, std::shared_ptr<Type> type);
+  void printStrings();
   void enter_scope();
   void exit_scope();
 
 private:
+  std::map<std::string, std::string> strings;
   std::vector<std::map<std::string, Variable>> variables;
   std::vector<std::map<std::string, std::shared_ptr<Type>>> types;
 

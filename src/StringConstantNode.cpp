@@ -1,9 +1,10 @@
 #include "StringConstantNode.hpp"
+#include "SymbolTable.hpp"
 
 #include <iostream>
 
 StringConstantNode::StringConstantNode(std::string string)
-  : string(string)
+  : ExpressionNode(StringType::get()), string(string)
 {}
 
 void StringConstantNode::emitSource(std::string indent)
@@ -13,5 +14,8 @@ void StringConstantNode::emitSource(std::string indent)
 
 RegisterPool::Register StringConstantNode::emit()
 {
-  throw "not implemented StringConstantNode StringConstantNode";
+  auto label = symbol_table.lookupString(string);
+  RegisterPool::Register reg;
+  std::cout << "la " << reg << ", " << label << std::endl;
+  return reg;
 }

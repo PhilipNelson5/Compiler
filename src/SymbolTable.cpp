@@ -30,6 +30,22 @@ std::shared_ptr<Type> SymbolTable::lookupType(std::string id)
   exit(EXIT_FAILURE);
 }
 
+std::string SymbolTable::lookupString(std::string str)
+{
+  static int num = 0;
+  const static std::string name = "string";
+  auto found = strings.find(str);
+
+  if (found == strings.end())
+  {
+    auto newLabel = name + std::to_string(num++);
+    strings.emplace(str, newLabel);
+    return newLabel;
+  }
+
+  return found->second;
+}
+
 Variable SymbolTable::lookupVariable(std::string id)
 {
   for (auto cur = variables.rbegin(); cur != variables.rend(); cur++)
@@ -64,6 +80,14 @@ void SymbolTable::storeVariable(std::string id, std::shared_ptr<Type> type)
   // Insert in top level
   top->emplace(id, var);
   LOG(DEBUG) << id << ":" << type->name() << " stored in symbol table";
+}
+
+void SymbolTable::printStrings()
+{
+  for (auto cur = strings.begin(); cur != strings.end(); ++cur)
+  {
+    std::cout << cur->second << ": .asciiz " << cur->first << std::endl;
+  }
 }
 
 void SymbolTable::enter_scope()

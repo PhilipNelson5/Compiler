@@ -1,4 +1,5 @@
 #include "ProgramNode.hpp"
+#include "SymbolTable.hpp"
 
 #include <iostream>
 #include <memory>
@@ -84,6 +85,7 @@ RegisterPool::Register ProgramNode::emit()
   }
 
   std::cout << "\n.data" << std::endl;
+  symbol_table.printStrings();
   std::cout << "GLOBAL_AREA:" << std::endl;
   return {};
 }

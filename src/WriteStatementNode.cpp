@@ -34,6 +34,15 @@ RegisterPool::Register WriteStatementNode::emit()
       emitSource("");
       std::cout << "syscall" << std::endl;
     }
+    else if (expr->type == StringType::get())
+    {
+      auto reg = expr->emit();
+      std::cout << "li $v0, 4"
+                << " # load print string instruction" << std::endl;
+      std::cout << "or $a0, $0, " << reg << " # ";
+      emitSource("");
+      std::cout << "syscall" << std::endl;
+    }
   }
 
   return {};
