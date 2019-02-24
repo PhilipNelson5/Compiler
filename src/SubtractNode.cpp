@@ -17,5 +17,5 @@ void SubtractNode::emitSource(std::string indent)
 
 RegisterPool::Register SubtractNode::emit()
 {
-  throw "not implemented";
+  throw "not implemented SubtractNode";
 }

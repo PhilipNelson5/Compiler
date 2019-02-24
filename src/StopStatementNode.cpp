@@ -11,5 +11,5 @@ void StopStatementNode::emitSource(std::string indent)
 
 RegisterPool::Register StopStatementNode::emit()
 {
-  throw "not implemented";
+  throw "not implemented StopStatementNode";
 }

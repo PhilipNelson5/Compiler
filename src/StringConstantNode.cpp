@@ -13,5 +13,5 @@ void StringConstantNode::emitSource(std::string indent)
 
 RegisterPool::Register StringConstantNode::emit()
 {
-  throw "not implemented";
+  throw "not implemented StringConstantNode StringConstantNode";
 }

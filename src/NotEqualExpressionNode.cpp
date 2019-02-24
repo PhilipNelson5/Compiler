@@ -18,5 +18,5 @@ void NotEqualExpressionNode::emitSource(std::string indent)
 
 RegisterPool::Register NotEqualExpressionNode::emit()
 {
-  throw "not implemented";
+  throw "not implemented NotEqualExpressionNode";
 }

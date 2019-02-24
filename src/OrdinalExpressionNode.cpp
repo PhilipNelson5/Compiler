@@ -15,5 +15,5 @@ void OrdinalExpressionNode::emitSource(std::string indent)
 
 RegisterPool::Register OrdinalExpressionNode::emit()
 {
-  throw "not implemented";
+  throw "not implemented OrdinalExpressionNode";
 }

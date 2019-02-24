@@ -35,5 +35,5 @@ void CharacterConstantNode::emitSource(std::string indent)
 
 RegisterPool::Register CharacterConstantNode::emit()
 {
-  throw "not implemented";
+  throw "not implemented CharacterConstantNode";
 }

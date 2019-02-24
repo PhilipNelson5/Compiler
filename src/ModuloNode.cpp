@@ -17,5 +17,5 @@ void ModuloNode::emitSource(std::string indent)
 
 RegisterPool::Register ModuloNode::emit()
 {
-  throw "not implemented";
+  throw "not implemented ModuloNode";
 }

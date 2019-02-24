@@ -17,5 +17,5 @@ void AndNode::emitSource(std::string indent)
 
 RegisterPool::Register AndNode::emit()
 {
-  throw "not implemented";
+  throw "not implemented AndNode";
 }

@@ -17,5 +17,5 @@ void OrNode::emitSource(std::string indent)
 
 RegisterPool::Register OrNode::emit()
 {
-  throw "not implemented";
+  throw "not implemented OrNode";
 }

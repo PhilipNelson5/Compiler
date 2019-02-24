@@ -17,5 +17,5 @@ void MultiplyNode::emitSource(std::string indent)
 
 RegisterPool::Register MultiplyNode::emit()
 {
-  throw "not implemented";
+  throw "not implemented MultiplyNode";
 }

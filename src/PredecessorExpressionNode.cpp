@@ -15,5 +15,5 @@ void PredecessorExpressionNode::emitSource(std::string indent)
 
 RegisterPool::Register PredecessorExpressionNode::emit()
 {
-  throw "not implemented";
+  throw "not implemented PredecessorExpressionNode";
 }

@@ -17,5 +17,5 @@ void LessThanEqualNode::emitSource(std::string indent)
 
 RegisterPool::Register LessThanEqualNode::emit()
 {
-  throw "not implemented";
+  throw "not implemented LessThanEqualNode";
 }

@@ -15,5 +15,5 @@ void UnaryMinusNode::emitSource(std::string indent)
 
 RegisterPool::Register UnaryMinusNode::emit()
 {
-  throw "not implemented";
+  throw "not implemented UnaryMinusNode";
 }

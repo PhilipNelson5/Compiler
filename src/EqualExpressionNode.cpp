@@ -18,5 +18,5 @@ void EqualExpressionNode::emitSource(std::string indent)
 
 RegisterPool::Register EqualExpressionNode::emit()
 {
-  throw "not implemented";
+  throw "not implemented EqualExpressionNode";
 }

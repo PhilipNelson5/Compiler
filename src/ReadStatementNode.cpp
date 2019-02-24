@@ -20,6 +20,6 @@ void ReadStatementNode::emitSource(std::string indent)
 
 RegisterPool::Register ReadStatementNode::emit()
 {
-  throw "not implemented";
+  throw "not implemented ReadStatementNode";
 }
 

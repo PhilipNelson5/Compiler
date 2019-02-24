@@ -17,5 +17,5 @@ void GreaterThanEqualNode::emitSource(std::string indent)
 
 RegisterPool::Register GreaterThanEqualNode::emit()
 {
-  throw "not implemented";
+  throw "not implemented GreaterThanEqualNode";
 }

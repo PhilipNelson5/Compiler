@@ -17,5 +17,5 @@ void DivideNode::emitSource(std::string indent)
 
 RegisterPool::Register DivideNode::emit()
 {
-  throw "not implemented";
+  throw "not implemented DivideNode";
 }

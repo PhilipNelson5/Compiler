@@ -13,5 +13,5 @@ void SimpleTypeNode::emitSource(std::string indent)
 
 RegisterPool::Register SimpleTypeNode::emit()
 {
-  throw "not implemented";
+  throw "not implemented SimpleTypeNode";
 }
