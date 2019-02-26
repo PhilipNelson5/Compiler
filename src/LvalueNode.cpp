@@ -10,7 +10,7 @@ LvalueNode::LvalueNode(std::string ident)
 
 std::shared_ptr<Type> LvalueNode::type()
 {
-  return symbol_table.lookupVariable(ident).type;
+  return symbol_table.lookupLval(ident).type;
 }
 
 void LvalueNode::emitSource(std::string indent)
@@ -20,7 +20,7 @@ void LvalueNode::emitSource(std::string indent)
 
 RegisterPool::Register LvalueNode::emit()
 {
-  auto loc = symbol_table.lookupVariable(ident);
+  auto loc = symbol_table.lookupLval(ident);
   RegisterPool::Register reg;
   std::cout << "lw " << reg << ", " << loc.getLoc() << " # load ";
   emitSource("");

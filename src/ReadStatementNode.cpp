@@ -28,7 +28,7 @@ RegisterPool::Register ReadStatementNode::emit()
 
   for (auto&& lval : lValues)
   {
-    auto loc = symbol_table.lookupVariable(lval->ident);
+    auto loc = symbol_table.lookupLval(lval->ident);
     if (loc.type == IntegerType::get())
     {
       std::cout << "li $v0, 5"

@@ -1,9 +1,9 @@
  S   C
-[X] [X] assignment.cpsl
-[X] [ ] badidea.cpsl
-[X] [ ] const_declarations.cpsl
-[X] [ ] expressions.cpsl
-[X] [X] hello.cpsl
-[X] [ ] io.cpsl
-[X] [ ] long_expression.cpsl
-[X] [X] stop.cpsl
+[X] [X] test/simple_expressions/assignment.cpsl
+[X] [ ] test/simple_expressions/badidea.cpsl
+[X] [ ] test/simple_expressions/const_declarations.cpsl
+[X] [ ] test/simple_expressions/expressions.cpsl
+[X] [X] test/simple_expressions/hello.cpsl
+[X] [ ] test/simple_expressions/io.cpsl
+[X] [ ] test/simple_expressions/long_expression.cpsl
+[X] [X] test/simple_expressions/stop.cpsl

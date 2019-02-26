@@ -1,5 +1,6 @@
 #include "SymbolTable.hpp"
 
+#include "BooleanConstantNode.hpp"
 #include "IntegerConstantNode.hpp"
 #include "log/easylogging++.h"
 
@@ -9,22 +10,26 @@ SymbolTable symbol_table;
 
 SymbolTable::SymbolTable()
 {
-  types.emplace_back();
+  // Predefines
+  scopes.emplace_back();
+  auto itPredefines = scopes.rbegin();
+  itPredefines->constants.emplace(std::string("true"),
+                                  new BooleanConstantNode(1));
+  itPredefines->constants.emplace(std::string("false"),
+                                  new BooleanConstantNode(0));
 
-  auto top = types.rbegin();
-  top->emplace(std::string("integer"), IntegerType::get());
-  top->emplace(std::string("char"), CharacterType::get());
-  top->emplace(std::string("string"), StringType::get());
-
-  variables.emplace_back();
+  itPredefines->types.emplace(std::string("integer"), IntegerType::get());
+  itPredefines->types.emplace(std::string("char"), CharacterType::get());
+  itPredefines->types.emplace(std::string("boolean"), BooleanType::get());
+  itPredefines->types.emplace(std::string("string"), StringType::get());
 }
 
 std::shared_ptr<Type> SymbolTable::lookupType(std::string id)
 {
-  for (auto cur = types.rbegin(); cur != types.rend(); cur++)
+  for (auto scope = scopes.rbegin(); scope != scopes.rend(); ++scope)
   {
-    auto found = cur->find(id);
-    if (found != cur->end())
+    auto found = scope->types.find(id);
+    if (found != scope->types.end())
     {
       return found->second;
     }
@@ -49,15 +54,21 @@ std::string SymbolTable::lookupString(std::string str)
   return found->second;
 }
 
-Variable SymbolTable::lookupVariable(std::string id)
+Variable SymbolTable::lookupLval(std::string id)
 {
-  for (auto cur = variables.rbegin(); cur != variables.rend(); cur++)
+  for (auto scope = scopes.rbegin(); scope != scopes.rend(); ++scope)
   {
-    auto found = cur->find(id);
-    if (found != cur->end())
+    auto foundVar = scope->variables.find(id);
+    if (foundVar != scope->variables.end())
     {
-      return found->second;
+      return foundVar->second;
     }
+
+    //auto foundConst = scope->constants.find(id);
+    //if (foundConst != scope->constants.end())
+    //{
+      //return foundConst->second;
+    //}
   }
   LOG(ERROR) << id << " not defined";
   exit(EXIT_FAILURE);
@@ -68,11 +79,19 @@ void SymbolTable::storeVariable(std::string id, std::shared_ptr<Type> type)
   static int globalOffset = 0;
 
   // Find on top level - error if already defined
-  auto top = variables.rbegin();
-  auto found = top->find(id);
-  if (found != top->end())
+  auto top = scopes.rbegin();
+  auto foundVar = top->variables.find(id);
+  auto foundConst = top->constants.find(id);
+
+  if (foundVar != top->variables.end())
   {
-    LOG(ERROR) << id << " is already defined in the scope\n";
+    LOG(ERROR) << id << " is already defined as a variable in the scope\n";
+    exit(EXIT_FAILURE);
+  }
+
+  if (foundConst != top->constants.end())
+  {
+    LOG(ERROR) << id << " is already defined as a constant in the scope\n";
     exit(EXIT_FAILURE);
   }
 
@@ -80,9 +99,10 @@ void SymbolTable::storeVariable(std::string id, std::shared_ptr<Type> type)
   Variable var(id, type, globalPointer, globalOffset);
   globalOffset += var.type->size();
 
-  // Insert in top level
-  top->emplace(id, var);
-  LOG(DEBUG) << id << ":" << type->name() << " stored in symbol table";
+  // Insert in top level scope
+  top->variables.emplace(id, var);
+  LOG(DEBUG) << id << ":" << type->name() << " stored in symbol table at scope "
+             << scopes.size() - 1;
 }
 
 void SymbolTable::printStrings()
@@ -95,10 +115,10 @@ void SymbolTable::printStrings()
 
 void SymbolTable::enter_scope()
 {
-  variables.emplace_back();
+  scopes.emplace_back();
 }
 
 void SymbolTable::exit_scope()
 {
-  variables.pop_back();
+  scopes.pop_back();
 }

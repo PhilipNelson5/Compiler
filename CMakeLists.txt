@@ -15,6 +15,7 @@ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
 
 set(cpsl_srcs
   main.cpp
+  src/Factory.hpp
 
   src/AddNode.cpp
   src/AddNode.hpp
@@ -22,6 +23,8 @@ set(cpsl_srcs
   src/AndNode.hpp
   src/AssignmentStatementNode.cpp
   src/AssignmentStatementNode.hpp
+  src/BooleanConstantNode.cpp
+  src/BooleanConstantNode.hpp
   src/CharacterConstantNode.cpp
   src/CharacterConstantNode.hpp
   src/CharacterExpressionNode.cpp

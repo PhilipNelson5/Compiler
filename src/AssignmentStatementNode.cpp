@@ -24,7 +24,7 @@ RegisterPool::Register AssignmentStatementNode::emit()
   std::cout << "\n# ";
   emitSource("");
 
-  auto loc = symbol_table.lookupVariable(lval->ident);
+  auto loc = symbol_table.lookupLval(lval->ident);
   auto reg_expr = expr->emit();
 
   std::cout << "sw " << reg_expr << ", " << loc.getLoc();

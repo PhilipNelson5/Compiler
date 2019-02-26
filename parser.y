@@ -5,6 +5,8 @@
 #include <sstream>
 #include <string>
 
+#include "src/Factory.hpp"
+
 // abstract node classes
 #include "src/Node.hpp"
 #include "src/StatementNode.hpp"
@@ -490,7 +492,7 @@ Expression                      : Expression OR_T Expression                   {
                                 | Expression GTE_T Expression                  { $$ = new GreaterThanEqualNode($1, $3); }
                                 | Expression LT_T Expression                   { $$ = new LessThanNode($1, $3); }
                                 | Expression GT_T Expression                   { $$ = new GreaterThanNode($1, $3); }
-                                | Expression PLUS_T Expression                 { $$ = new AddNode($1, $3); }
+                                | Expression PLUS_T Expression                 { $$ = makeAddNode($1, $3); }
                                 | Expression MINUS_T Expression                { $$ = new SubtractNode($1, $3); }
                                 | Expression MULTIPLY_T Expression             { $$ = new MultiplyNode($1, $3); }
                                 | Expression DIVIDE_T Expression               { $$ = new DivideNode($1, $3); }

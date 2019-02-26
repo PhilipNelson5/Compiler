@@ -14,6 +14,11 @@ std::shared_ptr<Type> IntegerConstantNode::type()
   return IntegerType::get();
 }
 
+bool IntegerConstantNode::isLiteral()
+{
+  return true;
+}
+
 void IntegerConstantNode::emitSource(std::string indent)
 {
   std::cout << indent << value;

@@ -39,11 +39,19 @@ struct Variable
   }
 };
 
+struct Scope
+{
+  std::map<std::string, std::shared_ptr<ExpressionNode>> constants;
+  std::map<std::string, Variable> variables;
+  std::map<std::string, std::shared_ptr<Type>> types;
+
+};
+
 class SymbolTable
 {
 public:
   SymbolTable();
-  Variable lookupVariable(std::string id);
+  Variable lookupLval(std::string id);
   std::shared_ptr<Type> lookupType(std::string id);
   std::string lookupString(std::string str);
   void storeVariable(std::string id, std::shared_ptr<Type> type);
@@ -53,8 +61,7 @@ public:
 
 private:
   std::map<std::string, std::string> strings;
-  std::vector<std::map<std::string, std::shared_ptr<Type>>> types;
-  std::vector<std::map<std::string, Variable>> variables;
+  std::vector<Scope> scopes;
 
   static constexpr int globalPointer = 28;
 };
