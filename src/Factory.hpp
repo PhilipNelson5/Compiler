@@ -9,7 +9,6 @@
 
 ExpressionNode* makeAddNode(ExpressionNode* e1, ExpressionNode* e2)
 {
-  std::cout << "makeAddNode" << std::endl;
   if (e1->isLiteral() && e2->isLiteral())
   {
     return new IntegerConstantNode(
