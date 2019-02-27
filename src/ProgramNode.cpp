@@ -86,7 +86,7 @@ RegisterPool::Register ProgramNode::emit()
 
   std::cout << "\n.data" << std::endl;
   symbol_table.printStrings();
-  std::cout << "GLOBAL_AREA:" << std::endl;
+  std::cout << "\n.align 2\nGLOBAL_AREA:" << std::endl;
   return {};
 }
 

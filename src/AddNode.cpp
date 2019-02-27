@@ -22,12 +22,12 @@ RegisterPool::Register AddNode::emit()
   std::cout << std::endl;
 
   auto r_lhs = lhs->emit();
-  auto r_rhs = lhs->emit();
-  RegisterPool::Register res;
-  std::cout << "add " << res << ", " << r_rhs << ", " << r_lhs << " # ";
+  auto r_rhs = rhs->emit();
+  RegisterPool::Register result;
+  std::cout << "add " << result << ", " << r_lhs << ", " << r_rhs << " # ";
 
   emitSource("");
   std::cout << std::endl;
 
-  return res;
+  return result;
 }

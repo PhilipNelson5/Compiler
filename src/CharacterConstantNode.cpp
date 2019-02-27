@@ -1,4 +1,5 @@
 #include "CharacterConstantNode.hpp"
+
 #include "Type.hpp"
 
 #include <iostream>
@@ -22,24 +23,28 @@ void CharacterConstantNode::emitSource(std::string indent)
     std::cout << "\\n";
     break;
   case '\r':
-      std::cout << "\\r";
-      break;
+    std::cout << "\\r";
+    break;
   case '\b':
-      std::cout << "\\b";
-      break;
+    std::cout << "\\b";
+    break;
   case '\t':
-      std::cout << "\\t";
-      break;
+    std::cout << "\\t";
+    break;
   case '\f':
-      std::cout << "\\f";
-      break;
+    std::cout << "\\f";
+    break;
   default:
-      std::cout << character;
+    std::cout << character;
   }
   std::cout << "'";
 }
 
 RegisterPool::Register CharacterConstantNode::emit()
 {
-  throw "not implemented CharacterConstantNode";
+  RegisterPool::Register result;
+  std::cout << "li " << result << ", ";
+  emitSource("");
+  std::cout << std::endl;
+  return result;
 }

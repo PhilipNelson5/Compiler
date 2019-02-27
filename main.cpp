@@ -3,12 +3,12 @@ extern int yydebug;
 
 #include "src/ProgramNode.hpp"
 #include "src/RegisterPool.hpp"
-#include "src/log/easylogging++.h"
 
 #include <cstring>
 #include <iostream>
 #include <memory>
 
+#include "src/log/easylogging++.h"
 INITIALIZE_EASYLOGGINGPP
 
 std::shared_ptr<ProgramNode> programNode;
@@ -83,7 +83,7 @@ void initEasyLogging(int argc, char* argv[])
   /* clang-format off */
   std::string defaultLogConfig = R"(
 * GLOBAL:
-    FORMAT               =  "[%fbase:%line] %level %msg"
+    FORMAT               =  "[%level][%fbase:%line] %msg"
     ENABLED              =  true
     TO_FILE              =  false
     TO_STANDARD_OUTPUT   =  true

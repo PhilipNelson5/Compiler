@@ -22,10 +22,14 @@ SymbolTable::SymbolTable()
   itPredefines->types.emplace(std::string("char"), CharacterType::get());
   itPredefines->types.emplace(std::string("boolean"), BooleanType::get());
   itPredefines->types.emplace(std::string("string"), StringType::get());
+
+  // Enter Global Scope
+  enter_scope();
 }
 
 std::shared_ptr<Type> SymbolTable::lookupType(std::string id)
 {
+  LOG(DEBUG) << "lookupType(" << id << ")";
   for (auto scope = scopes.rbegin(); scope != scopes.rend(); ++scope)
   {
     auto found = scope->types.find(id);
@@ -56,6 +60,7 @@ std::string SymbolTable::lookupString(std::string str)
 
 Variable SymbolTable::lookupLval(std::string id)
 {
+  LOG(DEBUG) << "lookupLval(" << id << ")";
   for (auto scope = scopes.rbegin(); scope != scopes.rend(); ++scope)
   {
     auto foundVar = scope->variables.find(id);
@@ -64,10 +69,10 @@ Variable SymbolTable::lookupLval(std::string id)
       return foundVar->second;
     }
 
-    //auto foundConst = scope->constants.find(id);
-    //if (foundConst != scope->constants.end())
+    // auto foundConst = scope->constants.find(id);
+    // if (foundConst != scope->constants.end())
     //{
-      //return foundConst->second;
+    // return foundConst->second;
     //}
   }
   LOG(ERROR) << id << " not defined";

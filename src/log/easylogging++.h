@@ -16,7 +16,23 @@
 
 #ifndef EASYLOGGINGPP_H
 #define EASYLOGGINGPP_H
+/////////////////////////////////////////////////////
+// Added by Philip Nelson
+/////////////////////////////////////////////////////
 #define ELPP_CUSTOM_COUT std::cerr
+
+#define RESET "\033[0m"
+#define RED "\033[31m"
+#define ORANGE "\033[33m"
+#define GRAY "\033[90m"
+#define GREEN "\033[32m"
+
+#include <string>
+
+std::string make_coloured(std::string msg);
+#define ELPP_CUSTOM_COUT_LINE(msg) make_coloured(msg)
+/////////////////////////////////////////////////////
+
 // Compilers and C++0x/C++11 Evaluation
 #if __cplusplus >= 201103L
 #  define ELPP_CXX11 1

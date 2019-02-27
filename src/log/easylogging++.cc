@@ -16,6 +16,32 @@
 
 #include "easylogging++.h"
 
+/////////////////////////////////////////////////////
+// Added by Philip Nelson
+/////////////////////////////////////////////////////
+std::string make_coloured(std::string msg)
+{
+  std::string prefix = msg.substr(0, 7);
+  if (prefix == "[DEBUG]")
+  {
+    return GREEN + msg + RESET;
+  }
+  else if (prefix == "[ERROR]")
+  {
+    return RED + msg + RESET;
+  }
+  else if (prefix == "[WARN ]")
+  {
+    return ORANGE + msg + RESET;
+  }
+  else if (prefix == "[TRACE]")
+  {
+    return GRAY + msg + RESET;
+  }
+  return msg;
+}
+/////////////////////////////////////////////////////
+
 #if defined(AUTO_INITIALIZE_EASYLOGGINGPP)
 INITIALIZE_EASYLOGGINGPP
 #endif

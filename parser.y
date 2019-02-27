@@ -493,10 +493,10 @@ Expression                      : Expression OR_T Expression                   {
                                 | Expression LT_T Expression                   { $$ = new LessThanNode($1, $3); }
                                 | Expression GT_T Expression                   { $$ = new GreaterThanNode($1, $3); }
                                 | Expression PLUS_T Expression                 { $$ = makeAddNode($1, $3); }
-                                | Expression MINUS_T Expression                { $$ = new SubtractNode($1, $3); }
-                                | Expression MULTIPLY_T Expression             { $$ = new MultiplyNode($1, $3); }
-                                | Expression DIVIDE_T Expression               { $$ = new DivideNode($1, $3); }
-                                | Expression MOD_T Expression                  { $$ = new ModuloNode($1, $3); }
+                                | Expression MINUS_T Expression                { $$ = makeSubtractNode($1, $3); }
+                                | Expression MULTIPLY_T Expression             { $$ = makeMultiplyNode($1, $3); }
+                                | Expression DIVIDE_T Expression               { $$ = makeDivideNode($1, $3); }
+                                | Expression MOD_T Expression                  { $$ = makeModuloNode($1, $3); }
                                 | NOT_T Expression                             { $$ = new NotNode($2); }
                                 | MINUS_T Expression %prec UNARY_MINUS_T       { $$ = new UnaryMinusNode($2); }
                                 | OPEN_PAREN_T Expression CLOSE_PAREN_T        { $$ = $2; }

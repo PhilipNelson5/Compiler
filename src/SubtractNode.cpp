@@ -17,5 +17,17 @@ void SubtractNode::emitSource(std::string indent)
 
 RegisterPool::Register SubtractNode::emit()
 {
-  throw "not implemented SubtractNode";
+  std::cout << "# ";
+  emitSource("");
+  std::cout << std::endl;
+
+  auto r_lhs = lhs->emit();
+  auto r_rhs = rhs->emit();
+  RegisterPool::Register res;
+  std::cout << "sub " << res << ", " << r_lhs << ", " << r_rhs << " # ";
+
+  emitSource("");
+  std::cout << std::endl;
+
+  return res;
 }

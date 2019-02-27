@@ -17,5 +17,18 @@ void MultiplyNode::emitSource(std::string indent)
 
 RegisterPool::Register MultiplyNode::emit()
 {
-  throw "not implemented MultiplyNode";
+  std::cout << "# ";
+  emitSource("");
+  std::cout << std::endl;
+
+  auto r_lhs = lhs->emit();
+  auto r_rhs = rhs->emit();
+  RegisterPool::Register result;
+  std::cout << "mult " << r_lhs << ", " << r_rhs << std::endl;
+
+  std::cout << "mflo " << result << " # ";
+  emitSource("");
+  std::cout << std::endl;
+  
+  return result;
 }
