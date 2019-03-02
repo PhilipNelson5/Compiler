@@ -3,7 +3,8 @@
 #include <iostream>
 
 SuccessorExpressionNode::SuccessorExpressionNode(ExpressionNode*& expr)
-  : expr(expr)
+  : ExpressionNode(expr->type)
+  , expr(expr)
 {}
 
 void SuccessorExpressionNode::emitSource(std::string indent)

@@ -1,9 +1,13 @@
 #include "SubtractNode.hpp"
 
+#include "IntegerLiteralNode.hpp"
+#include "log/easylogging++.h"
+
 #include <iostream>
 
 SubtractNode::SubtractNode(ExpressionNode*& left, ExpressionNode*& right)
-  : lhs(left)
+  : ExpressionNode(IntegerType::get())
+  , lhs(left)
   , rhs(right)
 {}
 
@@ -17,17 +21,45 @@ void SubtractNode::emitSource(std::string indent)
 
 RegisterPool::Register SubtractNode::emit()
 {
+  if (lhs->type != rhs->type)
+  {
+    LOG(ERROR) << "mismatched types in subtract expression: "
+               << lhs->type->name() << " and " << rhs->type->name();
+  }
+
+  if (lhs->type != IntegerType::get())
+  {
+    LOG(ERROR) << "can not subtract non integer types";
+  }
+
   std::cout << "# ";
   emitSource("");
   std::cout << std::endl;
 
-  auto r_lhs = lhs->emit();
-  auto r_rhs = rhs->emit();
-  RegisterPool::Register res;
-  std::cout << "sub " << res << ", " << r_lhs << ", " << r_rhs << " # ";
+  RegisterPool::Register result;
+  if (lhs->isConstant())
+  {
+    auto lhs_const = dynamic_cast<IntegerLiteralNode*>(lhs.get());
+    auto r_rhs = rhs->emit();
+    std::cout << "sub " << result << ", " << lhs_const->value << ", " << r_rhs
+              << " # ";
+  }
+  else if (rhs->isConstant())
+  {
+    auto rhs_const = dynamic_cast<IntegerLiteralNode*>(rhs.get());
+    auto r_lhs = lhs->emit();
+    std::cout << "sub " << result << ", " << r_lhs << ", " << rhs_const->value
+              << " # ";
+  }
+  else
+  {
+    auto r_lhs = lhs->emit();
+    auto r_rhs = rhs->emit();
+    std::cout << "sub " << result << ", " << r_lhs << ", " << r_rhs << " # ";
+  }
 
   emitSource("");
   std::cout << std::endl;
 
-  return res;
+  return result;
 }

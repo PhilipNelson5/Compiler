@@ -3,7 +3,8 @@
 #include <iostream>
 
 CharacterExpressionNode::CharacterExpressionNode(ExpressionNode*& expr)
-  : expr(expr)
+  : ExpressionNode(CharacterType::get())
+  , expr(expr)
 {}
 
 void CharacterExpressionNode::emitSource(std::string indent)
@@ -15,5 +16,5 @@ void CharacterExpressionNode::emitSource(std::string indent)
 
 RegisterPool::Register CharacterExpressionNode::emit()
 {
-  throw "not implemented CharacterConstantNode";
+  throw "not implemented CharacterLiteralNode";
 }

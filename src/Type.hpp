@@ -1,8 +1,11 @@
 #ifndef TYPE_HPP
 #define TYPE_HPP
 
+#include <map>
 #include <memory>
+#include <numeric>
 #include <string>
+#include <utility>
 
 //------------------------------------------------------------------------------
 // Type
@@ -87,6 +90,47 @@ public:
 
 private:
   static std::shared_ptr<Type> pStr;
+};
+
+//------------------------------------------------------------------------------
+// Array Type
+//------------------------------------------------------------------------------
+class ArrayType : public Type
+{
+public:
+  ArrayType(int lb,
+            int ub,
+            std::shared_ptr<Type> elementType,
+            std::shared_ptr<Type> indexType)
+    : lb(lb)
+    , ub(ub)
+    , indexType(indexType)
+    , elementType(elementType)
+  {}
+
+  const int lb, ub;
+  const std::shared_ptr<Type> indexType;
+  const std::shared_ptr<Type> elementType;
+
+  virtual int size() override { return ub - lb + 1 * elementType->size(); }
+};
+
+//------------------------------------------------------------------------------
+// Record Type
+//------------------------------------------------------------------------------
+class RecordType : public Type
+{
+public:
+  RecordType() {}
+
+  std::map<std::string, std::pair<int, std::shared_ptr<Type>>> table;
+
+  virtual int size() override
+  {
+    return std::accumulate(table.begin(), table.end(), 0, [](int sum, auto e) {
+      return sum + e.second.second->size();
+    });
+  }
 };
 
 #endif

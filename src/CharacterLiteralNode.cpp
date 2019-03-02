@@ -1,20 +1,16 @@
-#include "CharacterConstantNode.hpp"
+#include "CharacterLiteralNode.hpp"
 
 #include "Type.hpp"
 
 #include <iostream>
 #include <string>
 
-CharacterConstantNode::CharacterConstantNode(char character)
-  : character(character)
+CharacterLiteralNode::CharacterLiteralNode(char character)
+  : ExpressionNode(CharacterType::get())
+  , character(character)
 {}
 
-std::shared_ptr<Type> CharacterConstantNode::type()
-{
-  return CharacterType::get();
-}
-
-void CharacterConstantNode::emitSource(std::string indent)
+void CharacterLiteralNode::emitSource(std::string indent)
 {
   std::cout << indent << "'";
   switch (character)
@@ -40,7 +36,7 @@ void CharacterConstantNode::emitSource(std::string indent)
   std::cout << "'";
 }
 
-RegisterPool::Register CharacterConstantNode::emit()
+RegisterPool::Register CharacterLiteralNode::emit()
 {
   RegisterPool::Register result;
   std::cout << "li " << result << ", ";

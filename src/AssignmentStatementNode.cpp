@@ -1,6 +1,7 @@
 #include "AssignmentStatementNode.hpp"
 
 #include "SymbolTable.hpp"
+#include "log/easylogging++.h"
 
 #include <iostream>
 
@@ -24,10 +25,15 @@ RegisterPool::Register AssignmentStatementNode::emit()
   std::cout << "\n# ";
   emitSource("");
 
-  auto loc = symbol_table.lookupLval(lval->ident);
+  auto lval_info = symbol_table.lookupLval(lval->ident);
+  if (lval_info == nullptr)
+  {
+    LOG(ERROR) << lval->ident << " is not an lvalue";
+    exit(EXIT_FAILURE);
+  }
   auto reg_expr = expr->emit();
 
-  std::cout << "sw " << reg_expr << ", " << loc.getLoc();
+  std::cout << "sw " << reg_expr << ", " << lval_info->getLoc();
 
   std::cout << " # ";
   emitSource("");

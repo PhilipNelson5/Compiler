@@ -4,7 +4,8 @@
 
 EqualExpressionNode::EqualExpressionNode(ExpressionNode*& lhs,
                                          ExpressionNode*& rhs)
-  : lhs(lhs)
+  : ExpressionNode(BooleanType::get())
+  , lhs(lhs)
   , rhs(rhs)
 {}
 
@@ -29,10 +30,6 @@ RegisterPool::Register EqualExpressionNode::emit()
   std::cout << "# not sure how to do < #" << std::endl;
   std::cout << "########################" << std::endl;
   std::cout << "li " << result << ", 0" << std::endl;
-  //std::cout << "beq " << r_rhs << ", " << r_lhs << ", 8" << std::endl;
-  //std::cout << "li " << result << ", 0" << std::endl;
-  //std::cout << "add $pc, $pc, 4" << std::endl;
-  //std::cout << "li " << result << ", 1" << std::endl;
 
   return result;
 }

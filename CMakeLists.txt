@@ -8,7 +8,7 @@ bison_target(Parser parser.y ${CMAKE_CURRENT_BINARY_DIR}/parser.cpp)
 flex_target(Scanner scanner.l ${CMAKE_CURRENT_BINARY_DIR}/scanner.cpp)
 add_flex_bison_dependency(Scanner Parser)
 
-set(EXTRA_COMPILE_FLAGS "-g3 -std=c++14 -DELPP_NO_DEFAULT_LOG_FILE")
+set(EXTRA_COMPILE_FLAGS "-g3 -std=c++17 -DELPP_NO_DEFAULT_LOG_FILE")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${EXTRA_COMPILE_FLAGS}")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
@@ -23,10 +23,10 @@ set(cpsl_srcs
   src/AndNode.hpp
   src/AssignmentStatementNode.cpp
   src/AssignmentStatementNode.hpp
-  src/BooleanConstantNode.cpp
-  src/BooleanConstantNode.hpp
-  src/CharacterConstantNode.cpp
-  src/CharacterConstantNode.hpp
+  src/BooleanLiteralNode.cpp
+  src/BooleanLiteralNode.hpp
+  src/CharacterLiteralNode.cpp
+  src/CharacterLiteralNode.hpp
   src/CharacterExpressionNode.cpp
   src/CharacterExpressionNode.hpp
   src/ConstantDeclarationNode.cpp
@@ -41,8 +41,8 @@ set(cpsl_srcs
   src/GreaterThanEqualNode.hpp
   src/GreaterThanNode.cpp
   src/GreaterThanNode.hpp
-  src/IntegerConstantNode.cpp
-  src/IntegerConstantNode.hpp
+  src/IntegerLiteralNode.cpp
+  src/IntegerLiteralNode.hpp
   src/LessThanEqualNode.cpp
   src/LessThanEqualNode.hpp
   src/LessThanNode.cpp
@@ -76,8 +76,8 @@ set(cpsl_srcs
   src/StatementNode.hpp
   src/StopStatementNode.cpp
   src/StopStatementNode.hpp
-  src/StringConstantNode.cpp
-  src/StringConstantNode.hpp
+  src/StringLiteralNode.cpp
+  src/StringLiteralNode.hpp
   src/SubtractNode.cpp
   src/SubtractNode.hpp
   src/SuccessorExpressionNode.cpp

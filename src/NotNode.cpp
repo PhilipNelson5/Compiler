@@ -3,7 +3,8 @@
 #include <iostream>
 
 NotNode::NotNode(ExpressionNode*& right)
-  : rhs(right)
+  : ExpressionNode(IntegerType::get())
+  , rhs(right)
 {}
 
 void NotNode::emitSource(std::string indent)

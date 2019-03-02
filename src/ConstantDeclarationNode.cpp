@@ -1,5 +1,7 @@
 #include "ConstantDeclarationNode.hpp"
 
+#include "SymbolTable.hpp"
+
 #include <iostream>
 
 ConstantDeclarationNode::ConstantDeclarationNode(std::string ident,
@@ -17,5 +19,6 @@ void ConstantDeclarationNode::emitSource(std::string indent)
 
 RegisterPool::Register ConstantDeclarationNode::emit()
 {
-  throw "not implemented ConstantDeclarationNode";
+  symbol_table.storeConst(ident, expr);
+  return {};
 }

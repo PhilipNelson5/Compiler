@@ -3,7 +3,8 @@
 #include <iostream>
 
 LessThanNode::LessThanNode(ExpressionNode*& left, ExpressionNode*& right)
-  : lhs(left)
+  : ExpressionNode(BooleanType::get())
+  , lhs(left)
   , rhs(right)
 {}
 

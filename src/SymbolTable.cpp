@@ -1,22 +1,23 @@
 #include "SymbolTable.hpp"
 
-#include "BooleanConstantNode.hpp"
-#include "IntegerConstantNode.hpp"
+#include "BooleanLiteralNode.hpp"
+#include "IntegerLiteralNode.hpp"
 #include "log/easylogging++.h"
 
 #include <iostream>
+#include <optional>
 
 SymbolTable symbol_table;
 
 SymbolTable::SymbolTable()
 {
-  // Predefines
+  // Enter Predefined Scope
   scopes.emplace_back();
   auto itPredefines = scopes.rbegin();
   itPredefines->constants.emplace(std::string("true"),
-                                  new BooleanConstantNode(1));
+                                  new BooleanLiteralNode(1));
   itPredefines->constants.emplace(std::string("false"),
-                                  new BooleanConstantNode(0));
+                                  new BooleanLiteralNode(0));
 
   itPredefines->types.emplace(std::string("integer"), IntegerType::get());
   itPredefines->types.emplace(std::string("char"), CharacterType::get());
@@ -27,7 +28,7 @@ SymbolTable::SymbolTable()
   enter_scope();
 }
 
-std::shared_ptr<Type> SymbolTable::lookupType(std::string id)
+std::shared_ptr<Type> SymbolTable::lookupType(std::string id) const
 {
   LOG(DEBUG) << "lookupType(" << id << ")";
   for (auto scope = scopes.rbegin(); scope != scopes.rend(); ++scope)
@@ -42,7 +43,7 @@ std::shared_ptr<Type> SymbolTable::lookupType(std::string id)
   exit(EXIT_FAILURE);
 }
 
-std::string SymbolTable::lookupString(std::string str)
+const std::string SymbolTable::lookupString(std::string str)
 {
   static int num = 0;
   const static std::string name = "string";
@@ -58,7 +59,7 @@ std::string SymbolTable::lookupString(std::string str)
   return found->second;
 }
 
-Variable SymbolTable::lookupLval(std::string id)
+std::shared_ptr<Variable> SymbolTable::lookupLval(std::string id) const
 {
   LOG(DEBUG) << "lookupLval(" << id << ")";
   for (auto scope = scopes.rbegin(); scope != scopes.rend(); ++scope)
@@ -68,15 +69,24 @@ Variable SymbolTable::lookupLval(std::string id)
     {
       return foundVar->second;
     }
-
-    // auto foundConst = scope->constants.find(id);
-    // if (foundConst != scope->constants.end())
-    //{
-    // return foundConst->second;
-    //}
   }
-  LOG(ERROR) << id << " not defined";
-  exit(EXIT_FAILURE);
+  LOG(DEBUG) << id << " not defined as variable";
+  return nullptr;
+}
+
+std::shared_ptr<ExpressionNode> SymbolTable::lookupConst(std::string id) const
+{
+  LOG(DEBUG) << "lookupConst(" << id << ")";
+  for (auto scope = scopes.rbegin(); scope != scopes.rend(); ++scope)
+  {
+    auto foundConst = scope->constants.find(id);
+    if (foundConst != scope->constants.end())
+    {
+      return foundConst->second;
+    }
+  }
+  LOG(DEBUG) << id << " not defined as constant";
+  return nullptr;
 }
 
 void SymbolTable::storeVariable(std::string id, std::shared_ptr<Type> type)
@@ -90,31 +100,81 @@ void SymbolTable::storeVariable(std::string id, std::shared_ptr<Type> type)
 
   if (foundVar != top->variables.end())
   {
-    LOG(ERROR) << id << " is already defined as a variable in the scope\n";
+    LOG(ERROR) << id
+               << " is already defined as a variable in the current scope\n";
     exit(EXIT_FAILURE);
   }
 
   if (foundConst != top->constants.end())
   {
-    LOG(ERROR) << id << " is already defined as a constant in the scope\n";
+    LOG(ERROR) << id
+               << " is already defined as a constant in the current scope\n";
     exit(EXIT_FAILURE);
   }
 
   // set the offset and increment by the type's size;
-  Variable var(id, type, globalPointer, globalOffset);
-  globalOffset += var.type->size();
+  auto var = std::make_shared<Variable>(id, type, globalPointer, globalOffset);
+  globalOffset += var->type->size();
 
   // Insert in top level scope
   top->variables.emplace(id, var);
-  LOG(DEBUG) << id << ":" << type->name() << " stored in symbol table at scope "
+  LOG(DEBUG) << id << ":" << type->name() << " stored in variable symbol table at scope "
              << scopes.size() - 1;
 }
 
-void SymbolTable::printStrings()
+void SymbolTable::storeConst(std::string id,
+                             std::shared_ptr<ExpressionNode> expr)
+{
+  // Find on top level - error if already defined
+  auto top = scopes.rbegin();
+  auto foundVar = top->variables.find(id);
+  auto foundConst = top->constants.find(id);
+
+  if (foundVar != top->variables.end())
+  {
+    LOG(ERROR) << id
+               << " is already defined as a variable in the current scope\n";
+    exit(EXIT_FAILURE);
+  }
+
+  if (foundConst != top->constants.end())
+  {
+    LOG(ERROR) << id
+               << " is already defined as a constant in the current scope\n";
+    exit(EXIT_FAILURE);
+  }
+
+  // Insert in top level scope
+  top->constants.emplace(id, expr);
+  LOG(DEBUG) << id << ":" << expr->type->name()
+             << " stored in constant symbol table at scope " << scopes.size() - 1;
+}
+
+void SymbolTable::storeType(std::string id,
+                            std::shared_ptr<Type> type)
+{
+  // Find on top level - error if already defined
+  auto top = scopes.rbegin();
+  auto foundType = top->types.find(id);
+
+  if (foundType != top->types.end())
+  {
+    LOG(ERROR) << id
+               << " is already defined as a type in the current scope\n";
+    exit(EXIT_FAILURE);
+  }
+
+  // Insert in top level scope
+  top->types.emplace(id, type);
+  LOG(DEBUG) << id << ":" << type->name()
+             << " stored in type symbol table at scope " << scopes.size() - 1;
+}
+
+void SymbolTable::printStrings() const
 {
   for (auto cur = strings.begin(); cur != strings.end(); ++cur)
   {
-    std::cout << cur->second << ": .asciiz " << cur->first << std::endl;
+    std::cout << cur->second << ": .asciiz " << cur->first << '\n';
   }
 }
 

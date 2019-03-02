@@ -4,7 +4,8 @@
 
 NotEqualExpressionNode::NotEqualExpressionNode(ExpressionNode*& lhs,
                                                ExpressionNode*& rhs)
-  : lhs(lhs)
+  : ExpressionNode(BooleanType::get())
+  , lhs(lhs)
   , rhs(rhs)
 {}
 

@@ -3,7 +3,8 @@
 #include <iostream>
 
 OrNode::OrNode(ExpressionNode*& left, ExpressionNode*& right)
-  : lhs(left)
+  : ExpressionNode(BooleanType::get())
+  , lhs(left)
   , rhs(right)
 {}
 

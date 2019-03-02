@@ -27,17 +27,17 @@ RegisterPool::Register WriteStatementNode::emit()
   {
     auto reg = expr->emit();
 
-    if (expr->type() == IntegerType::get())
+    if (expr->type == IntegerType::get())
     {
       std::cout << "li $v0, 1"
                 << " # load print integer instruction" << std::endl;
     }
-    else if (expr->type() == CharacterType::get())
+    else if (expr->type == CharacterType::get())
     {
       std::cout << "li $v0, 11"
                 << " # load print character instruction" << std::endl;
     }
-    else if (expr->type() == StringType::get())
+    else if (expr->type == StringType::get())
     {
       std::cout << "li $v0, 4"
                 << " # load print string instruction" << std::endl;

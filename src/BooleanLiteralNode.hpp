@@ -4,16 +4,13 @@
 #include "ExpressionNode.hpp"
 #include "RegisterPool.hpp"
 
-class BooleanConstantNode : public ExpressionNode
+class BooleanLiteralNode : public ExpressionNode
 {
-  public:
-  BooleanConstantNode(int value);
-  virtual std::shared_ptr<Type> type() override;
+public:
+  BooleanLiteralNode(int value);
   virtual void emitSource(std::string indent) override;
   virtual RegisterPool::Register emit() override;
-
-private:
-  bool value;
+  const bool value;
 };
 
 #endif

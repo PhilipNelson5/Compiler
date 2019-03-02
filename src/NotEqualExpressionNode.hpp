@@ -7,8 +7,8 @@ class NotEqualExpressionNode : public ExpressionNode
 {
 public:
   NotEqualExpressionNode(ExpressionNode*& lhs, ExpressionNode*& rhs);
-  void emitSource(std::string indent) override;
-  RegisterPool::Register emit() override;
+  virtual void emitSource(std::string indent) override;
+  virtual RegisterPool::Register emit() override;
 
 private:
   std::shared_ptr<ExpressionNode> lhs;

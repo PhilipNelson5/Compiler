@@ -17,14 +17,14 @@
 #include "src/AddNode.hpp"
 #include "src/AndNode.hpp"
 #include "src/AssignmentStatementNode.hpp"
-#include "src/CharacterConstantNode.hpp"
+#include "src/CharacterLiteralNode.hpp"
 #include "src/CharacterExpressionNode.hpp"
 #include "src/ConstantDeclarationNode.hpp"
 #include "src/DivideNode.hpp"
 #include "src/EqualExpressionNode.hpp"
 #include "src/GreaterThanEqualNode.hpp"
 #include "src/GreaterThanNode.hpp"
-#include "src/IntegerConstantNode.hpp"
+#include "src/IntegerLiteralNode.hpp"
 #include "src/LessThanEqualNode.hpp"
 #include "src/LessThanNode.hpp"
 #include "src/ListNode.hpp"
@@ -40,7 +40,7 @@
 #include "src/ReadStatementNode.hpp"
 #include "src/SimpleTypeNode.hpp"
 #include "src/StopStatementNode.hpp"
-#include "src/StringConstantNode.hpp"
+#include "src/StringLiteralNode.hpp"
 #include "src/SubtractNode.hpp"
 #include "src/SuccessorExpressionNode.hpp"
 #include "src/TypeDeclarationNode.hpp"
@@ -486,8 +486,8 @@ ExpressionList                  : ExpressionList COMMA_T Expression
 
 Expression                      : Expression OR_T Expression                   { $$ = new OrNode($1, $3); }
                                 | Expression AND_T Expression                  { $$ = new AndNode($1, $3); }
-                                | Expression EQUAL_T Expression                { $$ = new EqualExpressionNode($1, $3); }
-                                | Expression NEQUAL_T Expression               { $$ = new NotEqualExpressionNode($1, $3); }
+                                | Expression EQUAL_T Expression                { $$ = makeEqualNode($1, $3); }
+                                | Expression NEQUAL_T Expression               { $$ = makeNotEqualNode($1, $3); }
                                 | Expression LTE_T Expression                  { $$ = new LessThanEqualNode($1, $3); }
                                 | Expression GTE_T Expression                  { $$ = new GreaterThanEqualNode($1, $3); }
                                 | Expression LT_T Expression                   { $$ = new LessThanNode($1, $3); }
@@ -506,9 +506,9 @@ Expression                      : Expression OR_T Expression                   {
                                 | PRED_T OPEN_PAREN_T Expression CLOSE_PAREN_T { $$ = new PredecessorExpressionNode($3); }
                                 | SUCC_T OPEN_PAREN_T Expression CLOSE_PAREN_T { $$ = new SuccessorExpressionNode($3); }
                                 | LValue                                       { $$ = $1; }
-                                | NUMBER_T                                     { $$ = new IntegerConstantNode($1); }
-                                | STRING_T                                     { $$ = new StringConstantNode($1); }
-                                | CHAR_T                                       { $$ = new CharacterConstantNode($1); }
+                                | NUMBER_T                                     { $$ = new IntegerLiteralNode($1); }
+                                | STRING_T                                     { $$ = new StringLiteralNode($1); }
+                                | CHAR_T                                       { $$ = new CharacterLiteralNode($1); }
                                 ;
 
 LValue                          : LValue DOT_T ID_T { $$ = nullptr; }

@@ -36,3 +36,4 @@
 * Why does adding the operator<< to the header file make multiple definitions?
 
 * Is it okay to print to std::cerr?
+  - ANSWER: Yes, that's fine.

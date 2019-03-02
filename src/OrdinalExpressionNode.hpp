@@ -7,8 +7,8 @@ class OrdinalExpressionNode : public ExpressionNode
 {
 public:
   OrdinalExpressionNode(ExpressionNode*& expr);
-  void emitSource(std::string indent) override;
-  RegisterPool::Register emit() override;
+  virtual void emitSource(std::string indent) override;
+  virtual RegisterPool::Register emit() override;
 
 private:
   std::shared_ptr<ExpressionNode> expr;

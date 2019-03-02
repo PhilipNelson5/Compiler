@@ -1,14 +1,14 @@
 #ifndef SYMBOL_TABLE_HPP
 #define SYMBOL_TABLE_HPP
 
-#include "Type.hpp"
 #include "ExpressionNode.hpp"
+#include "Type.hpp"
 
 #include <map>
 #include <memory>
+#include <sstream>
 #include <string>
 #include <vector>
-#include <sstream>
 
 struct Variable
 {
@@ -31,7 +31,7 @@ struct Variable
     , offset(offset)
   {}
 
-  std::string getLoc() 
+  std::string getLoc()
   {
     std::stringstream ss;
     ss << offset << "($" << memoryLocation << ")";
@@ -42,20 +42,22 @@ struct Variable
 struct Scope
 {
   std::map<std::string, std::shared_ptr<ExpressionNode>> constants;
-  std::map<std::string, Variable> variables;
+  std::map<std::string, std::shared_ptr<Variable>> variables;
   std::map<std::string, std::shared_ptr<Type>> types;
-
 };
 
 class SymbolTable
 {
 public:
   SymbolTable();
-  Variable lookupLval(std::string id);
-  std::shared_ptr<Type> lookupType(std::string id);
-  std::string lookupString(std::string str);
+  std::shared_ptr<ExpressionNode> lookupConst(std::string id) const;
+  std::shared_ptr<Variable> lookupLval(std::string id) const;
+  std::shared_ptr<Type> lookupType(std::string id) const;
+  const std::string lookupString(std::string str);
+  void storeConst(std::string id, std::shared_ptr<ExpressionNode> expr);
   void storeVariable(std::string id, std::shared_ptr<Type> type);
-  void printStrings();
+  void storeType(std::string id, std::shared_ptr<Type> type);
+  void printStrings() const;
   void enter_scope();
   void exit_scope();
 

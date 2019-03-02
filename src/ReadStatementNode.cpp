@@ -2,6 +2,7 @@
 
 #include "SymbolTable.hpp"
 #include "Type.hpp"
+#include "log/easylogging++.h"
 
 #include <iostream>
 
@@ -28,19 +29,29 @@ RegisterPool::Register ReadStatementNode::emit()
 
   for (auto&& lval : lValues)
   {
-    auto loc = symbol_table.lookupLval(lval->ident);
-    if (loc.type == IntegerType::get())
+    auto lval_info = symbol_table.lookupLval(lval->ident);
+    if (lval_info == nullptr)
+    {
+      LOG(ERROR) << lval->ident << " is not an lvalue";
+      exit(EXIT_FAILURE);
+    }
+    if (lval_info->type == IntegerType::get())
     {
       std::cout << "li $v0, 5"
                 << " # load read integer instruction" << std::endl;
     }
-    else if (loc.type == CharacterType::get())
+    else if (lval_info->type == CharacterType::get())
     {
       std::cout << "li $v0, 12"
                 << " # load read character instruction" << std::endl;
     }
+    else
+    {
+      LOG(ERROR) << "type " << lval->type->name() << " can not be read into";
+      exit(EXIT_FAILURE);
+    }
     std::cout << "syscall" << std::endl;
-    std::cout << "sw $v0, " << loc.getLoc();
+    std::cout << "sw $v0, " << lval_info->getLoc();
     std::cout << " # " << lval->ident << " = input" << std::endl << std::endl;
   }
 

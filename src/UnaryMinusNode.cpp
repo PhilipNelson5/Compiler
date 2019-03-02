@@ -3,7 +3,8 @@
 #include <iostream>
 
 UnaryMinusNode::UnaryMinusNode(ExpressionNode*& right)
-  : rhs(right)
+  : ExpressionNode(BooleanType::get())
+  , rhs(right)
 {}
 
 void UnaryMinusNode::emitSource(std::string indent)

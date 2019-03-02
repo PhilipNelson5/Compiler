@@ -4,15 +4,14 @@
 #include "ExpressionNode.hpp"
 #include "RegisterPool.hpp"
 
-class IntegerConstantNode : public ExpressionNode
+class IntegerLiteralNode : public ExpressionNode
 {
   public:
-  IntegerConstantNode(int value);
+  IntegerLiteralNode(int value);
   virtual bool isLiteral() override;
-  virtual std::shared_ptr<Type> type() override;
   virtual void emitSource(std::string indent) override;
   virtual RegisterPool::Register emit() override;
-  int value;
+  const int value;
 };
 
 #endif

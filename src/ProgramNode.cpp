@@ -1,4 +1,5 @@
 #include "ProgramNode.hpp"
+
 #include "SymbolTable.hpp"
 
 #include <iostream>
@@ -56,6 +57,9 @@ void ProgramNode::emitSource(std::string indent)
     std::cout << std::endl;
   }
 
+  // Procedure and Function Declarations
+  // -----------------------------------
+
   // Main Block
   // ---------------------
   std::cout << indent << "BEGIN" << std::endl;
@@ -70,12 +74,39 @@ RegisterPool::Register ProgramNode::emit()
 {
   std::cout << ".text" << std::endl;
   std::cout << "la $gp, GLOBAL_AREA" << std::endl;
+
+  // Constant Declarations
+  // ---------------------
+  if (constantDecls.size() > 0u)
+  {
+    for (auto&& constDecl : constantDecls)
+    {
+      constDecl->emit();
+    }
+  }
+
+  // Type Declarations
+  // -----------------
+  if (constantDecls.size() > 0u)
+  {
+    for (auto&& typeDecl : typeDecls)
+    {
+      typeDecl->emit();
+    }
+  }
+
   // Variable Declarations
   // ---------------------
-  for (auto&& varDecl : varDecls)
+  if (varDecls.size() > 0u)
   {
-    varDecl->emit();
+    for (auto&& varDecl : varDecls)
+    {
+      varDecl->emit();
+    }
   }
+
+  // Procedure and Function Declarations
+  // -----------------------------------
 
   // Main Block
   // ---------------------

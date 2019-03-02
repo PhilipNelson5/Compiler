@@ -5,16 +5,13 @@
 
 #include <string>
 
-class StringConstantNode : public ExpressionNode
+class StringLiteralNode : public ExpressionNode
 {
 public:
-  StringConstantNode(std::string);
-  virtual std::shared_ptr<Type> type() override;
+  StringLiteralNode(std::string);
   virtual void emitSource(std::string indent) override;
   virtual RegisterPool::Register emit() override;
-
-private:
-  std::string string;
+  const std::string string;
 };
 
 #endif

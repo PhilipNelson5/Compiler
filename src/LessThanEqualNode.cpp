@@ -2,8 +2,10 @@
 
 #include <iostream>
 
-LessThanEqualNode::LessThanEqualNode(ExpressionNode*& left, ExpressionNode*& right)
-  : lhs(left)
+LessThanEqualNode::LessThanEqualNode(ExpressionNode*& left,
+                                     ExpressionNode*& right)
+  : ExpressionNode(BooleanType::get())
+  , lhs(left)
   , rhs(right)
 {}
 

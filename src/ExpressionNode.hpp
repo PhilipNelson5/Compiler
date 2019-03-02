@@ -9,8 +9,10 @@
 class ExpressionNode : public Node
 {
 public:
+  ExpressionNode(std::shared_ptr<Type> type);
   virtual bool isLiteral();
-  virtual std::shared_ptr<Type> type() { return IntegerType::get(); }
+  virtual bool isConstant();
+  std::shared_ptr<Type> type;
 };
 
 #endif

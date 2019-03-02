@@ -3,7 +3,8 @@
 #include <iostream>
 
 OrdinalExpressionNode::OrdinalExpressionNode(ExpressionNode*& expr)
-  : expr(expr)
+  : ExpressionNode(IntegerType::get())
+  , expr(expr)
 {}
 
 void OrdinalExpressionNode::emitSource(std::string indent)
