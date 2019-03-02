@@ -29,10 +29,10 @@ RegisterPool::Register ReadStatementNode::emit()
 
   for (auto&& lval : lValues)
   {
-    auto lval_info = symbol_table.lookupLval(lval->ident);
+    auto lval_info = symbol_table.lookupLval(lval->id);
     if (lval_info == nullptr)
     {
-      LOG(ERROR) << lval->ident << " is not an lvalue";
+      LOG(ERROR) << lval->id << " is not an lvalue";
       exit(EXIT_FAILURE);
     }
     if (lval_info->type == IntegerType::get())
@@ -52,7 +52,7 @@ RegisterPool::Register ReadStatementNode::emit()
     }
     std::cout << "syscall" << std::endl;
     std::cout << "sw $v0, " << lval_info->getLoc();
-    std::cout << " # " << lval->ident << " = input" << std::endl << std::endl;
+    std::cout << " # " << lval->id << " = input" << std::endl << std::endl;
   }
 
   return {};

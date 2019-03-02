@@ -77,33 +77,33 @@ RegisterPool::Register ProgramNode::emit()
 
   // Constant Declarations
   // ---------------------
-  if (constantDecls.size() > 0u)
-  {
-    for (auto&& constDecl : constantDecls)
-    {
-      constDecl->emit();
-    }
-  }
+  // if (constantDecls.size() > 0u)
+  //{
+  // for (auto&& constDecl : constantDecls)
+  //{
+  // constDecl->emit();
+  //}
+  //}
 
   // Type Declarations
   // -----------------
-  if (constantDecls.size() > 0u)
-  {
-    for (auto&& typeDecl : typeDecls)
-    {
-      typeDecl->emit();
-    }
-  }
+  // if (constantDecls.size() > 0u)
+  //{
+  // for (auto&& typeDecl : typeDecls)
+  //{
+  // typeDecl->emit();
+  //}
+  //}
 
   // Variable Declarations
   // ---------------------
-  if (varDecls.size() > 0u)
-  {
-    for (auto&& varDecl : varDecls)
-    {
-      varDecl->emit();
-    }
-  }
+  // if (varDecls.size() > 0u)
+  //{
+  // for (auto&& varDecl : varDecls)
+  //{
+  // varDecl->emit();
+  //}
+  //}
 
   // Procedure and Function Declarations
   // -----------------------------------

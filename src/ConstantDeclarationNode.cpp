@@ -4,21 +4,22 @@
 
 #include <iostream>
 
-ConstantDeclarationNode::ConstantDeclarationNode(std::string ident,
+ConstantDeclarationNode::ConstantDeclarationNode(std::string id,
                                                  ExpressionNode* expr)
-  : ident(ident)
-  , expr(expr)
-{}
+  : m_id(id)
+  , m_expr(dynamic_cast<LiteralNode*>(expr))
+{
+  symbol_table.storeConst(m_id, m_expr);
+}
 
 void ConstantDeclarationNode::emitSource(std::string indent)
 {
-  std::cout << indent << ident << " = ";
-  expr->emitSource("");
+  std::cout << indent << m_id << " = ";
+  m_expr->emitSource("");
   std::cout << ";" << std::endl;
 }
 
 RegisterPool::Register ConstantDeclarationNode::emit()
 {
-  symbol_table.storeConst(ident, expr);
-  return {};
+  throw "ConstantDeclarationNode::emit() should not be called";
 }

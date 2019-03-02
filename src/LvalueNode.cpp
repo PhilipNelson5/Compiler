@@ -8,47 +8,59 @@
 
 #include <iostream>
 
-LvalueNode::LvalueNode(std::string ident)
-  : ExpressionNode(nullptr)
-  , ident(ident)
+std::shared_ptr<Type> getType(std::string identifier)
+{
+  auto lval_info = symbol_table.lookupLval(identifier);
+  if (lval_info != nullptr)
+  {
+    return lval_info->type;
+  }
+
+  auto const_info = symbol_table.lookupConst(identifier);
+  if (const_info != nullptr)
+  {
+    return const_info->type;
+  }
+
+  LOG(ERROR) << identifier << " is not defined";
+  exit(EXIT_FAILURE);
+}
+
+LvalueNode::LvalueNode(std::string _id)
+  : ExpressionNode(getType(_id))
+  , id(_id)
 {}
 
 bool LvalueNode::isConstant()
 {
-  return (symbol_table.lookupConst(ident) != nullptr);
+  return (symbol_table.lookupConst(id) != nullptr);
 }
 
 void LvalueNode::emitSource(std::string indent)
 {
-  std::cout << indent << ident;
+  std::cout << indent << id;
 }
 
 RegisterPool::Register LvalueNode::emit()
 {
-  auto lval_info = symbol_table.lookupLval(ident);
+  auto lval_info = symbol_table.lookupLval(id);
   if (lval_info != nullptr)
   {
-    // TRICKY: As far as I can tell the type can not be set at construction time
-    //         so when the lValue is emitted, look up the type and set it
-    type = lval_info->type;
     RegisterPool::Register result;
     std::cout << "lw " << result << ", " << lval_info->getLoc() << " # load "
-              << ident << '\n';
+              << id << '\n';
 
     return result;
   }
 
-  auto const_info = symbol_table.lookupConst(ident);
+  auto const_info = symbol_table.lookupConst(id);
   if (const_info != nullptr)
   {
-    // TRICKY: As far as I can tell the type can not be set at construction time
-    //         so when the lValue is emitted, look up the type and set it
-    type = const_info->type;
     if (const_info->type == IntegerType::get())
     {
       auto value = dynamic_cast<IntegerLiteralNode*>(const_info.get())->value;
       RegisterPool::Register result;
-      std::cout << "li " << result << ", " << value << " # load " << ident
+      std::cout << "li " << result << ", " << value << " # load " << id
                 << ", value " << value << '\n';
 
       return result;
@@ -57,7 +69,7 @@ RegisterPool::Register LvalueNode::emit()
     {
       auto value = dynamic_cast<BooleanLiteralNode*>(const_info.get())->value;
       RegisterPool::Register result;
-      std::cout << "li " << result << ", " << value << " # load " << ident
+      std::cout << "li " << result << ", " << value << " # load " << id
                 << ", value " << value << '\n';
 
       return result;
@@ -67,16 +79,16 @@ RegisterPool::Register LvalueNode::emit()
       auto value
         = dynamic_cast<CharacterLiteralNode*>(const_info.get())->character;
       RegisterPool::Register result;
-      std::cout << "li " << result << ", '" << value << "' # load " << ident
+      std::cout << "li " << result << ", '" << value << "' # load " << id
                 << ", value '" << value << "'\n";
 
       return result;
     }
-    LOG(ERROR) << ident << " is not a literal int, bool or char";
+    LOG(ERROR) << id << " is not a literal int, bool or char";
     exit(EXIT_FAILURE);
   }
 
-  LOG(ERROR) << ident << " is not defined";
+  LOG(ERROR) << id << " is not defined";
   exit(EXIT_FAILURE);
 }
 

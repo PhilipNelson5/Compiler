@@ -74,7 +74,7 @@ std::shared_ptr<Variable> SymbolTable::lookupLval(std::string id) const
   return nullptr;
 }
 
-std::shared_ptr<ExpressionNode> SymbolTable::lookupConst(std::string id) const
+std::shared_ptr<LiteralNode> SymbolTable::lookupConst(std::string id) const
 {
   LOG(DEBUG) << "lookupConst(" << id << ")";
   for (auto scope = scopes.rbegin(); scope != scopes.rend(); ++scope)
@@ -123,7 +123,7 @@ void SymbolTable::storeVariable(std::string id, std::shared_ptr<Type> type)
 }
 
 void SymbolTable::storeConst(std::string id,
-                             std::shared_ptr<ExpressionNode> expr)
+                             std::shared_ptr<LiteralNode> literal)
 {
   // Find on top level - error if already defined
   auto top = scopes.rbegin();
@@ -145,8 +145,8 @@ void SymbolTable::storeConst(std::string id,
   }
 
   // Insert in top level scope
-  top->constants.emplace(id, expr);
-  LOG(DEBUG) << id << ":" << expr->type->name()
+  top->constants.emplace(id, literal);
+  LOG(DEBUG) << id << ":" << literal->type->name()
              << " stored in constant symbol table at scope " << scopes.size() - 1;
 }
 

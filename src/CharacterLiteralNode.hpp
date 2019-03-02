@@ -1,9 +1,10 @@
 #ifndef CHARACTER_CONSTANT_NODE_HPP
 #define CHARACTER_CONSTANT_NODE_HPP
 
-#include "ExpressionNode.hpp"
+#include "LiteralNode.hpp"
+#include "RegisterPool.hpp"
 
-class CharacterLiteralNode : public ExpressionNode
+class CharacterLiteralNode : public LiteralNode
 {
 public:
   CharacterLiteralNode(char character);

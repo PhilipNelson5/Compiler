@@ -7,7 +7,7 @@
 #include <iostream>
 
 BooleanLiteralNode::BooleanLiteralNode(int value)
-  : ExpressionNode(BooleanType::get())
+  : LiteralNode(BooleanType::get())
   , value(value)
 {}
 

@@ -17,8 +17,8 @@ public:
   virtual RegisterPool::Register emit() override;
 
 private:
-  std::vector<std::string> idents;
-  std::shared_ptr<TypeNode> type;
+  std::vector<std::string> m_ids;
+  std::shared_ptr<TypeNode> m_type;
 };
 
 #endif

@@ -4,22 +4,23 @@
 
 #include <iostream>
 
-TypeDeclarationNode::TypeDeclarationNode(std::string ident, TypeNode* type)
-  : ident(ident)
-  , type(type)
-{}
+TypeDeclarationNode::TypeDeclarationNode(std::string id, TypeNode* type)
+  : m_id(id)
+  , m_type(type)
+{
+  //TODO: check for other types of types
+  auto typeType = symbol_table.lookupType(m_type->ident);
+  symbol_table.storeType(m_id, typeType);
+}
 
 void TypeDeclarationNode::emitSource(std::string indent)
 {
-  std::cout << indent << ident << " = ";
-  type->emitSource("");
+  std::cout << indent << m_id << " = ";
+  m_type->emitSource("");
   std::cout << ";" << std::endl;
 }
 
 RegisterPool::Register TypeDeclarationNode::emit()
 {
-  //TODO: check for other types of types
-  auto typeType = symbol_table.lookupType(type->ident);
-  symbol_table.storeType(ident, typeType);
-  return {};
+  throw "TypeDeclarationNode::emit() should not be called";
 }

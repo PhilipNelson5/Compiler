@@ -1,5 +1,7 @@
 #include "WriteStatementNode.hpp"
 
+#include "log/easylogging++.h"
+
 #include <iostream>
 
 WriteStatementNode::WriteStatementNode(ListNode<ExpressionNode>*& exprList)
@@ -27,7 +29,7 @@ RegisterPool::Register WriteStatementNode::emit()
   {
     auto reg = expr->emit();
 
-    if (expr->type == IntegerType::get())
+    if (expr->type == IntegerType::get() | expr->type == BooleanType::get())
     {
       std::cout << "li $v0, 1"
                 << " # load print integer instruction" << std::endl;
@@ -41,6 +43,11 @@ RegisterPool::Register WriteStatementNode::emit()
     {
       std::cout << "li $v0, 4"
                 << " # load print string instruction" << std::endl;
+    }
+    else
+    {
+      LOG(ERROR) << "write is not defined for type " << expr->type->name();
+      exit(EXIT_FAILURE);
     }
 
     std::cout << "or $a0, $0, " << reg << " # ";

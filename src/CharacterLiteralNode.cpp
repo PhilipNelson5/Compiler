@@ -6,7 +6,7 @@
 #include <string>
 
 CharacterLiteralNode::CharacterLiteralNode(char character)
-  : ExpressionNode(CharacterType::get())
+  : LiteralNode(CharacterType::get())
   , character(character)
 {}
 

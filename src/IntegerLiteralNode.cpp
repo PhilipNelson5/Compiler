@@ -6,7 +6,7 @@
 #include <iostream>
 
 IntegerLiteralNode::IntegerLiteralNode(int value)
-  : ExpressionNode(IntegerType::get())
+  : LiteralNode(IntegerType::get())
   , value(value)
 {}
 

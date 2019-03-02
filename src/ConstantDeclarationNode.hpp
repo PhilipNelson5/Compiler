@@ -1,7 +1,7 @@
 #ifndef CONST_DECL_NODE_HPP
 #define CONST_DECL_NODE_HPP
 
-#include "ExpressionNode.hpp"
+#include "LiteralNode.hpp"
 #include "ListNode.hpp"
 #include "Node.hpp"
 #include "RegisterPool.hpp"
@@ -17,8 +17,8 @@ public:
   virtual RegisterPool::Register emit() override;
 
 private:
-  std::string ident;
-  std::shared_ptr<ExpressionNode> expr;
+  std::string m_id;
+  std::shared_ptr<LiteralNode> m_expr;
 };
 
 #endif

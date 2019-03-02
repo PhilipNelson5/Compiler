@@ -25,10 +25,10 @@ RegisterPool::Register AssignmentStatementNode::emit()
   std::cout << "\n# ";
   emitSource("");
 
-  auto lval_info = symbol_table.lookupLval(lval->ident);
+  auto lval_info = symbol_table.lookupLval(lval->id);
   if (lval_info == nullptr)
   {
-    LOG(ERROR) << lval->ident << " is not an lvalue";
+    LOG(ERROR) << lval->id << " is not an lvalue";
     exit(EXIT_FAILURE);
   }
   auto reg_expr = expr->emit();

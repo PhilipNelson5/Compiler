@@ -1,11 +1,12 @@
 #ifndef STRING_CONSTANT_NODE_HPP
 #define STRING_CONSTANT_NODE_HPP
 
-#include "ExpressionNode.hpp"
+#include "LiteralNode.hpp"
+#include "RegisterPool.hpp"
 
 #include <string>
 
-class StringLiteralNode : public ExpressionNode
+class StringLiteralNode : public LiteralNode
 {
 public:
   StringLiteralNode(std::string);

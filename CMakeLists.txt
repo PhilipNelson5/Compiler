@@ -25,10 +25,10 @@ set(cpsl_srcs
   src/AssignmentStatementNode.hpp
   src/BooleanLiteralNode.cpp
   src/BooleanLiteralNode.hpp
-  src/CharacterLiteralNode.cpp
-  src/CharacterLiteralNode.hpp
   src/CharacterExpressionNode.cpp
   src/CharacterExpressionNode.hpp
+  src/CharacterLiteralNode.cpp
+  src/CharacterLiteralNode.hpp
   src/ConstantDeclarationNode.cpp
   src/ConstantDeclarationNode.hpp
   src/DivideNode.cpp
@@ -48,6 +48,7 @@ set(cpsl_srcs
   src/LessThanNode.cpp
   src/LessThanNode.hpp
   src/ListNode.hpp
+  src/LiteralNode.hpp
   src/LvalueNode.cpp
   src/LvalueNode.hpp
   src/ModuloNode.cpp

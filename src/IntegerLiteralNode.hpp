@@ -1,10 +1,10 @@
 #ifndef INTEGER_CONSTANT_NODE_HPP
 #define INTEGER_CONSTANT_NODE_HPP
 
-#include "ExpressionNode.hpp"
+#include "LiteralNode.hpp"
 #include "RegisterPool.hpp"
 
-class IntegerLiteralNode : public ExpressionNode
+class IntegerLiteralNode : public LiteralNode
 {
   public:
   IntegerLiteralNode(int value);

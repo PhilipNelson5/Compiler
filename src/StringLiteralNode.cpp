@@ -5,7 +5,7 @@
 #include <iostream>
 
 StringLiteralNode::StringLiteralNode(std::string string)
-  : ExpressionNode(StringType::get())
+  : LiteralNode(StringType::get())
   , string(string)
 {}
 

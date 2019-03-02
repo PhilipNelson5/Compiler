@@ -4,6 +4,6 @@
 [X] [ ] test/simple_expressions/const_declarations.cpsl
 [X] [ ] test/simple_expressions/expressions.cpsl
 [X] [X] test/simple_expressions/hello.cpsl
-[X] [ ] test/simple_expressions/io.cpsl
+[X] [X] test/simple_expressions/io.cpsl
 [X] [ ] test/simple_expressions/long_expression.cpsl
 [X] [X] test/simple_expressions/stop.cpsl

@@ -14,7 +14,7 @@ public:
   void emitSource(std::string indent) override;
   RegisterPool::Register emit() override;
 
-  const std::string ident;
+  const std::string id;
 };
 
 #endif
