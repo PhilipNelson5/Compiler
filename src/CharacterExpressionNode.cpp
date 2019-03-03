@@ -1,4 +1,5 @@
 #include "CharacterExpressionNode.hpp"
+#include "log/easylogging++.h"
 
 #include <iostream>
 
@@ -16,5 +17,14 @@ void CharacterExpressionNode::emitSource(std::string indent)
 
 RegisterPool::Register CharacterExpressionNode::emit()
 {
-  throw "not implemented CharacterLiteralNode";
+  if (expr->type != IntegerType::get())
+  {
+    LOG(ERROR) << "chr is not defined on " << expr->type->name()
+               << ". Must use integer type";
+    exit(EXIT_FAILURE);
+  }
+
+  expr->type = CharacterType::get();
+
+  return expr->emit();
 }

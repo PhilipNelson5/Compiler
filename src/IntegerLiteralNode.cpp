@@ -22,10 +22,10 @@ void IntegerLiteralNode::emitSource(std::string indent)
 
 RegisterPool::Register IntegerLiteralNode::emit()
 {
-  RegisterPool::Register reg;
-  std::cout << "li " << reg << ", " << value << " # load ";
+  RegisterPool::Register result;
+  std::cout << "li " << result << ", " << value << " # load ";
   emitSource("");
   std::cout << std::endl;
 
-  return reg;
+  return result;
 }

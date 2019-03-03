@@ -22,6 +22,18 @@ echo -e "$Cyan[ COMPILING ]$RESET cpsl < ${file}"
 
 build/cpsl $kwargs < ${file} > output.asm
 
+if [ -x "$(command -v bat)" ]; then
+  bat output.asm
+else
+  printf '─%.0s' $(seq 1 $(tput cols))
+  echo "File: output.asm"
+  printf '─%.0s' $(seq 1 $(tput cols))
+
+  cat -n output.asm
+
+  printf '━%.0s' $(seq 1 $(tput cols))
+fi
+
 printf '─%.0s' $(seq 1 $(tput cols))
 echo -e "$Cyan[ MARS ]$RESET java -jar ~/Downloads/Mars4_5.jar output.asm"
 printf '─%.0s' $(seq 1 $(tput cols))

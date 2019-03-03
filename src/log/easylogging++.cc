@@ -22,6 +22,7 @@
 std::string make_coloured(std::string msg)
 {
   std::string prefix = msg.substr(0, 7);
+  std::string prefix2 = msg.substr(0, 9);
   if (prefix == "[DEBUG]")
   {
     return GREEN + msg + RESET;
@@ -30,7 +31,7 @@ std::string make_coloured(std::string msg)
   {
     return RED + msg + RESET;
   }
-  else if (prefix == "[WARN ]")
+  else if (prefix2 == "[WARNING]")
   {
     return ORANGE + msg + RESET;
   }

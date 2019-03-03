@@ -3,11 +3,14 @@
 #include "BooleanLiteralNode.hpp"
 #include "CharacterLiteralNode.hpp"
 #include "IntegerLiteralNode.hpp"
+#include "StringLiteralNode.hpp"
 #include "SymbolTable.hpp"
 #include "log/easylogging++.h"
 
 #include <iostream>
 
+namespace
+{
 std::shared_ptr<Type> getType(std::string identifier)
 {
   auto lval_info = symbol_table.lookupLval(identifier);
@@ -25,6 +28,8 @@ std::shared_ptr<Type> getType(std::string identifier)
   LOG(ERROR) << identifier << " is not defined";
   exit(EXIT_FAILURE);
 }
+
+} // namespace
 
 LvalueNode::LvalueNode(std::string _id)
   : ExpressionNode(getType(_id))
@@ -56,6 +61,7 @@ RegisterPool::Register LvalueNode::emit()
   auto const_info = symbol_table.lookupConst(id);
   if (const_info != nullptr)
   {
+    return const_info->emit();
     if (const_info->type == IntegerType::get())
     {
       auto value = dynamic_cast<IntegerLiteralNode*>(const_info.get())->value;
@@ -84,8 +90,14 @@ RegisterPool::Register LvalueNode::emit()
 
       return result;
     }
-    LOG(ERROR) << id << " is not a literal int, bool or char";
-    exit(EXIT_FAILURE);
+    else if (const_info->type == StringType::get())
+    {
+      auto value = dynamic_cast<StringLiteralNode*>(const_info.get())->string;
+      auto label = symbol_table.lookupString(value);
+      RegisterPool::Register result;
+      std::cout << "la " << result << ", " << label << std::endl;
+      return result;
+    }
   }
 
   LOG(ERROR) << id << " is not defined";

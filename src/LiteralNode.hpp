@@ -9,6 +9,10 @@ public:
   LiteralNode(std::shared_ptr<Type> type)
     : ExpressionNode(type)
   {}
+
+  //bool isConstant() { return true; }
+
+  //bool isLiteral() { return true; }
 };
 
 #endif

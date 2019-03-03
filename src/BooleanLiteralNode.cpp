@@ -13,7 +13,7 @@ BooleanLiteralNode::BooleanLiteralNode(int value)
 
 void BooleanLiteralNode::emitSource(std::string indent)
 {
-  std::cout << indent << std::boolalpha << value;
+  std::cout << indent << std::boolalpha << value << std::noboolalpha;
 }
 
 RegisterPool::Register BooleanLiteralNode::emit()

@@ -208,13 +208,13 @@ void yyerror(const char*);
 %type <expressionNode> Expression
 %type <lvalue> LValue
 
-%right     UNARY_MINUS_T
-%left      MULTIPLY_T DIVIDE_T MOD_T
-%left      PLUS_T MINUS_T
-%nonassoc  EQUAL_T NEQUAL_T LT_T LTE_T GT_T GTE_T 
-%left      NOT_T
-%left      AND_T
 %left      OR_T
+%left      AND_T
+%right     NOT_T
+%nonassoc  EQUAL_T NEQUAL_T LT_T LTE_T GT_T GTE_T 
+%left      PLUS_T MINUS_T
+%left      MULTIPLY_T DIVIDE_T MOD_T
+%right     UNARY_MINUS_T
 
 %%
 
@@ -249,7 +249,25 @@ ConstDeclList                   : ConstDeclList ConstDecl
 
 ConstDecl                       : ID_T EQUAL_T Expression SEMI_COLON_T
                                   {
-                                    $$ = new ConstantDeclarationNode($1, $3);
+                                    LOG(WARNING) << "NEW CONST DECL";
+
+                                    // if ( Expression is an Lvalue )
+                                    if(LvalueNode* plval = dynamic_cast<LvalueNode*>($3))
+                                    {
+                                      LOG(WARNING) << "  -> LvalueNode";
+                                      $$ = new ConstantDeclarationNode($1, makeLiteralNode(plval));
+                                    }
+                                    // if ( Expression is a Literal )
+                                    else if(LiteralNode* plit = dynamic_cast<LiteralNode*>($3))
+                                    {
+                                      LOG(WARNING) << "  -> LiteralNode";
+                                      $$ = new ConstantDeclarationNode($1, plit);
+                                    }
+                                    else
+                                    {
+                                      LOG(ERROR) << "Non-Const expression in Constant Declaration";
+                                      exit(EXIT_FAILURE);
+                                    }
                                   }
                                 ;
 

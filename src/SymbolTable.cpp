@@ -118,7 +118,8 @@ void SymbolTable::storeVariable(std::string id, std::shared_ptr<Type> type)
 
   // Insert in top level scope
   top->variables.emplace(id, var);
-  LOG(DEBUG) << id << ":" << type->name() << " stored in variable symbol table at scope "
+  LOG(DEBUG) << id << ":" << type->name()
+             << " stored in variable symbol table at scope "
              << scopes.size() - 1;
 }
 
@@ -146,12 +147,13 @@ void SymbolTable::storeConst(std::string id,
 
   // Insert in top level scope
   top->constants.emplace(id, literal);
+
   LOG(DEBUG) << id << ":" << literal->type->name()
-             << " stored in constant symbol table at scope " << scopes.size() - 1;
+             << " stored in constant symbol table at scope "
+             << scopes.size() - 1;
 }
 
-void SymbolTable::storeType(std::string id,
-                            std::shared_ptr<Type> type)
+void SymbolTable::storeType(std::string id, std::shared_ptr<Type> type)
 {
   // Find on top level - error if already defined
   auto top = scopes.rbegin();
@@ -159,8 +161,7 @@ void SymbolTable::storeType(std::string id,
 
   if (foundType != top->types.end())
   {
-    LOG(ERROR) << id
-               << " is already defined as a type in the current scope\n";
+    LOG(ERROR) << id << " is already defined as a type in the current scope\n";
     exit(EXIT_FAILURE);
   }
 

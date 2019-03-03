@@ -1,4 +1,5 @@
 #include "CharacterLiteralNode.hpp"
+#include "log/easylogging++.h"
 
 #include "Type.hpp"
 
@@ -8,7 +9,9 @@
 CharacterLiteralNode::CharacterLiteralNode(char character)
   : LiteralNode(CharacterType::get())
   , character(character)
-{}
+{
+  LOG(DEBUG) << "NEW CHARACTER NODE";
+}
 
 void CharacterLiteralNode::emitSource(std::string indent)
 {

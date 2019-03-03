@@ -27,7 +27,7 @@ RegisterPool::Register EqualExpressionNode::emit()
   auto r_rhs = rhs->emit();
   RegisterPool::Register result;
   std::cout << "########################" << std::endl;
-  std::cout << "# not sure how to do < #" << std::endl;
+  std::cout << "# not sure how to do = #" << std::endl;
   std::cout << "########################" << std::endl;
   std::cout << "li " << result << ", 0" << std::endl;
 
