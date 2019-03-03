@@ -25,9 +25,6 @@ RegisterPool::Register LessThanNode::emit()
   auto r_lhs = lhs->emit();
   auto r_rhs = rhs->emit();
   RegisterPool::Register result;
-  std::cout << "###############################" << std::endl;
-  std::cout << "# not sure how to do equality #" << std::endl;
-  std::cout << "###############################" << std::endl;
-  std::cout << "li " << result << ", 0" << std::endl;
+  std::cout << "slt " << result << ", " << r_lhs << ", " << r_rhs << '\n';
   return result;
 }
