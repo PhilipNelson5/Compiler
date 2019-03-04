@@ -53,7 +53,7 @@ RegisterPool::Register LvalueNode::emit()
   {
     RegisterPool::Register result;
     std::cout << "lw " << result << ", " << lval_info->getLoc() << " # load "
-              << id << '\n';
+              << id << " " << RegisterPool::Register::getSize() << '\n';
 
     return result;
   }

@@ -36,30 +36,39 @@ RegisterPool::Register AddNode::emit()
   emitSource("");
   std::cout << '\n';
 
-  RegisterPool::Register result;
   if (lhs->isConstant())
   {
     auto lhs_const = dynamic_cast<IntegerLiteralNode*>(lhs.get());
     auto r_rhs = rhs->emit();
+    RegisterPool::Register result;
     std::cout << "add " << result << ", " << lhs_const->value << ", " << r_rhs
               << " # ";
+    emitSource("");
+    std::cout << '\n';
+
+    return result;
   }
   else if (rhs->isConstant())
   {
     auto rhs_const = dynamic_cast<IntegerLiteralNode*>(rhs.get());
     auto r_lhs = lhs->emit();
+    RegisterPool::Register result;
     std::cout << "add " << result << ", " << r_lhs << ", " << rhs_const->value
               << " # ";
+    emitSource("");
+    std::cout << '\n';
+
+    return result;
   }
   else
   {
     auto r_lhs = lhs->emit();
     auto r_rhs = rhs->emit();
+    RegisterPool::Register result;
     std::cout << "add " << result << ", " << r_lhs << ", " << r_rhs << " # ";
+    emitSource("");
+    std::cout << '\n';
+
+    return result;
   }
-
-  emitSource("");
-  std::cout << '\n';
-
-  return result;
 }

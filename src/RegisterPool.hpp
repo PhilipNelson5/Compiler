@@ -27,6 +27,8 @@ public:
   // register name getter
   std::string toString() const { return "$" + std::to_string(name); }
 
+  static size_t getSize() { return pool.size(); }
+
 private:
   // deleted copy constructor
   Register(const Register& reg) = delete;

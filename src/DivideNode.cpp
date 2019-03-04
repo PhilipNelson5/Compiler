@@ -36,9 +36,9 @@ RegisterPool::Register DivideNode::emit()
   emitSource("");
   std::cout << '\n';
 
-  RegisterPool::Register result;
   auto r_lhs = lhs->emit();
   auto r_rhs = rhs->emit();
+  RegisterPool::Register result;
   std::cout << "div " << r_lhs << ", " << r_rhs << '\n';
   std::cout << "mflo " << result << " # ";
 
