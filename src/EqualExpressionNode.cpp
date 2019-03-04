@@ -17,15 +17,17 @@ void EqualExpressionNode::emitSource(std::string indent)
   rhs->emitSource("");
 }
 
-RegisterPool::Register EqualExpressionNode::emit()
+Value EqualExpressionNode::emit()
 {
   std::cout << "# ";
   emitSource("");
   std::cout << std::endl;
 
-  auto r_lhs = lhs->emit();
-  auto r_rhs = rhs->emit();
+  auto v_lhs = lhs->emit();
+  auto v_rhs = rhs->emit();
   RegisterPool::Register result;
+  auto r_lhs = v_lhs.getTheeIntoARegister();
+  auto r_rhs = v_lhs.getTheeIntoARegister();
   std::cout << "seq " << result << ", " << r_lhs << ", " << r_rhs << '\n';
 
   return result;

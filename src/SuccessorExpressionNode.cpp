@@ -14,7 +14,7 @@ void SuccessorExpressionNode::emitSource(std::string indent)
   std::cout << ")";
 }
 
-RegisterPool::Register SuccessorExpressionNode::emit()
+Value SuccessorExpressionNode::emit()
 {
   throw "not implemented SuccessorExpressionNode";
 }

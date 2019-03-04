@@ -16,7 +16,7 @@ void OrdinalExpressionNode::emitSource(std::string indent)
   std::cout << ")";
 }
 
-RegisterPool::Register OrdinalExpressionNode::emit()
+Value OrdinalExpressionNode::emit()
 {
   if (expr->type != CharacterType::get())
   {

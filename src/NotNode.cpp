@@ -14,7 +14,7 @@ void NotNode::emitSource(std::string indent)
   rhs->emitSource("");
 }
 
-RegisterPool::Register NotNode::emit()
+Value NotNode::emit()
 {
   throw "not implemented NotNode";
 }

@@ -9,7 +9,7 @@ class BooleanLiteralNode : public LiteralNode
 public:
   BooleanLiteralNode(int value);
   virtual void emitSource(std::string indent) override;
-  virtual RegisterPool::Register emit() override;
+  virtual Value emit() override;
   const bool value;
 };
 

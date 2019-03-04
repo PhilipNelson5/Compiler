@@ -46,22 +46,19 @@ void LvalueNode::emitSource(std::string indent)
   std::cout << indent << id;
 }
 
-RegisterPool::Register LvalueNode::emit()
+Value LvalueNode::emit()
 {
   auto lval_info = symbol_table.lookupLval(id);
   if (lval_info != nullptr)
   {
-    RegisterPool::Register result;
-    std::cout << "lw " << result << ", " << lval_info->getLoc() << " # load "
-              << id << '\n';
-
-    return result;
+    return {lval_info->offset, lval_info->memoryLocation};
   }
 
   auto const_info = symbol_table.lookupConst(id);
   if (const_info != nullptr)
   {
     return const_info->emit();
+#if 0
     if (const_info->type == IntegerType::get())
     {
       auto value = dynamic_cast<IntegerLiteralNode*>(const_info.get())->value;
@@ -98,6 +95,7 @@ RegisterPool::Register LvalueNode::emit()
       std::cout << "la " << result << ", " << label << std::endl;
       return result;
     }
+#endif
   }
 
   LOG(ERROR) << id << " is not defined";

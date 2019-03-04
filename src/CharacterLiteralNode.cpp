@@ -1,7 +1,7 @@
 #include "CharacterLiteralNode.hpp"
-#include "log/easylogging++.h"
 
 #include "Type.hpp"
+#include "log/easylogging++.h"
 
 #include <iostream>
 #include <string>
@@ -13,37 +13,31 @@ CharacterLiteralNode::CharacterLiteralNode(char character)
   LOG(DEBUG) << "NEW CHARACTER NODE";
 }
 
-void CharacterLiteralNode::emitSource(std::string indent)
+std::string CharacterLiteralNode::toString() const
 {
-  std::cout << indent << "'";
   switch (character)
   {
   case '\n':
-    std::cout << "\\n";
-    break;
+    return "\\n";
   case '\r':
-    std::cout << "\\r";
-    break;
+    return "\\r";
   case '\b':
-    std::cout << "\\b";
-    break;
+    return "\\b";
   case '\t':
-    std::cout << "\\t";
-    break;
+    return "\\t";
   case '\f':
-    std::cout << "\\f";
-    break;
+    return "\\f";
   default:
-    std::cout << character;
+    return &character;
   }
-  std::cout << "'";
 }
 
-RegisterPool::Register CharacterLiteralNode::emit()
+void CharacterLiteralNode::emitSource(std::string indent)
 {
-  RegisterPool::Register result;
-  std::cout << "li " << result << ", ";
-  emitSource("");
-  std::cout << std::endl;
-  return result;
+  std::cout << indent << "'" << toString() << "'";
+}
+
+Value CharacterLiteralNode::emit()
+{
+  return character;
 }

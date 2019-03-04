@@ -20,14 +20,14 @@ void WriteStatementNode::emitSource(std::string indent)
   std::cout << ");" << std::endl;
 }
 
-RegisterPool::Register WriteStatementNode::emit()
+Value WriteStatementNode::emit()
 {
   std::cout << "\n# ";
   emitSource("");
 
   for (auto&& expr : expressionList)
   {
-    auto reg = expr->emit();
+    auto v_reg = expr->emit();
 
     if (expr->type == IntegerType::get() | expr->type == BooleanType::get())
     {
@@ -50,7 +50,8 @@ RegisterPool::Register WriteStatementNode::emit()
       exit(EXIT_FAILURE);
     }
 
-    std::cout << "or $a0, $0, " << reg << " # ";
+    auto r_reg = v_reg.getTheeIntoARegister();
+    std::cout << "or $a0, $0, " << r_reg << " # ";
     std::cout << "write(";
     expr->emitSource("");
     std::cout << ")" << std::endl;

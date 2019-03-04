@@ -70,7 +70,7 @@ void ProgramNode::emitSource(std::string indent)
   std::cout << indent << "END." << std::endl;
 }
 
-RegisterPool::Register ProgramNode::emit()
+Value ProgramNode::emit()
 {
   std::cout << ".text" << std::endl;
   std::cout << "la $gp, GLOBAL_AREA" << std::endl;

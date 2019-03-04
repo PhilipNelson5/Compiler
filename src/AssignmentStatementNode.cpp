@@ -17,10 +17,10 @@ void AssignmentStatementNode::emitSource(std::string indent)
   lval->emitSource("");
   std::cout << " := ";
   expr->emitSource("");
-  std::cout << ";" << std::endl;
+  std::cout << ";\n";
 }
 
-RegisterPool::Register AssignmentStatementNode::emit()
+Value AssignmentStatementNode::emit()
 {
   std::cout << "\n# ";
   emitSource("");
@@ -31,12 +31,13 @@ RegisterPool::Register AssignmentStatementNode::emit()
     LOG(ERROR) << lval->id << " is not an lvalue";
     exit(EXIT_FAILURE);
   }
-  auto reg_expr = expr->emit();
+  auto v_expr = expr->emit();
+  auto r_expr = v_expr.getTheeIntoARegister();
 
-  std::cout << "sw " << reg_expr << ", " << lval_info->getLoc();
+  std::cout << "sw " << r_expr << ", " << lval_info->getLoc();
 
   std::cout << " # ";
   emitSource("");
 
-  return reg_expr;
+  return r_expr;
 }

@@ -13,7 +13,7 @@ class ReadStatementNode : StatementNode
 public:
   ReadStatementNode(ListNode<LvalueNode>*& lVals);
   virtual void emitSource(std::string indent) override;
-  virtual RegisterPool::Register emit() override;
+  virtual Value emit() override;
 
 private:
   std::vector<std::shared_ptr<LvalueNode>> lValues;

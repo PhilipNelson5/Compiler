@@ -18,7 +18,7 @@ void ModuloNode::emitSource(std::string indent)
   rhs->emitSource("");
 }
 
-RegisterPool::Register ModuloNode::emit()
+Value ModuloNode::emit()
 {
   if (lhs->type != rhs->type)
   {
@@ -35,12 +35,14 @@ RegisterPool::Register ModuloNode::emit()
   emitSource("");
   std::cout << '\n';
 
+  auto v_lhs = lhs->emit();
+  auto v_rhs = rhs->emit();
   RegisterPool::Register result;
-  auto r_lhs = lhs->emit();
-  auto r_rhs = rhs->emit();
+  auto r_lhs = v_lhs.getTheeIntoARegister();
+  auto r_rhs = v_rhs.getTheeIntoARegister();
+
   std::cout << "div " << r_lhs << ", " << r_rhs << '\n';
   std::cout << "mfhi " << result << " # ";
-
   emitSource("");
   std::cout << '\n';
 

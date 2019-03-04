@@ -22,6 +22,7 @@ Register::Register()
   }
   name = pool.back();
   pool.pop_back();
+  LOG(WARNING) << "Allocated " << name;
 }
 
 Register::~Register()

@@ -19,12 +19,12 @@ void DivideNode::emitSource(std::string indent)
   rhs->emitSource("");
 }
 
-RegisterPool::Register DivideNode::emit()
+Value DivideNode::emit()
 {
   if (lhs->type != rhs->type)
   {
-    LOG(ERROR) << "mismatched types in divide expression: "
-               << lhs->type->name() << " and " << rhs->type->name();
+    LOG(ERROR) << "mismatched types in divide expression: " << lhs->type->name()
+               << " and " << rhs->type->name();
   }
 
   if (lhs->type != IntegerType::get())
@@ -36,12 +36,14 @@ RegisterPool::Register DivideNode::emit()
   emitSource("");
   std::cout << '\n';
 
+  auto v_lhs = lhs->emit();
+  auto v_rhs = rhs->emit();
   RegisterPool::Register result;
-  auto r_lhs = lhs->emit();
-  auto r_rhs = rhs->emit();
+  auto r_lhs = v_lhs.getTheeIntoARegister();
+  auto r_rhs = v_rhs.getTheeIntoARegister();
+
   std::cout << "div " << r_lhs << ", " << r_rhs << '\n';
   std::cout << "mflo " << result << " # ";
-
   emitSource("");
   std::cout << '\n';
 

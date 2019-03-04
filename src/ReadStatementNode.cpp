@@ -22,7 +22,7 @@ void ReadStatementNode::emitSource(std::string indent)
   std::cout << ");" << std::endl;
 }
 
-RegisterPool::Register ReadStatementNode::emit()
+Value ReadStatementNode::emit()
 {
   std::cout << "\n# ";
   emitSource("");

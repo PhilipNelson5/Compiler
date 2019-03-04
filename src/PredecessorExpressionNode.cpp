@@ -14,7 +14,7 @@ void PredecessorExpressionNode::emitSource(std::string indent)
   std::cout << ")";
 }
 
-RegisterPool::Register PredecessorExpressionNode::emit()
+Value PredecessorExpressionNode::emit()
 {
   throw "not implemented PredecessorExpressionNode";
 }

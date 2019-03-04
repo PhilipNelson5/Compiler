@@ -15,7 +15,7 @@ void CharacterExpressionNode::emitSource(std::string indent)
   std::cout << ")";
 }
 
-RegisterPool::Register CharacterExpressionNode::emit()
+Value CharacterExpressionNode::emit()
 {
   if (expr->type != IntegerType::get())
   {

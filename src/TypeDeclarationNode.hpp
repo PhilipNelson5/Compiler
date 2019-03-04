@@ -9,7 +9,7 @@ class TypeDeclarationNode : public Node
 public:
   TypeDeclarationNode(std::string ident, TypeNode* type);
   virtual void emitSource(std::string indent) override;
-  virtual RegisterPool::Register emit() override;
+  virtual Value emit() override;
 
 private:
   std::string m_id;

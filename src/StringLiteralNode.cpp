@@ -17,10 +17,7 @@ void StringLiteralNode::emitSource(std::string indent)
   std::cout << indent << string;
 }
 
-RegisterPool::Register StringLiteralNode::emit()
+Value StringLiteralNode::emit()
 {
-  auto label = symbol_table.lookupString(string);
-  RegisterPool::Register result;
-  std::cout << "la " << result << ", " << label << std::endl;
-  return result;
+  return symbol_table.lookupString(string);
 }

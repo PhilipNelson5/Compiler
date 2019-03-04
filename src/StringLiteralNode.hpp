@@ -11,7 +11,7 @@ class StringLiteralNode : public LiteralNode
 public:
   StringLiteralNode(std::string);
   virtual void emitSource(std::string indent) override;
-  virtual RegisterPool::Register emit() override;
+  virtual Value emit() override;
   const std::string string;
 };
 
