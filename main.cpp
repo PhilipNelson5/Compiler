@@ -64,13 +64,21 @@ int main(int argc, char** argv)
       }
     }
   }
-  LOG(WARNING) << RegisterPool::Register::low;
+  LOG(INFO) << "most registers used: " << 18 - RegisterPool::Register::low;
+}
+
+void setLogLevel(std::string & config, std::string const & name, bool const & enabled)
+{
+  config += "* " + name + ":\n";
+  if (enabled) config += "    ENABLED = true\n";
+  else config += "    ENABLED = false\n";
 }
 
 void initEasyLogging(int argc, char* argv[])
 {
   bool log_debug = false;
   bool log_warn = false;
+  bool log_info = true;
   bool log_error = true;
   for (auto i = 1; i < argc; ++i)
   {
@@ -78,11 +86,13 @@ void initEasyLogging(int argc, char* argv[])
       log_debug = true;
     if (strcmp(argv[i], "-lw") == 0 | strcmp(argv[i], "--log-warning") == 0)
       log_warn = true;
+    if (strcmp(argv[i], "-li") == 0 | strcmp(argv[i], "--no-log-info") == 0)
+      log_error = false;
     if (strcmp(argv[i], "-le") == 0 | strcmp(argv[i], "--no-log-error") == 0)
       log_error = false;
   }
   /* clang-format off */
-  std::string defaultLogConfig = R"(
+  std::string config = R"(
 * GLOBAL:
     FORMAT               =  "[%level][%fbase:%line] %msg"
     ENABLED              =  true
@@ -93,23 +103,16 @@ void initEasyLogging(int argc, char* argv[])
     MAX_LOG_FILE_SIZE    =  2097152 ## 2MB
     LOG_FLUSH_THRESHOLD  =  1 ## Flush after every log
 )";
-  defaultLogConfig += "* DEBUG:\n";
-  if (log_debug) defaultLogConfig += "    ENABLED = true\n";
-  else defaultLogConfig += "    ENABLED = false\n";
-
-  defaultLogConfig += "* WARNING:\n";
-  if (log_warn) defaultLogConfig += "    ENABLED = true\n";
-  else defaultLogConfig += "    ENABLED = false\n";
-
-  defaultLogConfig += "* ERROR:\n";
-  if (log_error) defaultLogConfig += "    ENABLED = true\n";
-  else defaultLogConfig += "    ENABLED = false\n";
+  setLogLevel(config, "DEBUG", log_debug);
+  setLogLevel(config, "INFO", log_info);
+  setLogLevel(config, "WARNING", log_warn);
+  setLogLevel(config, "ERROR", log_error);
   /* clang-format on */
 
   START_EASYLOGGINGPP(argc, argv);
 
   el::Configurations conf;
-  conf.parseFromText(defaultLogConfig);
+  conf.parseFromText(config);
   el::Loggers::setDefaultConfigurations(conf);
   el::Loggers::reconfigureAllLoggers(conf);
 }
@@ -133,6 +136,7 @@ void showHelp()
   std::cout << "-s\t--source\tparse and emit source code\n";
   std::cout << "-ld\t--log-debug\tenable debugging level logging\n";
   std::cout << "-lw\t--log-warn\tenable warning level logging\n";
+  std::cout << "-li\t--no-log-info\tdisable info level logging\n";
   std::cout << "-le\t--no-log-error\tdisable error level logging\n";
   std::cout << std::endl;
 }

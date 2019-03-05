@@ -249,25 +249,7 @@ ConstDeclList                   : ConstDeclList ConstDecl
 
 ConstDecl                       : ID_T EQUAL_T Expression SEMI_COLON_T
                                   {
-                                    LOG(WARNING) << "NEW CONST DECL";
-
-                                    // if ( Expression is an Lvalue )
-                                    if(LvalueNode* plval = dynamic_cast<LvalueNode*>($3))
-                                    {
-                                      LOG(WARNING) << "  -> LvalueNode";
-                                      $$ = new ConstantDeclarationNode($1, makeLiteralNode(plval));
-                                    }
-                                    // if ( Expression is a Literal )
-                                    else if(LiteralNode* plit = dynamic_cast<LiteralNode*>($3))
-                                    {
-                                      LOG(WARNING) << "  -> LiteralNode";
-                                      $$ = new ConstantDeclarationNode($1, plit);
-                                    }
-                                    else
-                                    {
-                                      LOG(ERROR) << "Non-Const expression in Constant Declaration";
-                                      exit(EXIT_FAILURE);
-                                    }
+                                    $$ = makeConstantDeclarationNode($1, $3);
                                   }
                                 ;
 

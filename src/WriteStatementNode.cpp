@@ -52,6 +52,7 @@ Value WriteStatementNode::emit()
 
     auto r_reg = v_reg.getTheeIntoARegister();
     std::cout << "or $a0, $0, " << r_reg << " # ";
+
     std::cout << "write(";
     expr->emitSource("");
     std::cout << ")" << std::endl;

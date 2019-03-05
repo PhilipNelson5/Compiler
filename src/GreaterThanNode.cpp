@@ -24,9 +24,9 @@ Value GreaterThanNode::emit()
 
   auto v_lhs = lhs->emit();
   auto v_rhs = rhs->emit();
-  RegisterPool::Register result;
   auto r_lhs = v_lhs.getTheeIntoARegister();
   auto r_rhs = v_rhs.getTheeIntoARegister();
+  RegisterPool::Register result;
 
   std::cout << "sgt " << result << ", " << r_lhs << ", " << r_rhs << '\n';
 

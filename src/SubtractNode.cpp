@@ -69,9 +69,10 @@ Value SubtractNode::emit()
     auto r_lhs = v_lhs.getTheeIntoARegister();
     auto r_rhs = v_rhs.getTheeIntoARegister();
     RegisterPool::Register result;
+
     std::cout << "sub " << result << ", " << r_lhs << ", " << r_rhs << " # ";
     emitSource("");
-    std::cout << std::endl;
+    std::cout << '\n';
 
     return result;
   }

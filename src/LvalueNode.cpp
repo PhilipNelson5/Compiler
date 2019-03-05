@@ -58,44 +58,6 @@ Value LvalueNode::emit()
   if (const_info != nullptr)
   {
     return const_info->emit();
-#if 0
-    if (const_info->type == IntegerType::get())
-    {
-      auto value = dynamic_cast<IntegerLiteralNode*>(const_info.get())->value;
-      RegisterPool::Register result;
-      std::cout << "li " << result << ", " << value << " # load " << id
-                << ", value " << value << '\n';
-
-      return result;
-    }
-    else if (const_info->type == BooleanType::get())
-    {
-      auto value = dynamic_cast<BooleanLiteralNode*>(const_info.get())->value;
-      RegisterPool::Register result;
-      std::cout << "li " << result << ", " << value << " # load " << id
-                << ", value " << value << '\n';
-
-      return result;
-    }
-    else if (const_info->type == CharacterType::get())
-    {
-      auto value
-        = dynamic_cast<CharacterLiteralNode*>(const_info.get())->character;
-      RegisterPool::Register result;
-      std::cout << "li " << result << ", '" << value << "' # load " << id
-                << ", value '" << value << "'\n";
-
-      return result;
-    }
-    else if (const_info->type == StringType::get())
-    {
-      auto value = dynamic_cast<StringLiteralNode*>(const_info.get())->string;
-      auto label = symbol_table.lookupString(value);
-      RegisterPool::Register result;
-      std::cout << "la " << result << ", " << label << std::endl;
-      return result;
-    }
-#endif
   }
 
   LOG(ERROR) << id << " is not defined";

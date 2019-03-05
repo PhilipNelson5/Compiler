@@ -93,6 +93,7 @@ set(cpsl_srcs
   src/UnaryMinusNode.hpp
   src/VariableDeclarationNode.cpp
   src/VariableDeclarationNode.hpp
+  src/Value.hpp
   src/WriteStatementNode.cpp
   src/WriteStatementNode.hpp
 

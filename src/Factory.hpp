@@ -2,6 +2,7 @@
 #define FACTORY_HPP
 
 #include "AddNode.hpp"
+#include "ConstantDeclarationNode.hpp"
 #include "BooleanLiteralNode.hpp"
 #include "CharacterLiteralNode.hpp"
 #include "DivideNode.hpp"
@@ -70,15 +71,6 @@ ExpressionNode* makeNode(ExpressionNode* e1, ExpressionNode* e2, F f)
   {
     return new NodeType(e1, e2);
   }
-
-  // OLD CODE
-  // if (e1->isLiteral() && e2->isLiteral())
-  //{
-  // return new LiteralType(f(dynamic_cast<LiteralType*>(e1)->value,
-  // dynamic_cast<LiteralType*>(e2)->value));
-  //}
-  // else
-  // return new NodeType(e1, e2);
 }
 
 ExpressionNode* makeAddNode(ExpressionNode* e1, ExpressionNode* e2)
@@ -148,11 +140,30 @@ ExpressionNode* makeLiteralNode(LvalueNode* e)
       return new StringLiteralNode(
         dynamic_cast<StringLiteralNode*>(const_info.get())->string);
     }
-    LOG(ERROR) << e->type->name() << " can not be turned into a literal";
+    LOG(ERROR) << e->id << " : " << e->type->name() << " can not be turned into a literal";
     exit(EXIT_FAILURE);
   }
   LOG(ERROR) << e->id << "is not defined in the const symbol table";
   exit(EXIT_FAILURE);
+}
+
+ConstantDeclarationNode* makeConstantDeclarationNode(std::string id, ExpressionNode* e)
+{
+  // if ( Expression is an Lvalue )
+  if(LvalueNode* plval = dynamic_cast<LvalueNode*>(e))
+  {
+    return new ConstantDeclarationNode(id, makeLiteralNode(plval));
+  }
+  // if ( Expression is a Literal )
+  else if(LiteralNode* plit = dynamic_cast<LiteralNode*>(e))
+  {
+    return new ConstantDeclarationNode(id, plit);
+  }
+  else
+  {
+    LOG(ERROR) << "Non-Const expression in Constant Declaration";
+    exit(EXIT_FAILURE);
+  }
 }
 
 ExpressionNode* makeLvalueNode(std::string id)
