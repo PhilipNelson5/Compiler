@@ -57,51 +57,51 @@ struct Value
 
   RegisterPool::Register getTheeIntoARegister()
   {
-    if(std::holds_alternative<int>(value))
+    if (std::holds_alternative<int>(value))
     {
       RegisterPool::Register result;
       std::cout << "li " << result << ", " << std::get<int>(value) << '\n';
       return result;
     }
-    else if(std::holds_alternative<char>(value))
+    else if (std::holds_alternative<char>(value))
     {
       RegisterPool::Register result;
       std::cout << "li " << result << ", '" << toString(std::get<char>(value))
                 << '\'' << '\n';
       return result;
     }
-    else if(std::holds_alternative<std::string>(value))
+    else if (std::holds_alternative<std::string>(value))
     {
       RegisterPool::Register result;
       std::cout << "la " << result << ", " << std::get<std::string>(value)
                 << '\n';
       return result;
     }
-    else if(std::holds_alternative<pair>(value))
+    else if (std::holds_alternative<pair>(value))
     {
       RegisterPool::Register result;
       std::cout << "lw " << result << ", " << std::get<pair>(value).first
                 << "($" << std::get<pair>(value).second << ")\n";
       return result;
     }
-    else if(std::holds_alternative<Register>(value))
+    else if (std::holds_alternative<Register>(value))
     {
       return std::move(std::get<Register>(value));
     }
-    else if(std::holds_alternative<std::monostate>(value))
+    else if (std::holds_alternative<std::monostate>(value))
     {
       throw "Initialized Value";
     }
+    throw "Initialized Value";
   }
 
-  /*
-    int int_value;
-    char char_value;
-    std::string label;
-    std::pair<int offset, int memoryLocation>
-    RegisterPool::Register reg;
-  */
-  std::variant<std::monostate, int, char, std::string, std::pair<int, int>, Register> value;
+  std::variant<std::monostate,      // uninitialized state
+               int,                 // const int value
+               char,                // const char value
+               std::string,         // const string label
+               std::pair<int, int>, // offset, memory location
+               Register>            // Register
+    value;
 };
 
 #endif
