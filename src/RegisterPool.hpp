@@ -14,6 +14,7 @@ class Register
 public:
   // constructor
   Register();
+  Register(int);
 
   // move constructor
   Register(Register&& old);
@@ -39,6 +40,8 @@ private:
 
   // Register name
   int name;
+
+  bool valid;
 
   // pool of registers
   static std::vector<int> pool;

@@ -36,22 +36,31 @@ Value SubtractNode::emit()
   emitSource("");
   std::cout << std::endl;
 
-  RegisterPool::Register result;
   if (lhs->isConstant())
   {
     auto lhs_const = dynamic_cast<IntegerLiteralNode*>(lhs.get());
     auto v_rhs = rhs->emit();
     auto r_rhs = v_rhs.getTheeIntoARegister();
+    RegisterPool::Register result;
     std::cout << "sub " << result << ", " << lhs_const->value << ", " << r_rhs
               << " # ";
+    emitSource("");
+    std::cout << std::endl;
+
+    return result;
   }
   else if (rhs->isConstant())
   {
     auto rhs_const = dynamic_cast<IntegerLiteralNode*>(rhs.get());
     auto v_lhs = lhs->emit();
     auto r_lhs = v_lhs.getTheeIntoARegister();
+    RegisterPool::Register result;
     std::cout << "sub " << result << ", " << r_lhs << ", " << rhs_const->value
               << " # ";
+    emitSource("");
+    std::cout << std::endl;
+
+    return result;
   }
   else
   {
@@ -59,11 +68,11 @@ Value SubtractNode::emit()
     auto v_rhs = rhs->emit();
     auto r_lhs = v_lhs.getTheeIntoARegister();
     auto r_rhs = v_rhs.getTheeIntoARegister();
+    RegisterPool::Register result;
     std::cout << "sub " << result << ", " << r_lhs << ", " << r_rhs << " # ";
+    emitSource("");
+    std::cout << std::endl;
+
+    return result;
   }
-
-  emitSource("");
-  std::cout << std::endl;
-
-  return result;
 }

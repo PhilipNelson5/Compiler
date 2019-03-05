@@ -18,27 +18,32 @@ struct Value
   };
 
   Value()
-    : type(Type::UNINIT)
+    : reg(0)
+    , type(Type::UNINIT)
   {}
 
   Value(int int_value)
     : int_value(int_value)
+    , reg(0)
     , type(Type::CONST_INT)
   {}
 
   Value(char char_value)
     : char_value(char_value)
+    , reg(0)
     , type(Type::CONST_CHAR)
   {}
 
   Value(std::string label)
     : label(label)
+    , reg(0)
     , type(Type::CONST_STRING)
   {}
 
   Value(int offset, int memoryLocation)
     : offset(offset)
     , memoryLocation(memoryLocation)
+    , reg(0)
     , type(Type::LVAL)
   {}
 
@@ -92,7 +97,8 @@ struct Value
     case Type::LVAL:
     {
       RegisterPool::Register result;
-      std::cout << "lw " << result << ", " << offset << "($" << memoryLocation << ")\n";
+      std::cout << "lw " << result << ", " << offset << "($" << memoryLocation
+                << ")\n";
       return result;
     }
     case Type::REGISTER:

@@ -8,11 +8,21 @@ std::vector<int> Register::pool;
 
 Register::Register(Register&& old)
   : name{old.name}
+  , valid(true)
 {
   old.name = -1;
+  old.valid = false;
+}
+
+Register::Register(int foo)
+  : name(28)
+  , valid(false)
+{
+  (void)foo;
 }
 
 Register::Register()
+  : valid(true)
 {
   init();
   if (pool.size() == 0)
@@ -22,12 +32,12 @@ Register::Register()
   }
   name = pool.back();
   pool.pop_back();
-  LOG(WARNING) << "Allocated " << name;
+  LOG(WARNING) << pool.size();
 }
 
 Register::~Register()
 {
-  if (name != -1)
+  if (valid)
   {
     pool.emplace_back(name);
   }

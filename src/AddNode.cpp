@@ -27,7 +27,7 @@ Value AddNode::emit()
                << " and " << rhs->type->name();
   }
 
-  if (lhs->type != IntegerType::get() | lhs->type != CharacterType::get())
+  if (lhs->type != IntegerType::get() && lhs->type != CharacterType::get())
   {
     LOG(ERROR) << "can not add non integer types";
   }
@@ -36,22 +36,31 @@ Value AddNode::emit()
   emitSource("");
   std::cout << '\n';
 
-  RegisterPool::Register result;
   if (lhs->isConstant())
   {
     auto lhs_const = dynamic_cast<IntegerLiteralNode*>(lhs.get());
     auto v_rhs = rhs->emit();
     auto r_rhs = v_rhs.getTheeIntoARegister();
+    RegisterPool::Register result;
     std::cout << "add " << result << ", " << lhs_const->value << ", " << r_rhs
               << " # ";
+    emitSource("");
+    std::cout << '\n';
+
+    return result;
   }
   else if (rhs->isConstant())
   {
     auto rhs_const = dynamic_cast<IntegerLiteralNode*>(rhs.get());
     auto v_lhs = lhs->emit();
     auto r_lhs = v_lhs.getTheeIntoARegister();
+    RegisterPool::Register result;
     std::cout << "add " << result << ", " << r_lhs << ", " << rhs_const->value
               << " # ";
+    emitSource("");
+    std::cout << '\n';
+
+    return result;
   }
   else
   {
@@ -59,11 +68,11 @@ Value AddNode::emit()
     auto v_rhs = rhs->emit();
     auto r_lhs = v_lhs.getTheeIntoARegister();
     auto r_rhs = v_rhs.getTheeIntoARegister();
+    RegisterPool::Register result;
     std::cout << "add " << result << ", " << r_lhs << ", " << r_rhs << " # ";
+    emitSource("");
+    std::cout << '\n';
+
+    return result;
   }
-
-  emitSource("");
-  std::cout << '\n';
-
-  return result;
 }
