@@ -64,6 +64,7 @@ int main(int argc, char** argv)
       }
     }
   }
+  LOG(WARNING) << RegisterPool::Register::low;
 }
 
 void initEasyLogging(int argc, char* argv[])

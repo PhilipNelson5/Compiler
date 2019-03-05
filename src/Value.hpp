@@ -4,6 +4,11 @@
 #include "RegisterPool.hpp"
 
 #include <iostream>
+#include <utility>
+#include <variant>
+
+using pair = std::pair<int, int>;
+using Register = RegisterPool::Register;
 
 struct Value
 {
@@ -18,37 +23,31 @@ struct Value
   };
 
   Value()
-    : reg(0)
-    , type(Type::UNINIT)
+    : type(Type::UNINIT)
   {}
 
   Value(int int_value)
-    : int_value(int_value)
-    , reg(0)
+    : value(int_value)
     , type(Type::CONST_INT)
   {}
 
   Value(char char_value)
-    : char_value(char_value)
-    , reg(0)
+    : value(char_value)
     , type(Type::CONST_CHAR)
   {}
 
   Value(std::string label)
-    : label(label)
-    , reg(0)
+    : value(label)
     , type(Type::CONST_STRING)
   {}
 
   Value(int offset, int memoryLocation)
-    : offset(offset)
-    , memoryLocation(memoryLocation)
-    , reg(0)
+    : value(std::make_pair(offset, memoryLocation))
     , type(Type::LVAL)
   {}
 
   Value(RegisterPool::Register&& reg)
-    : reg(std::move(reg))
+    : value(std::move(reg))
     , type(Type::REGISTER)
   {}
 
@@ -78,32 +77,33 @@ struct Value
     case Type::CONST_INT:
     {
       RegisterPool::Register result;
-      std::cout << "li " << result << ", " << int_value << '\n';
+      std::cout << "li " << result << ", " << std::get<int>(value) << '\n';
       return result;
     }
     case Type::CONST_CHAR:
     {
       RegisterPool::Register result;
-      std::cout << "li " << result << ", '" << toString(char_value) << '\''
-                << '\n';
+      std::cout << "li " << result << ", '" << toString(std::get<char>(value))
+                << '\'' << '\n';
       return result;
     }
     case Type::CONST_STRING:
     {
       RegisterPool::Register result;
-      std::cout << "la " << result << ", " << label << '\n';
+      std::cout << "la " << result << ", " << std::get<std::string>(value)
+                << '\n';
       return result;
     }
     case Type::LVAL:
     {
       RegisterPool::Register result;
-      std::cout << "lw " << result << ", " << offset << "($" << memoryLocation
-                << ")\n";
+      std::cout << "lw " << result << ", " << std::get<pair>(value).first
+                << "($" << std::get<pair>(value).second << ")\n";
       return result;
     }
     case Type::REGISTER:
     {
-      return std::move(reg);
+      return std::move(std::get<Register>(value));
     }
     case Type::UNINIT:
     {
@@ -113,12 +113,14 @@ struct Value
     throw "Initialized Value";
   }
 
-  int int_value;
-  char char_value;
-  std::string label;
-  int offset;
-  int memoryLocation;
-  RegisterPool::Register reg;
+  /*
+    int int_value;
+    char char_value;
+    std::string label;
+    std::pair<int offset, int memoryLocation>
+    RegisterPool::Register reg;
+  */
+  std::variant<int, char, std::string, std::pair<int, int>, Register> value;
   Type type;
 };
 

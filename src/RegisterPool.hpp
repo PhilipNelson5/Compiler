@@ -14,7 +14,6 @@ class Register
 public:
   // constructor
   Register();
-  Register(int);
 
   // move constructor
   Register(Register&& old);
@@ -27,6 +26,9 @@ public:
 
   // register name getter
   std::string toString() const { return "$" + std::to_string(name); }
+
+  // lowest number of registers
+  static size_t low;
 
 private:
   // deleted copy constructor
@@ -41,6 +43,7 @@ private:
   // Register name
   int name;
 
+  // unmoved registers are valid
   bool valid;
 
   // pool of registers
