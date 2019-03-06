@@ -20,12 +20,7 @@ void IntegerLiteralNode::emitSource(std::string indent)
   std::cout << indent << value;
 }
 
-RegisterPool::Register IntegerLiteralNode::emit()
+Value IntegerLiteralNode::emit()
 {
-  RegisterPool::Register result;
-  std::cout << "li " << result << ", " << value << " # load ";
-  emitSource("");
-  std::cout << std::endl;
-
-  return result;
+  return value;
 }

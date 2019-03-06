@@ -13,7 +13,7 @@ class WriteStatementNode : public StatementNode
 public:
   WriteStatementNode(ListNode<ExpressionNode>*& exprList);
   virtual void emitSource(std::string indent) override;
-  virtual RegisterPool::Register emit() override;
+  virtual Value emit() override;
 
 private:
   std::vector<std::shared_ptr<ExpressionNode>> expressionList;

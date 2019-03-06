@@ -16,7 +16,7 @@ void AndNode::emitSource(std::string indent)
   rhs->emitSource("");
 }
 
-RegisterPool::Register AndNode::emit()
+Value AndNode::emit()
 {
   throw "not implemented AndNode";
 }

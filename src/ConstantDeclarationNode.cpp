@@ -19,7 +19,7 @@ void ConstantDeclarationNode::emitSource(std::string indent)
   std::cout << ";" << std::endl;
 }
 
-RegisterPool::Register ConstantDeclarationNode::emit()
+Value ConstantDeclarationNode::emit()
 {
   throw "ConstantDeclarationNode::emit() should not be called";
 }

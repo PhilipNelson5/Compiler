@@ -5,6 +5,8 @@
 
 class StatementNode : public Node
 {
+public:
+  StatementNode() = default;
 };
 
 #endif

@@ -27,7 +27,8 @@ public:
   // register name getter
   std::string toString() const { return "$" + std::to_string(name); }
 
-  static size_t getSize() { return pool.size(); }
+  // lowest number of registers
+  static size_t low;
 
 private:
   // deleted copy constructor
@@ -41,6 +42,9 @@ private:
 
   // Register name
   int name;
+
+  // unmoved registers are valid
+  bool valid;
 
   // pool of registers
   static std::vector<int> pool;

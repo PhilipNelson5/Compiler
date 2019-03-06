@@ -14,7 +14,7 @@ class ConstantDeclarationNode : public Node
 public:
   ConstantDeclarationNode(std::string ident, ExpressionNode* type);
   virtual void emitSource(std::string indent) override;
-  virtual RegisterPool::Register emit() override;
+  virtual Value emit() override;
 
 private:
   std::string m_id;

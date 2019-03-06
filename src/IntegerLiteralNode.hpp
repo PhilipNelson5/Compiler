@@ -10,7 +10,7 @@ class IntegerLiteralNode : public LiteralNode
   IntegerLiteralNode(int value);
   virtual bool isLiteral() override;
   virtual void emitSource(std::string indent) override;
-  virtual RegisterPool::Register emit() override;
+  virtual Value emit() override;
   const int value;
 };
 

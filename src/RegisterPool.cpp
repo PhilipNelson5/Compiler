@@ -2,17 +2,23 @@
 
 #include "log/easylogging++.h"
 
+#include <cmath>
+
 namespace RegisterPool
 {
 std::vector<int> Register::pool;
+size_t Register::low;
 
 Register::Register(Register&& old)
   : name{old.name}
+  , valid(true)
 {
   old.name = -1;
+  old.valid = false;
 }
 
 Register::Register()
+  : valid(true)
 {
   init();
   if (pool.size() == 0)
@@ -22,11 +28,12 @@ Register::Register()
   }
   name = pool.back();
   pool.pop_back();
+  low = std::min(low, pool.size());
 }
 
 Register::~Register()
 {
-  if (name != -1)
+  if (valid)
   {
     pool.emplace_back(name);
   }
@@ -60,6 +67,8 @@ void Register::init()
   pool.emplace_back(23);
   pool.emplace_back(24);
   pool.emplace_back(25);
+
+  low = pool.size();
 }
 } // namespace RegisterPool
 

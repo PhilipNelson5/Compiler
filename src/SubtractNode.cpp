@@ -19,7 +19,7 @@ void SubtractNode::emitSource(std::string indent)
   rhs->emitSource("");
 }
 
-RegisterPool::Register SubtractNode::emit()
+Value SubtractNode::emit()
 {
   if (lhs->type != rhs->type)
   {
@@ -39,9 +39,11 @@ RegisterPool::Register SubtractNode::emit()
   if (lhs->isConstant())
   {
     auto lhs_const = dynamic_cast<IntegerLiteralNode*>(lhs.get());
-    auto r_rhs = rhs->emit();
+    auto v_rhs = rhs->emit();
+    auto r_rhs = v_rhs.getTheeIntoARegister();
     RegisterPool::Register result;
-    std::cout << "sub " << result << ", " << lhs_const->value << ", " << r_rhs
+
+    std::cout << "addi " << result << ", " << r_rhs << ", " << -lhs_const->value 
               << " # ";
     emitSource("");
     std::cout << std::endl;
@@ -51,9 +53,11 @@ RegisterPool::Register SubtractNode::emit()
   else if (rhs->isConstant())
   {
     auto rhs_const = dynamic_cast<IntegerLiteralNode*>(rhs.get());
-    auto r_lhs = lhs->emit();
+    auto v_lhs = lhs->emit();
+    auto r_lhs = v_lhs.getTheeIntoARegister();
     RegisterPool::Register result;
-    std::cout << "sub " << result << ", " << r_lhs << ", " << rhs_const->value
+
+    std::cout << "addi " << result << ", " << r_lhs << ", " << -rhs_const->value
               << " # ";
     emitSource("");
     std::cout << std::endl;
@@ -62,12 +66,15 @@ RegisterPool::Register SubtractNode::emit()
   }
   else
   {
-    auto r_lhs = lhs->emit();
-    auto r_rhs = rhs->emit();
+    auto v_lhs = lhs->emit();
+    auto v_rhs = rhs->emit();
+    auto r_lhs = v_lhs.getTheeIntoARegister();
+    auto r_rhs = v_rhs.getTheeIntoARegister();
     RegisterPool::Register result;
+
     std::cout << "sub " << result << ", " << r_lhs << ", " << r_rhs << " # ";
     emitSource("");
-    std::cout << std::endl;
+    std::cout << '\n';
 
     return result;
   }

@@ -8,7 +8,7 @@ class SimpleTypeNode : public TypeNode
 public:
   SimpleTypeNode(std::string ident);
   virtual void emitSource(std::string indent) override;
-  virtual RegisterPool::Register emit() override;
+  virtual Value emit() override;
 };
 
 #endif

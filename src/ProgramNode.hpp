@@ -21,7 +21,7 @@ public:
               ListNode<VariableDeclarationNode>*& vds,
               ListNode<StatementNode>*& mb);
   virtual void emitSource(std::string indent) override;
-  virtual RegisterPool::Register emit() override;
+  virtual Value emit() override;
 
 private:
   std::vector<std::shared_ptr<ConstantDeclarationNode>> constantDecls;

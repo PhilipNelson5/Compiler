@@ -11,7 +11,7 @@ class UnaryMinusNode : public ExpressionNode
 public:
   UnaryMinusNode(ExpressionNode*& right);
   virtual void emitSource(std::string indent) override;
-  virtual RegisterPool::Register emit() override;
+  virtual Value emit() override;
 
 private:
   std::shared_ptr<ExpressionNode> rhs;

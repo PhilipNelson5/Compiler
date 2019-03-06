@@ -20,7 +20,7 @@ void TypeDeclarationNode::emitSource(std::string indent)
   std::cout << ";" << std::endl;
 }
 
-RegisterPool::Register TypeDeclarationNode::emit()
+Value TypeDeclarationNode::emit()
 {
   throw "TypeDeclarationNode::emit() should not be called";
 }

@@ -8,7 +8,7 @@ class StopStatementNode : public StatementNode
 public:
   StopStatementNode();
   virtual void emitSource(std::string indent) override;
-  virtual RegisterPool::Register emit() override;
+  virtual Value emit() override;
 };
 
 #endif

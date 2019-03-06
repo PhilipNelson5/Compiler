@@ -17,14 +17,16 @@ void GreaterThanEqualNode::emitSource(std::string indent)
   rhs->emitSource("");
 }
 
-RegisterPool::Register GreaterThanEqualNode::emit()
+Value GreaterThanEqualNode::emit()
 {
   std::cout << "# ";
   emitSource("");
   std::cout << std::endl;
 
-  auto r_lhs = lhs->emit();
-  auto r_rhs = rhs->emit();
+  auto v_lhs = lhs->emit();
+  auto v_rhs = rhs->emit();
+  auto r_lhs = v_lhs.getTheeIntoARegister();
+  auto r_rhs = v_rhs.getTheeIntoARegister();
   RegisterPool::Register result;
   std::cout << "sge " << result << ", " << r_lhs << ", " << r_rhs << '\n';
 

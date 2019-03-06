@@ -16,12 +16,7 @@ void BooleanLiteralNode::emitSource(std::string indent)
   std::cout << indent << std::boolalpha << value << std::noboolalpha;
 }
 
-RegisterPool::Register BooleanLiteralNode::emit()
+Value BooleanLiteralNode::emit()
 {
-  RegisterPool::Register reg;
-  std::cout << "li " << reg << ", " << value << " # load ";
-  emitSource("");
-  std::cout << std::endl;
-
-  return reg;
+  return {value};
 }

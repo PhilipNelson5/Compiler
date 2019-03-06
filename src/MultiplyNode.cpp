@@ -19,7 +19,7 @@ void MultiplyNode::emitSource(std::string indent)
   rhs->emitSource("");
 }
 
-RegisterPool::Register MultiplyNode::emit()
+Value MultiplyNode::emit()
 {
   if (lhs->type != rhs->type)
   {
@@ -36,12 +36,14 @@ RegisterPool::Register MultiplyNode::emit()
   emitSource("");
   std::cout << '\n';
 
-  auto r_lhs = lhs->emit();
-  auto r_rhs = rhs->emit();
+  auto v_lhs = lhs->emit();
+  auto v_rhs = rhs->emit();
+  auto r_lhs = v_lhs.getTheeIntoARegister();
+  auto r_rhs = v_rhs.getTheeIntoARegister();
   RegisterPool::Register result;
+
   std::cout << "mult " << r_lhs << ", " << r_rhs << '\n';
   std::cout << "mflo " << result << " # ";
-
   emitSource("");
   std::cout << '\n';
 

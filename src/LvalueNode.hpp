@@ -10,9 +10,9 @@ class LvalueNode : public ExpressionNode
 {
 public:
   LvalueNode(std::string ident);
-  bool isConstant() override;
-  void emitSource(std::string indent) override;
-  RegisterPool::Register emit() override;
+  virtual bool isConstant() override;
+  virtual void emitSource(std::string indent) override;
+  virtual Value emit() override;
 
   const std::string id;
 };

@@ -11,7 +11,7 @@ class AddNode : public ExpressionNode
 public:
   AddNode(ExpressionNode*& left, ExpressionNode*& right);
   virtual void emitSource(std::string indent) override;
-  virtual RegisterPool::Register emit() override;
+  virtual Value emit() override;
 
 private:
   std::shared_ptr<ExpressionNode> lhs;

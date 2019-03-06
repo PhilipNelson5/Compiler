@@ -29,7 +29,7 @@ void VariableDeclarationNode::emitSource(std::string indent)
   std::cout << ";" << std::endl;
 }
 
-RegisterPool::Register VariableDeclarationNode::emit()
+Value VariableDeclarationNode::emit()
 {
   throw "VariableDeclarationNode::emit() should not be called";
 }

@@ -46,58 +46,18 @@ void LvalueNode::emitSource(std::string indent)
   std::cout << indent << id;
 }
 
-RegisterPool::Register LvalueNode::emit()
+Value LvalueNode::emit()
 {
   auto lval_info = symbol_table.lookupLval(id);
   if (lval_info != nullptr)
   {
-    RegisterPool::Register result;
-    std::cout << "lw " << result << ", " << lval_info->getLoc() << " # load "
-              << id << " " << RegisterPool::Register::getSize() << '\n';
-
-    return result;
+    return {lval_info->offset, lval_info->memoryLocation};
   }
 
   auto const_info = symbol_table.lookupConst(id);
   if (const_info != nullptr)
   {
     return const_info->emit();
-    if (const_info->type == IntegerType::get())
-    {
-      auto value = dynamic_cast<IntegerLiteralNode*>(const_info.get())->value;
-      RegisterPool::Register result;
-      std::cout << "li " << result << ", " << value << " # load " << id
-                << ", value " << value << '\n';
-
-      return result;
-    }
-    else if (const_info->type == BooleanType::get())
-    {
-      auto value = dynamic_cast<BooleanLiteralNode*>(const_info.get())->value;
-      RegisterPool::Register result;
-      std::cout << "li " << result << ", " << value << " # load " << id
-                << ", value " << value << '\n';
-
-      return result;
-    }
-    else if (const_info->type == CharacterType::get())
-    {
-      auto value
-        = dynamic_cast<CharacterLiteralNode*>(const_info.get())->character;
-      RegisterPool::Register result;
-      std::cout << "li " << result << ", '" << value << "' # load " << id
-                << ", value '" << value << "'\n";
-
-      return result;
-    }
-    else if (const_info->type == StringType::get())
-    {
-      auto value = dynamic_cast<StringLiteralNode*>(const_info.get())->string;
-      auto label = symbol_table.lookupString(value);
-      RegisterPool::Register result;
-      std::cout << "la " << result << ", " << label << std::endl;
-      return result;
-    }
   }
 
   LOG(ERROR) << id << " is not defined";

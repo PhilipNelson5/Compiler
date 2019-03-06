@@ -56,5 +56,8 @@ CMakeCache.txt
 CMakeFiles/*
 cmake_install.cmake
 
-# Compiles Assembly Files
+# Compiled Assembly Files
 *.asm
+
+# Ctags
+tags
