@@ -52,6 +52,8 @@ set(cpsl_srcs
   src/ListNode.hpp
   src/LiteralNode.hpp
   src/LvalueNode.hpp
+  src/MemberAccessNode.cpp
+  src/MemberAccessNode.hpp
   src/ModuloNode.cpp
   src/ModuloNode.hpp
   src/MultiplyNode.cpp
@@ -80,6 +82,8 @@ set(cpsl_srcs
   src/StopStatementNode.hpp
   src/StringLiteralNode.cpp
   src/StringLiteralNode.hpp
+  src/SubscriptOperatorNode.cpp
+  src/SubscriptOperatorNode.hpp
   src/SubtractNode.cpp
   src/SubtractNode.hpp
   src/SuccessorExpressionNode.cpp

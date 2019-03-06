@@ -1,9 +1,10 @@
 #ifndef IDENTIFIER_NODE_HPP
 #define IDENTIFIER_NODE_HPP
 
-#include "LvalueNode.hpp"
+#include "LvalueNode.hpp" // for LvalueNode
+#include "Value.hpp"      // for Value
 
-#include <string>
+#include <string> // for string
 
 class IdentifierNode : public LvalueNode
 {

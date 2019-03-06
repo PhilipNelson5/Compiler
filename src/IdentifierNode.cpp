@@ -1,13 +1,12 @@
 #include "IdentifierNode.hpp"
 
-#include "BooleanLiteralNode.hpp"
-#include "CharacterLiteralNode.hpp"
-#include "IntegerLiteralNode.hpp"
-#include "StringLiteralNode.hpp"
-#include "SymbolTable.hpp"
-#include "log/easylogging++.h"
+#include "LiteralNode.hpp"     // for LiteralNode
+#include "SymbolTable.hpp"     // for SymbolTable, symbol_table, Variable
+#include "log/easylogging++.h" // for Writer, CERROR, LOG
 
-#include <iostream>
+#include <iostream> // for basic_ostream, cout, ostream
+#include <memory>   // for operator!=, shared_ptr, __shared_ptr_...
+#include <stdlib.h> // for exit, EXIT_FAILURE
 
 IdentifierNode::IdentifierNode(std::string id)
   : LvalueNode(symbol_table.getType(id))

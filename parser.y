@@ -513,9 +513,18 @@ Expression                      : Expression OR_T Expression                   {
                                 | CHAR_T                                       { $$ = new CharacterLiteralNode($1); }
                                 ;
 
-LValue                          : LValue DOT_T ID_T { $$ = nullptr; }
-                                | LValue OPEN_BRACKET_T Expression CLOSE_BRACKET_T { $$ = nullptr; }
-                                | ID_T { $$ = new IdentifierNode($1); }
+LValue                          : LValue DOT_T ID_T
+                                  {
+                                    $$ = nullptr;
+                                  }
+                                | LValue OPEN_BRACKET_T Expression CLOSE_BRACKET_T
+                                  {
+                                    $$ = nullptr;
+                                  }
+                                | ID_T
+                                  {
+                                    $$ = new IdentifierNode($1);
+                                  }
                                 ;
 
 %%
