@@ -2,19 +2,14 @@
 #define LVALUE_NODE_HPP
 
 #include "ExpressionNode.hpp"
-#include "RegisterPool.hpp"
-
-#include <string>
 
 class LvalueNode : public ExpressionNode
 {
 public:
-  LvalueNode(std::string ident);
-  virtual bool isConstant() override;
-  virtual void emitSource(std::string indent) override;
-  virtual Value emit() override;
-
-  const std::string id;
+  LvalueNode(std::shared_ptr<Type> type)
+    : ExpressionNode(type)
+  {}
+  virtual std::string getId() = 0;
 };
 
 #endif

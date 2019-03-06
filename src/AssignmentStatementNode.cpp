@@ -1,20 +1,24 @@
 #include "AssignmentStatementNode.hpp"
 
-#include "SymbolTable.hpp"
-#include "log/easylogging++.h"
+#include "ExpressionNode.hpp"  // for ExpressionNode
+#include "IdentifierNode.hpp"  // for IdentifierNode
+#include "RegisterPool.hpp"    // for operator<<
+#include "SymbolTable.hpp"     // for SymbolTable, Variable, symbol_table
+#include "log/easylogging++.h" // for Writer, CERROR, LOG
 
-#include <iostream>
+#include <iostream> // for operator<<, ostream, cout, basic_ostream
+#include <stdlib.h> // for exit, EXIT_FAILURE
 
-AssignmentStatementNode::AssignmentStatementNode(LvalueNode*& lval,
+AssignmentStatementNode::AssignmentStatementNode(LvalueNode*& identifier,
                                                  ExpressionNode* expr)
-  : lval(std::shared_ptr<LvalueNode>(lval))
+  : identifier(std::shared_ptr<LvalueNode>(identifier))
   , expr(std::shared_ptr<ExpressionNode>(expr))
 {}
 
 void AssignmentStatementNode::emitSource(std::string indent)
 {
   std::cout << indent;
-  lval->emitSource("");
+  identifier->emitSource("");
   std::cout << " := ";
   expr->emitSource("");
   std::cout << ";\n";
@@ -25,16 +29,16 @@ Value AssignmentStatementNode::emit()
   std::cout << "\n# ";
   emitSource("");
 
-  auto lval_info = symbol_table.lookupLval(lval->id);
-  if (lval_info == nullptr)
+  auto v_id = identifier->emit();
+  if (!v_id.isLvalue())
   {
-    LOG(ERROR) << lval->id << " is not an lvalue";
+    LOG(ERROR) << identifier->getId() << " is not an Lvalue";
     exit(EXIT_FAILURE);
   }
   auto v_expr = expr->emit();
   auto r_expr = v_expr.getTheeIntoARegister();
 
-  std::cout << "sw " << r_expr << ", " << lval_info->getLoc();
+  std::cout << "sw " << r_expr << ", " << v_id.getLocation();
 
   std::cout << " # ";
   emitSource("");

@@ -1,14 +1,16 @@
 extern int yyparse();
 extern int yydebug;
 
-#include "src/ProgramNode.hpp"
-#include "src/RegisterPool.hpp"
+#include "src/ProgramNode.hpp"     // for ProgramNode
+#include "src/RegisterPool.hpp"    // for Register, Register::low
+#include "src/log/easylogging++.h" // for Writer, LOG, DefaultLogBuilder
 
-#include <cstring>
-#include <iostream>
-#include <memory>
+#include <cstring>  // for strcmp
+#include <iostream> // for operator<<, cout, ostream, endl
+#include <memory>   // for allocator, shared_ptr, __shared_p...
+#include <stdlib.h> // for exit, EXIT_FAILURE, EXIT_SUCCESS
+#include <string>   // for string, operator+
 
-#include "src/log/easylogging++.h"
 INITIALIZE_EASYLOGGINGPP
 
 std::shared_ptr<ProgramNode> programNode;
@@ -67,11 +69,15 @@ int main(int argc, char** argv)
   LOG(INFO) << "most registers used: " << 18 - RegisterPool::Register::low;
 }
 
-void setLogLevel(std::string & config, std::string const & name, bool const & enabled)
+void setLogLevel(std::string& config,
+                 std::string const& name,
+                 bool const& enabled)
 {
   config += "* " + name + ":\n";
-  if (enabled) config += "    ENABLED = true\n";
-  else config += "    ENABLED = false\n";
+  if (enabled)
+    config += "    ENABLED = true\n";
+  else
+    config += "    ENABLED = false\n";
 }
 
 void initEasyLogging(int argc, char* argv[])

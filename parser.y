@@ -24,6 +24,7 @@
 #include "src/EqualExpressionNode.hpp"
 #include "src/GreaterThanEqualNode.hpp"
 #include "src/GreaterThanNode.hpp"
+#include "src/IdentifierNode.hpp"
 #include "src/IntegerLiteralNode.hpp"
 #include "src/LessThanEqualNode.hpp"
 #include "src/LessThanNode.hpp"
@@ -76,6 +77,7 @@ void yyerror(const char*);
 
   AssignmentStatementNode * assignmentNode;
   ConstantDeclarationNode * constDeclNode;
+  IdentifierNode * identifier;
   LvalueNode * lvalue;
   ReadStatementNode * readStatementNode;
   SimpleTypeNode * simpleTypeNode;
@@ -513,7 +515,7 @@ Expression                      : Expression OR_T Expression                   {
 
 LValue                          : LValue DOT_T ID_T { $$ = nullptr; }
                                 | LValue OPEN_BRACKET_T Expression CLOSE_BRACKET_T { $$ = nullptr; }
-                                | ID_T { $$ = new LvalueNode($1); }
+                                | ID_T { $$ = new IdentifierNode($1); }
                                 ;
 
 %%

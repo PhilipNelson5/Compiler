@@ -1,9 +1,11 @@
 #include "AddNode.hpp"
 
-#include "IntegerLiteralNode.hpp"
-#include "log/easylogging++.h"
+#include "IntegerLiteralNode.hpp" // for IntegerLiteralNode
+#include "RegisterPool.hpp"       // for operator<<, Register
+#include "Type.hpp"               // for IntegerType, Type, CharacterType
+#include "log/easylogging++.h"    // for Writer, CERROR, LOG
 
-#include <iostream>
+#include <iostream> // for operator<<, ostream, cout, basic_o...
 
 AddNode::AddNode(ExpressionNode*& left, ExpressionNode*& right)
   : ExpressionNode(IntegerType::get())

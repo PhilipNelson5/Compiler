@@ -41,6 +41,8 @@ set(cpsl_srcs
   src/GreaterThanEqualNode.hpp
   src/GreaterThanNode.cpp
   src/GreaterThanNode.hpp
+  src/IdentifierNode.cpp
+  src/IdentifierNode.hpp
   src/IntegerLiteralNode.cpp
   src/IntegerLiteralNode.hpp
   src/LessThanEqualNode.cpp
@@ -49,7 +51,6 @@ set(cpsl_srcs
   src/LessThanNode.hpp
   src/ListNode.hpp
   src/LiteralNode.hpp
-  src/LvalueNode.cpp
   src/LvalueNode.hpp
   src/ModuloNode.cpp
   src/ModuloNode.hpp

@@ -28,6 +28,24 @@ SymbolTable::SymbolTable()
   enter_scope();
 }
 
+std::shared_ptr<Type> SymbolTable::getType(std::string id)
+{
+  auto lval_info = lookupLval(id);
+  if (lval_info != nullptr)
+  {
+    return lval_info->type;
+  }
+
+  auto const_info = lookupConst(id);
+  if (const_info != nullptr)
+  {
+    return const_info->type;
+  }
+
+  LOG(ERROR) << id << " is not defined";
+  exit(EXIT_FAILURE);
+}
+
 std::shared_ptr<Type> SymbolTable::lookupType(std::string id) const
 {
   LOG(DEBUG) << "lookupType(" << id << ")";

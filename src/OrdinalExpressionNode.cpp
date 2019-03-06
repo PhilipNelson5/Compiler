@@ -1,8 +1,11 @@
 #include "OrdinalExpressionNode.hpp"
 
-#include "log/easylogging++.h"
+#include "Type.hpp"            // for IntegerType, CharacterType, Type
+#include "Value.hpp"           // for Value
+#include "log/easylogging++.h" // for Writer, CERROR, LOG
 
-#include <iostream>
+#include <iostream> // for operator<<, cout, ostream, basic_ostream
+#include <stdlib.h> // for exit, EXIT_FAILURE
 
 OrdinalExpressionNode::OrdinalExpressionNode(ExpressionNode*& expr)
   : ExpressionNode(IntegerType::get())

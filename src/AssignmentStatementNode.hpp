@@ -1,12 +1,14 @@
 #ifndef ASSIGNEMNT_STATEMENT_NODE_HPP
 #define ASSIGNEMNT_STATEMENT_NODE_HPP
 
-#include "ExpressionNode.hpp"
+#include <memory>             // for shared_ptr
+#include <string>             // for string
+#include "StatementNode.hpp"  // for StatementNode
 #include "LvalueNode.hpp"
-#include "RegisterPool.hpp"
-#include "StatementNode.hpp"
+#include "Value.hpp"          // for Value
 
-#include <memory>
+class ExpressionNode;
+class IdentifierNode;
 
 class AssignmentStatementNode : public StatementNode
 {
@@ -16,7 +18,7 @@ public:
   virtual Value emit() override;
 
 private:
-  std::shared_ptr<LvalueNode> lval;
+  std::shared_ptr<LvalueNode> identifier;
   std::shared_ptr<ExpressionNode> expr;
 };
 

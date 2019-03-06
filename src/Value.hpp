@@ -2,6 +2,7 @@
 #define VALUE_HPP
 
 #include "RegisterPool.hpp"
+#include "log/easylogging++.h"
 
 #include <iostream>
 #include <utility>
@@ -36,6 +37,19 @@ struct Value
     : value(std::move(reg))
   {}
 
+  bool isLvalue() { return std::holds_alternative<pair>(value); }
+
+  std::string getLocation()
+  {
+    if (!isLvalue())
+    {
+      LOG(ERROR) << "No memory associated with this value";
+      exit(EXIT_FAILURE);
+    }
+    auto p = std::get<pair>(value);
+    return std::to_string(p.first) + "($" + std::to_string(p.second) + ")";
+  }
+
   std::string toString(char character) const
   {
     switch (character)
@@ -51,7 +65,7 @@ struct Value
     case '\f':
       return "\\f";
     default:
-      return &character;
+      return std::string(1, character);
     }
   }
 
@@ -90,9 +104,9 @@ struct Value
     }
     else if (std::holds_alternative<std::monostate>(value))
     {
-      throw "Initialized Value";
+      throw "Uninitialized Value";
     }
-    throw "Initialized Value";
+    throw "Uninitialized Value";
   }
 
   std::variant<std::monostate,      // uninitialized state

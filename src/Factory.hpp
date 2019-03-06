@@ -1,24 +1,28 @@
 #ifndef FACTORY_HPP
 #define FACTORY_HPP
 
-#include "AddNode.hpp"
-#include "ConstantDeclarationNode.hpp"
-#include "BooleanLiteralNode.hpp"
-#include "CharacterLiteralNode.hpp"
-#include "DivideNode.hpp"
-#include "EqualExpressionNode.hpp"
-#include "ExpressionNode.hpp"
-#include "IntegerLiteralNode.hpp"
-#include "LvalueNode.hpp"
-#include "ModuloNode.hpp"
-#include "MultiplyNode.hpp"
-#include "NotEqualExpressionNode.hpp"
-#include "StringLiteralNode.hpp"
-#include "SubtractNode.hpp"
-#include "SymbolTable.hpp"
-#include "log/easylogging++.h"
+#include "AddNode.hpp"                 // for AddNode
+#include "BooleanLiteralNode.hpp"      // for BooleanLiteralNode
+#include "CharacterLiteralNode.hpp"    // for CharacterLiteralNode
+#include "ConstantDeclarationNode.hpp" // for ConstantDeclarationNode
+#include "DivideNode.hpp"              // for DivideNode
+#include "EqualExpressionNode.hpp"     // for EqualExpressionNode
+#include "ExpressionNode.hpp"          // for ExpressionNode
+#include "IdentifierNode.hpp"          // for IdentifierNode
+#include "IntegerLiteralNode.hpp"      // for IntegerLiteralNode
+#include "LiteralNode.hpp"             // for LiteralNode
+#include "ModuloNode.hpp"              // for ModuloNode
+#include "MultiplyNode.hpp"            // for MultiplyNode
+#include "NotEqualExpressionNode.hpp"  // for NotEqualExpressionNode
+#include "StringLiteralNode.hpp"       // for StringLiteralNode
+#include "SubtractNode.hpp"            // for SubtractNode
+#include "SymbolTable.hpp"             // for SymbolTable, symbol_table
+#include "Type.hpp"                    // for BooleanType, CharacterType
+#include "log/easylogging++.h"         // for Writer, CERROR, LOG
 
-#include <iostream>
+#include <memory>   // for shared_ptr, operator==, __sha...
+#include <stdlib.h> // for exit, EXIT_FAILURE
+#include <string>   // for string
 
 template<typename NodeType, typename LiteralType, typename F>
 ExpressionNode* makeNode(ExpressionNode* e1, ExpressionNode* e2, F f)
@@ -36,7 +40,7 @@ ExpressionNode* makeNode(ExpressionNode* e1, ExpressionNode* e2, F f)
   else if (e1->isConstant())
   {
     auto c1 = dynamic_cast<LvalueNode*>(e1);
-    lit1 = dynamic_cast<LiteralType*>(symbol_table.lookupConst(c1->id).get());
+    lit1 = dynamic_cast<LiteralType*>(symbol_table.lookupConst(c1->getId()).get());
   }
   else
   {
@@ -53,7 +57,7 @@ ExpressionNode* makeNode(ExpressionNode* e1, ExpressionNode* e2, F f)
   else if (e2->isConstant())
   {
     auto c2 = dynamic_cast<LvalueNode*>(e2);
-    lit2 = dynamic_cast<LiteralType*>(symbol_table.lookupConst(c2->id).get());
+    lit2 = dynamic_cast<LiteralType*>(symbol_table.lookupConst(c2->getId()).get());
   }
   else
   {
@@ -117,7 +121,7 @@ ExpressionNode* makeEqualNode(ExpressionNode* e1, ExpressionNode* e2)
 
 ExpressionNode* makeLiteralNode(LvalueNode* e)
 {
-  auto const_info = symbol_table.lookupConst(e->id);
+  auto const_info = symbol_table.lookupConst(e->getId());
   if (const_info != nullptr)
   {
     if (const_info->type == IntegerType::get())
@@ -140,22 +144,24 @@ ExpressionNode* makeLiteralNode(LvalueNode* e)
       return new StringLiteralNode(
         dynamic_cast<StringLiteralNode*>(const_info.get())->string);
     }
-    LOG(ERROR) << e->id << " : " << e->type->name() << " can not be turned into a literal";
+    LOG(ERROR) << e->getId() << " : " << e->type->name()
+               << " can not be turned into a literal";
     exit(EXIT_FAILURE);
   }
-  LOG(ERROR) << e->id << "is not defined in the const symbol table";
+  LOG(ERROR) << e->getId() << "is not defined in the const symbol table";
   exit(EXIT_FAILURE);
 }
 
-ConstantDeclarationNode* makeConstantDeclarationNode(std::string id, ExpressionNode* e)
+ConstantDeclarationNode* makeConstantDeclarationNode(std::string id,
+                                                     ExpressionNode* e)
 {
-  // if ( Expression is an Lvalue )
-  if(LvalueNode* plval = dynamic_cast<LvalueNode*>(e))
+  // if ( Expression is an IdentifierNode )
+  if (LvalueNode* plval = dynamic_cast<LvalueNode*>(e))
   {
     return new ConstantDeclarationNode(id, makeLiteralNode(plval));
   }
   // if ( Expression is a Literal )
-  else if(LiteralNode* plit = dynamic_cast<LiteralNode*>(e))
+  else if (LiteralNode* plit = dynamic_cast<LiteralNode*>(e))
   {
     return new ConstantDeclarationNode(id, plit);
   }
@@ -166,7 +172,8 @@ ConstantDeclarationNode* makeConstantDeclarationNode(std::string id, ExpressionN
   }
 }
 
-ExpressionNode* makeLvalueNode(std::string id)
+#if 0
+ExpressionNode* makeIdentifierNode(std::string id)
 {
   auto const_info = symbol_table.lookupConst(id);
   if (const_info != nullptr)
@@ -193,7 +200,8 @@ ExpressionNode* makeLvalueNode(std::string id)
     }
   }
 
-  return new LvalueNode(id);
+  return new IdentifierNode(id);
 }
+#endif
 
 #endif

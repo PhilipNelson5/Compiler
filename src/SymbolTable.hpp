@@ -1,15 +1,14 @@
 #ifndef SYMBOL_TABLE_HPP
 #define SYMBOL_TABLE_HPP
 
-#include "ExpressionNode.hpp"
-#include "Type.hpp"
-#include "LiteralNode.hpp"
+#include <map>     // for map
+#include <memory>  // for shared_ptr
+#include <sstream> // for basic_ostream::operator<<, operator<<, stringstream
+#include <string>  // for string
+#include <vector>  // for vector
 
-#include <map>
-#include <memory>
-#include <sstream>
-#include <string>
-#include <vector>
+class LiteralNode;
+class Type;
 
 struct Variable
 {
@@ -51,6 +50,7 @@ class SymbolTable
 {
 public:
   SymbolTable();
+  std::shared_ptr<Type> getType(std::string id);
   std::shared_ptr<LiteralNode> lookupConst(std::string id) const;
   std::shared_ptr<Variable> lookupLval(std::string id) const;
   std::shared_ptr<Type> lookupType(std::string id) const;

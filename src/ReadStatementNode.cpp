@@ -1,24 +1,28 @@
 #include "ReadStatementNode.hpp"
 
-#include "SymbolTable.hpp"
-#include "Type.hpp"
-#include "log/easylogging++.h"
+#include "ListNode.hpp"        // for ListNode
+#include "LvalueNode.hpp"      // for LvalueNode
+#include "RegisterPool.hpp"    // for operator<<
+#include "Type.hpp"            // for CharacterType, IntegerType, Type
+#include "log/easylogging++.h" // for Writer, CERROR, LOG
 
-#include <iostream>
+#include <ext/alloc_traits.h> // for __alloc_traits<>::value_type
+#include <iostream>           // for operator<<, basic_ostream, cout, ostream
+#include <stdlib.h>           // for exit, EXIT_FAILURE
 
-ReadStatementNode::ReadStatementNode(ListNode<LvalueNode>*& lVals)
-  : lValues(ListNode<LvalueNode>::makeVector(lVals))
+ReadStatementNode::ReadStatementNode(ListNode<LvalueNode>*& identifiers)
+  : identifiers(ListNode<LvalueNode>::makeVector(identifiers))
 {}
 
 void ReadStatementNode::emitSource(std::string indent)
 {
   std::cout << indent << "read(";
-  for (auto i = 0u; i < lValues.size() - 1; ++i)
+  for (auto i = 0u; i < identifiers.size() - 1; ++i)
   {
-    lValues[i]->emitSource("");
+    identifiers[i]->emitSource("");
     std::cout << ", ";
   }
-  lValues.back()->emitSource("");
+  identifiers.back()->emitSource("");
   std::cout << ");" << std::endl;
 }
 
@@ -27,32 +31,35 @@ Value ReadStatementNode::emit()
   std::cout << "\n# ";
   emitSource("");
 
-  for (auto&& lval : lValues)
+  for (auto&& identifier : identifiers)
   {
-    auto lval_info = symbol_table.lookupLval(lval->id);
-    if (lval_info == nullptr)
+    auto v_id = identifier->emit();
+    if (!v_id.isLvalue())
     {
-      LOG(ERROR) << lval->id << " is not an lvalue";
+      LOG(ERROR) << identifier->getId() << " is not an Lvalue";
       exit(EXIT_FAILURE);
     }
-    if (lval_info->type == IntegerType::get())
+
+    if (identifier->type == IntegerType::get())
     {
       std::cout << "li $v0, 5"
-                << " # load read integer instruction" << std::endl;
+                << " # load read integer instruction" << '\n';
     }
-    else if (lval_info->type == CharacterType::get())
+    else if (identifier->type == CharacterType::get())
     {
       std::cout << "li $v0, 12"
-                << " # load read character instruction" << std::endl;
+                << " # load read character instruction" << '\n';
     }
     else
     {
-      LOG(ERROR) << "type " << lval->type->name() << " can not be read into";
+      LOG(ERROR) << "type " << identifier->type->name()
+                 << " can not be read into";
       exit(EXIT_FAILURE);
     }
-    std::cout << "syscall" << std::endl;
-    std::cout << "sw $v0, " << lval_info->getLoc();
-    std::cout << " # " << lval->id << " = input" << std::endl << std::endl;
+
+    std::cout << "syscall" << '\n';
+    std::cout << "sw $v0, " << v_id.getLocation();
+    std::cout << " # " << identifier->getId() << " = input" << '\n' << '\n';
   }
 
   return {};
