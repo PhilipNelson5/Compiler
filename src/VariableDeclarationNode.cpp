@@ -26,8 +26,8 @@ void VariableDeclarationNode::emitSource(std::string indent)
     std::cout << m_ids[i] << ", ";
   }
   std::cout << m_ids.back() << " : ";
-  m_type->emitSource("");
-  std::cout << ";" << std::endl;
+  m_type->emitSource(indent + "  ");
+  std::cout << ";" << '\n';
 }
 
 Value VariableDeclarationNode::emit()

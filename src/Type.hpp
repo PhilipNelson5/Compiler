@@ -3,6 +3,7 @@
 
 #include "ListNode.hpp"
 #include "TypeNode.hpp"
+#include "log/easylogging++.h"
 
 #include <iostream>
 #include <map>
@@ -40,7 +41,8 @@ public:
 
   virtual void emitSource(std::string indent) override
   {
-    std::cout << indent << name();
+    (void)indent;
+    std::cout << name();
   }
 
 private:
@@ -63,7 +65,8 @@ public:
 
   virtual void emitSource(std::string indent) override
   {
-    std::cout << indent << name();
+    (void)indent;
+    std::cout << name();
   }
 
 private:
@@ -86,7 +89,8 @@ public:
 
   virtual void emitSource(std::string indent) override
   {
-    std::cout << indent << name();
+    (void)indent;
+    std::cout << name();
   }
 
 private:
@@ -111,7 +115,8 @@ public:
 
   virtual void emitSource(std::string indent) override
   {
-    std::cout << indent << name();
+    (void)indent;
+    std::cout << name();
   }
 
 private:
@@ -138,7 +143,8 @@ public:
 
   virtual void emitSource(std::string indent) override
   {
-    std::cout << indent << name();
+    (void)indent;
+    std::cout << name();
   }
 
   const int lb, ub;
@@ -182,10 +188,28 @@ public:
 
   virtual void emitSource(std::string indent) override
   {
-    std::cout << indent << name();
+    std::cout << "record" << '\n';
+    for (auto&& r : table)
+    {
+      std::cout << indent << r.first << " : ";
+      r.second.second->emitSource(indent + "  ");
+      std::cout << ";\n";
+    }
+    std::cout << std::string(indent.length() - 2, ' ') << "end";
   }
 
   std::map<std::string, std::pair<int, std::shared_ptr<Type>>> table;
+
+  std::pair<int, std::shared_ptr<Type>> lookupId(std::string id)
+  {
+    auto found = table.find(id);
+    if (found == std::end(table))
+    {
+      LOG(ERROR) << id << "does not exist in record";
+      exit(EXIT_FAILURE);
+    }
+    return found->second;
+  }
 
   virtual int size() override
   {

@@ -15,7 +15,7 @@ TypeDeclarationNode::TypeDeclarationNode(std::string id, TypeNode*& typeNode)
 void TypeDeclarationNode::emitSource(std::string indent)
 {
   std::cout << indent << m_id << " = ";
-  m_type->emitSource("");
+  m_type->emitSource(indent + "  ");
   std::cout << ";" << std::endl;
 }
 

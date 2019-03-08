@@ -1,0 +1,25 @@
+type
+ point = record
+   x,y : integer;
+ end;
+
+ line = record
+   a,b : point;
+ end;
+
+var
+ l : line;
+ w,x,y,z : integer;
+
+begin
+ w:= 0;
+ x:= 1;
+ y:= 2;
+ z:= 3;
+ l.a.x := w*y;
+ l.a.y := x-z;
+ l.b.x := y/x;
+ l.b.y := z+w;
+
+ write("line l : (", l.a.x, ',', l.a.y, "), (", l.b.x, ',', l.b.y, ')');
+end.

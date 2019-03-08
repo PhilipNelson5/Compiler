@@ -29,6 +29,7 @@
 #include "src/LessThanNode.hpp"
 #include "src/ListNode.hpp"
 #include "src/LvalueNode.hpp"
+#include "src/MemberAccessNode.hpp"
 #include "src/ModuloNode.hpp"
 #include "src/MultiplyNode.hpp"
 #include "src/NotEqualExpressionNode.hpp"
@@ -43,12 +44,13 @@
 #include "src/SubtractNode.hpp"
 #include "src/SuccessorExpressionNode.hpp"
 #include "src/SymbolTable.hpp"
-#include "src/Type.hpp"
 #include "src/TypeDeclarationNode.hpp"
 #include "src/TypeNode.hpp"
 #include "src/UnaryMinusNode.hpp"
 #include "src/VariableDeclarationNode.hpp"
 #include "src/WriteStatementNode.hpp"
+
+class Type;
 
 #define YYERROR_VERBOSE 1
 #define DEBUG 1
@@ -534,7 +536,7 @@ Expression                      : Expression OR_T Expression                   {
 
 LValue                          : LValue DOT_T ID_T
                                   {
-                                    $$ = nullptr;
+                                    $$ = new MemberAccessNode($1, $3);
                                   }
                                 | LValue OPEN_BRACKET_T Expression CLOSE_BRACKET_T
                                   {

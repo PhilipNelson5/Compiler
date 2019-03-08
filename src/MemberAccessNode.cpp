@@ -9,6 +9,11 @@
 #include <stdlib.h> // for exit, EXIT_FAILURE
 #include <utility>  // for pair
 
+std::string MemberAccessNode::getId()
+{
+  return lValue->getId() + "." + id;
+}
+
 std::shared_ptr<Type> lookupId(LvalueNode* lValue, std::string id)
 {
   if (RecordType* pRecord = dynamic_cast<RecordType*>(lValue->type.get()))
@@ -36,10 +41,28 @@ MemberAccessNode::MemberAccessNode(LvalueNode* lValue, std::string id)
 
 void MemberAccessNode::emitSource(std::string indent)
 {
-  std::cout << indent << '.' << id;
+  std::cout << indent << lValue->getId() << '.' << id;
 }
 
 Value MemberAccessNode::emit()
 {
-  throw "MemberAccessNode::emit not implemented";
+  if (RecordType* record = dynamic_cast<RecordType*>(lValue->type.get()))
+  {
+    auto v_lval = lValue->emit();
+    if (!v_lval.isLvalue())
+    {
+      LOG(ERROR) << lValue->getId() << " is not an lvalue";
+      exit(EXIT_FAILURE);
+    }
+    auto [offset1, memoryLocation]
+      = std::get<std::pair<int, int>>(v_lval.value);
+    auto [offset2, type] = record->lookupId(id);
+
+    return {offset1 + offset2, memoryLocation};
+  }
+  else
+  {
+    LOG(ERROR) << lValue->getId() << " is not a record type";
+    exit(EXIT_FAILURE);
+  }
 }

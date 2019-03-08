@@ -11,6 +11,7 @@ class MemberAccessNode : public LvalueNode
 {
 public:
   MemberAccessNode(LvalueNode* lValue, std::string id);
+  virtual std::string getId() override;
   virtual void emitSource(std::string indent) override;
   virtual Value emit() override;
 
