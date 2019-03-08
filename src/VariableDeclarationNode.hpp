@@ -4,7 +4,7 @@
 #include "ListNode.hpp"
 #include "Node.hpp"
 #include "RegisterPool.hpp"
-#include "TypeNode.hpp"
+#include "Type.hpp"
 
 #include <string>
 #include <vector>
@@ -12,13 +12,14 @@
 class VariableDeclarationNode : public Node
 {
 public:
-  VariableDeclarationNode(ListNode<std::string>* identList, TypeNode* type);
+  VariableDeclarationNode(ListNode<std::string>* identList,
+                          std::shared_ptr<Type>* type);
   virtual void emitSource(std::string indent) override;
   virtual Value emit() override;
 
 private:
   std::vector<std::string> m_ids;
-  std::shared_ptr<TypeNode> m_type;
+  std::shared_ptr<Type> m_type;
 };
 
 #endif

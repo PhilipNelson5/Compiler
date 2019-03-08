@@ -8,13 +8,12 @@
 
 VariableDeclarationNode::VariableDeclarationNode(
   ListNode<std::string>* identList,
-  TypeNode* type)
+  std::shared_ptr<Type>* type)
   : m_ids(ListNode<std::string>::makeDerefVector(identList))
-  , m_type(type)
+  , m_type(*type)
 {
-  auto pType = symbol_table.lookupType(m_type->ident);
   for (auto&& id : m_ids)
-    symbol_table.storeVariable(id, pType);
+    symbol_table.storeVariable(id, m_type);
 }
 
 void VariableDeclarationNode::emitSource(std::string indent)

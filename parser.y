@@ -11,7 +11,6 @@
 #include "src/Node.hpp"
 #include "src/StatementNode.hpp"
 #include "src/ExpressionNode.hpp"
-#include "src/TypeNode.hpp"
 
 // concrete node classes
 #include "src/AddNode.hpp"
@@ -39,11 +38,12 @@
 #include "src/PredecessorExpressionNode.hpp"
 #include "src/ProgramNode.hpp"
 #include "src/ReadStatementNode.hpp"
-#include "src/SimpleTypeNode.hpp"
 #include "src/StopStatementNode.hpp"
 #include "src/StringLiteralNode.hpp"
 #include "src/SubtractNode.hpp"
 #include "src/SuccessorExpressionNode.hpp"
+#include "src/SymbolTable.hpp"
+#include "src/Type.hpp"
 #include "src/TypeDeclarationNode.hpp"
 #include "src/UnaryMinusNode.hpp"
 #include "src/VariableDeclarationNode.hpp"
@@ -73,14 +73,15 @@ void yyerror(const char*);
   Node * node;
   StatementNode * statementNode;
   ExpressionNode * expressionNode;
-  TypeNode * typeNode;
+  std::shared_ptr<Type> * type;
+  RecordType * recordType;
+  ArrayType * arrayType;
 
   AssignmentStatementNode * assignmentNode;
   ConstantDeclarationNode * constDeclNode;
   IdentifierNode * identifier;
   LvalueNode * lvalue;
   ReadStatementNode * readStatementNode;
-  SimpleTypeNode * simpleTypeNode;
   StopStatementNode * stopStatementNode;
   TypeDeclarationNode * typeDeclarationNode;
   VariableDeclarationNode * varDeclNode;
@@ -179,13 +180,13 @@ void yyerror(const char*);
 %type <typeDeclarationList> OptTypeDecls
 %type <typeDeclarationList> TypeDeclList
 %type <typeDeclarationNode> TypeDecl
-%type <typeNode> Type
-%type <simpleTypeNode> SimpleType
-%type <node> RecordType
+%type <type> Type
+%type <type> SimpleType
+%type <recordType> RecordType
 %type <varDelcList> OptFieldList
 %type <varDelcList> FieldList
 %type <varDeclNode> Field
-%type <node> ArrayType
+%type <arrayType> ArrayType
 %type <identList> IdentList
 %type <varDelcList> OptVariableDecls
 %type <varDelcList> VariableDeclList
@@ -323,7 +324,11 @@ Type                            : SimpleType { $$ = $1;}
                                 | ArrayType {}
                                 ;
 
-SimpleType                      : ID_T { $$ = new SimpleTypeNode($1); }
+SimpleType                      : ID_T
+                                  {
+                                    std::shared_ptr<Type> theType = symbol_table.lookupType($1);
+                                    $$ = &theType;
+                                  }
                                 ;
 
 RecordType                      : RECORD_T OptFieldList END_T {}

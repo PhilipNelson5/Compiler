@@ -1,16 +1,16 @@
 #include "TypeDeclarationNode.hpp"
 
 #include "SymbolTable.hpp"
+#include "Type.hpp"
 
 #include <iostream>
 
-TypeDeclarationNode::TypeDeclarationNode(std::string id, TypeNode* type)
+TypeDeclarationNode::TypeDeclarationNode(std::string id,
+                                         std::shared_ptr<Type>* type)
   : m_id(id)
-  , m_type(type)
+  , m_type(*type)
 {
-  //TODO: check for other types of types
-  auto typeType = symbol_table.lookupType(m_type->ident);
-  symbol_table.storeType(m_id, typeType);
+  symbol_table.storeType(m_id, m_type);
 }
 
 void TypeDeclarationNode::emitSource(std::string indent)

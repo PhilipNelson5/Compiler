@@ -1,6 +1,7 @@
 #ifndef TYPE_HPP
 #define TYPE_HPP
 
+#include <iostream>
 #include <map>
 #include <memory>
 #include <numeric>
@@ -16,6 +17,7 @@ public:
   virtual int size() { return 4; };
   virtual std::string name() = 0;
   virtual ~Type() = default;
+  virtual void emitSource(std::string indent) = 0;
 };
 
 //------------------------------------------------------------------------------
@@ -30,6 +32,11 @@ public:
   {
     if (!pInt) pInt = std::make_shared<IntegerType>();
     return pInt;
+  }
+
+  virtual void emitSource(std::string indent) override
+  {
+    std::cout << indent << name();
   }
 
 private:
@@ -50,6 +57,11 @@ public:
     return pChar;
   }
 
+  virtual void emitSource(std::string indent) override
+  {
+    std::cout << indent << name();
+  }
+
 private:
   static std::shared_ptr<Type> pChar;
 };
@@ -68,6 +80,11 @@ public:
     return pBool;
   }
 
+  virtual void emitSource(std::string indent) override
+  {
+    std::cout << indent << name();
+  }
+
 private:
   static std::shared_ptr<Type> pBool;
 };
@@ -80,12 +97,17 @@ class StringType : public Type
 public:
   int size() override { return 0; }
 
-  std::string name() override { return "string"; }
+  virtual std::string name() override { return "string"; }
 
   static std::shared_ptr<Type> get()
   {
     if (!pStr) pStr = std::make_shared<StringType>();
     return pStr;
+  }
+
+  virtual void emitSource(std::string indent) override
+  {
+    std::cout << indent << name();
   }
 
 private:
@@ -108,6 +130,13 @@ public:
     , elementType(elementType)
   {}
 
+  virtual std::string name() override { return "array"; }
+
+  virtual void emitSource(std::string indent) override
+  {
+    std::cout << indent << name();
+  }
+
   const int lb, ub;
   const std::shared_ptr<Type> indexType;
   const std::shared_ptr<Type> elementType;
@@ -122,6 +151,13 @@ class RecordType : public Type
 {
 public:
   RecordType() {}
+
+  virtual std::string name() override { return "record"; }
+
+  virtual void emitSource(std::string indent) override
+  {
+    std::cout << indent << name();
+  }
 
   std::map<std::string, std::pair<int, std::shared_ptr<Type>>> table;
 

@@ -6,7 +6,6 @@
 #include "src/Node.hpp"
 #include "src/StatementNode.hpp"
 #include "src/ExpressionNode.hpp"
-#include "src/TypeNode.hpp"
 
 // concrete node classes
 #include "src/AddNode.hpp"
@@ -34,11 +33,12 @@
 #include "src/PredecessorExpressionNode.hpp"
 #include "src/ProgramNode.hpp"
 #include "src/ReadStatementNode.hpp"
-#include "src/SimpleTypeNode.hpp"
 #include "src/StopStatementNode.hpp"
 #include "src/StringLiteralNode.hpp"
 #include "src/SubtractNode.hpp"
 #include "src/SuccessorExpressionNode.hpp"
+#include "src/SymbolTable.hpp"
+#include "src/Type.hpp"
 #include "src/TypeDeclarationNode.hpp"
 #include "src/UnaryMinusNode.hpp"
 #include "src/VariableDeclarationNode.hpp"

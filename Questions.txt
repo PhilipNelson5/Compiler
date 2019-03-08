@@ -13,7 +13,7 @@
   - ANSWER: NO
 
 * How should the executable be named etc?
-  - ANSWER: cpsl < in.cpsl > out.asm
+  - ANSWER: cpsl < input.cpsl > output.asm
           You can use MIPS comments 
           Syntax errors should go to std::error
           Make your own command line flags for debugging
@@ -34,6 +34,9 @@
   - ANSWER: Push back to the list or vector;
 
 * Why does adding the operator<< to the header file make multiple definitions?
+  - ANSWER: Because the implementation gets included in every translation unit
 
 * Is it okay to print to std::cerr?
   - ANSWER: Yes, that's fine.
+
+* Is the pointer to a shared_ptr bad?
