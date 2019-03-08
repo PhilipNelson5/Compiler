@@ -5,10 +5,9 @@
 
 #include <iostream>
 
-TypeDeclarationNode::TypeDeclarationNode(std::string id,
-                                         std::shared_ptr<Type>* type)
+TypeDeclarationNode::TypeDeclarationNode(std::string id, TypeNode*& typeNode)
   : m_id(id)
-  , m_type(*type)
+  , m_type(typeNode->type)
 {
   symbol_table.storeType(m_id, m_type);
 }

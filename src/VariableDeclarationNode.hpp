@@ -1,19 +1,22 @@
 #ifndef VARIABLE_DECLARATION_NODE_HPP
 #define VARIABLE_DECLARATION_NODE_HPP
 
-#include "ListNode.hpp"
-#include "Node.hpp"
-#include "RegisterPool.hpp"
-#include "Type.hpp"
+#include "Node.hpp"  // for Node
+#include "Value.hpp" // for Value
 
-#include <string>
-#include <vector>
+#include <memory> // for shared_ptr
+#include <string> // for string
+#include <vector> // for vector
+class Type;
+class TypeNode;
+template<typename T>
+class ListNode;
 
 class VariableDeclarationNode : public Node
 {
 public:
   VariableDeclarationNode(ListNode<std::string>* identList,
-                          std::shared_ptr<Type>* type);
+                          TypeNode*& typeNode);
   virtual void emitSource(std::string indent) override;
   virtual Value emit() override;
 

@@ -28,7 +28,7 @@ std::string CharacterLiteralNode::toString() const
   case '\f':
     return "\\f";
   default:
-    return &character;
+    return {1, character};
   }
 }
 

@@ -1,12 +1,16 @@
 #ifndef TYPE_HPP
 #define TYPE_HPP
 
+#include "ListNode.hpp"
+#include "TypeNode.hpp"
+
 #include <iostream>
 #include <map>
 #include <memory>
 #include <numeric>
 #include <string>
 #include <utility>
+#include <vector>
 
 //------------------------------------------------------------------------------
 // Type
@@ -147,10 +151,32 @@ public:
 //------------------------------------------------------------------------------
 // Record Type
 //------------------------------------------------------------------------------
+struct Field
+{
+  Field(ListNode<std::string>*& idList, TypeNode* typeNode)
+    : ids(ListNode<std::string>::makeDerefVector(idList))
+    , type(typeNode->type)
+  {}
+  const std::vector<std::string> ids;
+  const std::shared_ptr<Type> type;
+};
+
 class RecordType : public Type
 {
 public:
-  RecordType() {}
+  RecordType(ListNode<Field>*& fields)
+  {
+    int offset = 0;
+    auto vecFields = ListNode<Field>::makeVector(fields);
+    for (auto&& f : vecFields)
+    {
+      for (auto&& id : f->ids)
+      {
+        table.emplace(id, std::make_pair(offset, f->type));
+        offset += f->type->size();
+      }
+    }
+  }
 
   virtual std::string name() override { return "record"; }
 

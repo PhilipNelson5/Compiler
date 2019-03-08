@@ -45,6 +45,7 @@
 #include "src/SymbolTable.hpp"
 #include "src/Type.hpp"
 #include "src/TypeDeclarationNode.hpp"
+#include "src/TypeNode.hpp"
 #include "src/UnaryMinusNode.hpp"
 #include "src/VariableDeclarationNode.hpp"
 #include "src/WriteStatementNode.hpp"
@@ -70,12 +71,14 @@ void yyerror(const char*);
   char char_val;
   char * str_val;
 
+  Field * field;
+
   Node * node;
   StatementNode * statementNode;
   ExpressionNode * expressionNode;
-  std::shared_ptr<Type> * type;
-  RecordType * recordType;
-  ArrayType * arrayType;
+  TypeNode * type;
+  /*std::shared_ptr<RecordType> * recordType;*/
+  /*std::shared_ptr<ArrayType> * arrayType;*/
 
   AssignmentStatementNode * assignmentNode;
   ConstantDeclarationNode * constDeclNode;
@@ -89,6 +92,7 @@ void yyerror(const char*);
 
   ListNode<ConstantDeclarationNode> * constDelcList;
   ListNode<ExpressionNode> * expressionList;
+  ListNode<Field> * fieldList;
   ListNode<LvalueNode> * lValueList;
   ListNode<StatementNode> * statementList;
   ListNode<TypeDeclarationNode> * typeDeclarationList;
@@ -182,11 +186,13 @@ void yyerror(const char*);
 %type <typeDeclarationNode> TypeDecl
 %type <type> Type
 %type <type> SimpleType
-%type <recordType> RecordType
-%type <varDelcList> OptFieldList
-%type <varDelcList> FieldList
-%type <varDeclNode> Field
-%type <arrayType> ArrayType
+%type <type> RecordType
+/*%type <recordType> RecordType*/
+%type <fieldList> OptFieldList
+%type <fieldList> FieldList
+%type <field> Field
+%type <type> ArrayType
+/*%type <arrayType> ArrayType*/
 %type <identList> IdentList
 %type <varDelcList> OptVariableDecls
 %type <varDelcList> VariableDeclList
@@ -214,7 +220,7 @@ void yyerror(const char*);
 %left      OR_T
 %left      AND_T
 %right     NOT_T
-%nonassoc  EQUAL_T NEQUAL_T LT_T LTE_T GT_T GTE_T 
+%nonassoc  EQUAL_T NEQUAL_T LT_T LTE_T GT_T GTE_T
 %left      PLUS_T MINUS_T
 %left      MULTIPLY_T DIVIDE_T MOD_T
 %right     UNARY_MINUS_T
@@ -319,30 +325,38 @@ TypeDecl                        : ID_T EQUAL_T Type SEMI_COLON_T
                                   }
                                 ;
 
-Type                            : SimpleType { $$ = $1;}
-                                | RecordType {}
-                                | ArrayType {}
+Type                            : SimpleType { $$ = $1; }
+                                | RecordType { $$ = $1; }
+                                | ArrayType  { $$ = $1; }
                                 ;
 
 SimpleType                      : ID_T
                                   {
-                                    std::shared_ptr<Type> theType = symbol_table.lookupType($1);
-                                    $$ = &theType;
+                                    $$ = new TypeNode(symbol_table.lookupType($1));
                                   }
                                 ;
 
-RecordType                      : RECORD_T OptFieldList END_T {}
+RecordType                      : RECORD_T OptFieldList END_T
+                                  {
+                                    $$ = new TypeNode(std::make_shared<RecordType>($2));
+                                  }
                                 ;
 
 OptFieldList                    : FieldList { $$ = $1; }
                                 | /* λ */ { $$ = nullptr; }
                                 ;
 
-FieldList                       : FieldList Field {}
-                                | Field {}
+FieldList                       : FieldList Field
+                                  {
+                                    $$ = new ListNode<Field>($2, $1);
+                                  }
+                                | Field
+                                  {
+                                    $$ = new ListNode<Field>($1);
+                                  }
                                 ;
 
-Field                           : IdentList COLON_T Type SEMI_COLON_T {}
+Field                           : IdentList COLON_T Type SEMI_COLON_T { $$ = new Field($1, $3); }
                                 ;
 
 ArrayType                       : ARRAY_T
@@ -358,7 +372,7 @@ IdentList                       : IdentList COMMA_T ID_T
                                   {
                                     $$ = new ListNode<std::string>(new std::string($1));
                                   }
-                                ;  
+                                ;
 
 /* 3.1.4 Variable Declerations */
 OptVariableDecls                : VAR_T VariableDeclList { $$ = $2; }
@@ -460,14 +474,14 @@ LValueList                      : LValueList COMMA_T LValue
                                   {
                                     $$ = new ListNode<LvalueNode>($3, $1);
                                   }
-                                | LValue 
+                                | LValue
                                   {
                                     $$ = new ListNode<LvalueNode>($1);
                                   }
                                 ;
 
 WriteStatement                  : WRITE_T OPEN_PAREN_T ExpressionList CLOSE_PAREN_T
-                                  { 
+                                  {
                                     $$ = new WriteStatementNode($3);
                                   }
                                 ;

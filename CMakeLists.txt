@@ -92,6 +92,7 @@ set(cpsl_srcs
   src/Type.hpp
   src/TypeDeclarationNode.cpp
   src/TypeDeclarationNode.hpp
+  src/TypeNode.hpp
   src/UnaryMinusNode.cpp
   src/UnaryMinusNode.hpp
   src/VariableDeclarationNode.cpp

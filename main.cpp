@@ -64,9 +64,9 @@ int main(int argc, char** argv)
         LOG(ERROR) << msg << std::endl;
         exit(EXIT_FAILURE);
       }
+      LOG(INFO) << "most registers used: " << 18 - RegisterPool::Register::low;
     }
   }
-  LOG(INFO) << "most registers used: " << 18 - RegisterPool::Register::low;
 }
 
 void setLogLevel(std::string& config,
