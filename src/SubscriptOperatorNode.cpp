@@ -1,8 +1,26 @@
 #include "SubscriptOperatorNode.hpp"
 
+#include <sstream>
+struct cout_redirect
+{
+  cout_redirect(std::streambuf* new_buffer)
+    : old(std::cout.rdbuf(new_buffer))
+  {}
+
+  ~cout_redirect() { std::cout.rdbuf(old); }
+
+private:
+  std::streambuf* old;
+};
+
 std::string SubscriptOperatorNode::getId()
 {
-  return lValue->getId() + "[ expr ]";
+  std::stringstream s_expr;
+  { // remporarily redirect stdout to the s_expr stringstream
+    cout_redirect redirect(s_expr.rdbuf());
+    expr->emitSource("");
+  }
+  return lValue->getId() + "[" + s_expr.str() + "]";
 }
 
 std::shared_ptr<Type> getArrayType(LvalueNode* lValue)

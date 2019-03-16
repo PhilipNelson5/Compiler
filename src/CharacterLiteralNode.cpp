@@ -13,6 +13,11 @@ CharacterLiteralNode::CharacterLiteralNode(char character)
   LOG(DEBUG) << "NEW CHARACTER NODE";
 }
 
+bool CharacterLiteralNode::isLiteral()
+{
+  return true;
+}
+
 std::string CharacterLiteralNode::toString() const
 {
   switch (character)
@@ -34,7 +39,8 @@ std::string CharacterLiteralNode::toString() const
 
 void CharacterLiteralNode::emitSource(std::string indent)
 {
-  std::cout << indent << "'" << toString() << "'";
+  (void)indent;
+  std::cout << "'" << toString() << "'";
 }
 
 Value CharacterLiteralNode::emit()

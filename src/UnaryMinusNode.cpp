@@ -3,14 +3,14 @@
 #include <iostream>
 
 UnaryMinusNode::UnaryMinusNode(ExpressionNode*& right)
-  : ExpressionNode(BooleanType::get())
+  : ExpressionNode(IntegerType::get())
   , rhs(right)
 {}
 
 void UnaryMinusNode::emitSource(std::string indent)
 {
   std::cout << indent;
-  std::cout << "~";
+  std::cout << "-";
   rhs->emitSource("");
 }
 

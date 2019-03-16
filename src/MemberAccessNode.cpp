@@ -61,7 +61,7 @@ Value MemberAccessNode::emit()
     {
       auto r_lval = v_lval.getRegister();
       auto [offset2, type] = record->lookupId(id);
-      std::cout << "addi " << r_lval << ", " << offset2
+      std::cout << "addi " << r_lval << ", " << r_lval << ", " << offset2
                 << " # access member: " << id << '\n';
       return {std::move(r_lval), Value::RegisterIs::ADDRESS};
     }

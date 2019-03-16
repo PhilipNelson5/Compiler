@@ -51,6 +51,22 @@ Value AssignmentStatementNode::emit()
                   << " # paste\n";
       }
     }
+    if (RecordType* record = dynamic_cast<RecordType*>(expr->type.get()))
+    {
+      auto size = record->size();
+      auto r_expr = v_expr.getRegister();
+      auto [offset, memoryLocation] = std::get<std::pair<int, int>>(v_id.value);
+      RegisterPool::Register tmp;
+      std::cout << "# Deep Copy\n";
+      for (auto i = 0; i < size; i += 4)
+      {
+        std::cout << "lw " << tmp << ", " << i << "(" << r_expr << ")"
+                  << " # copy\n";
+        std::cout << "sw " << tmp << ", " << offset + i << "($"
+                  << memoryLocation << ")"
+                  << " # paste\n";
+      }
+    }
     else
     {
       auto r_expr = v_expr.getTheeIntoARegister();
@@ -59,9 +75,27 @@ Value AssignmentStatementNode::emit()
   }
   else if (v_id.isRegister())
   {
-    auto r_id = v_id.getRegister();
-    auto r_expr = v_expr.getTheeIntoARegister();
-    std::cout << "sw " << r_expr << ", 0(" << r_id << ")";
+    if (RecordType* record = dynamic_cast<RecordType*>(expr->type.get()))
+    {
+      auto size = record->size();
+      auto r_expr = v_expr.getRegister();
+      auto r_id = v_id.getRegister();
+      RegisterPool::Register tmp;
+      std::cout << "# Deep Copy\n";
+      for (auto i = 0; i < size; i += 4)
+      {
+        std::cout << "lw " << tmp << ", " << i << "(" << r_expr << ")"
+                  << " # copy\n";
+        std::cout << "sw " << tmp << ", " << i << "(" << r_id << ")"
+                  << " # paste\n";
+      }
+    }
+    else
+    {
+      auto r_id = v_id.getRegister();
+      auto r_expr = v_expr.getTheeIntoARegister();
+      std::cout << "sw " << r_expr << ", 0(" << r_id << ")";
+    }
   }
   else
   {

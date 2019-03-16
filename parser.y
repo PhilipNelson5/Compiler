@@ -522,7 +522,7 @@ Expression                      : Expression OR_T Expression                   {
                                 | Expression DIVIDE_T Expression               { $$ = makeDivideNode($1, $3); }
                                 | Expression MOD_T Expression                  { $$ = makeModuloNode($1, $3); }
                                 | NOT_T Expression                             { $$ = new NotNode($2); }
-                                | MINUS_T Expression %prec UNARY_MINUS_T       { $$ = new UnaryMinusNode($2); }
+                                | MINUS_T Expression %prec UNARY_MINUS_T       { $$ = makeUnaryMinusNode($2); }
                                 | OPEN_PAREN_T Expression CLOSE_PAREN_T        { $$ = $2; }
                                 | ProcedureCall                                { }
                                 | CHR_T OPEN_PAREN_T Expression CLOSE_PAREN_T  { $$ = new CharacterExpressionNode($3); }

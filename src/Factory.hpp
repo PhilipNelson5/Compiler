@@ -18,7 +18,8 @@
 #include "SubtractNode.hpp"            // for SubtractNode
 #include "SymbolTable.hpp"             // for SymbolTable, symbol_table
 #include "Type.hpp"                    // for ArrayType, IntegerType, Chara...
-#include "log/easylogging++.h"         // for Writer, CERROR, LOG
+#include "UnaryMinusNode.hpp"
+#include "log/easylogging++.h" // for Writer, CERROR, LOG
 
 #include <memory>   // for shared_ptr, operator==, make_...
 #include <stdlib.h> // for exit, EXIT_FAILURE
@@ -41,9 +42,10 @@ LiteralType* literalize(ExpressionNode* e)
 }
 
 template<typename NodeType, typename LiteralType, typename F>
-ExpressionNode* makeNode(ExpressionNode* e1, ExpressionNode* e2, F f)
+ExpressionNode* makeBinaryExpressionNode(ExpressionNode* e1,
+                                         ExpressionNode* e2,
+                                         F f)
 {
-
   // ----------------------------------------
   // Find expression 1 as literal or constant
   // ----------------------------------------
@@ -68,45 +70,69 @@ ExpressionNode* makeNode(ExpressionNode* e1, ExpressionNode* e2, F f)
   }
 }
 
+template<typename NodeType, typename LiteralType, typename F>
+ExpressionNode* makeUnaryExpresisonNode(ExpressionNode* e, F f)
+{
+  // ----------------------------------------
+  // Find expression as literal or constant
+  // ----------------------------------------
+  LiteralType* lit = literalize<LiteralType>(e);
+
+  if (lit)
+  {
+    return new LiteralType(f(lit->value));
+  }
+  else
+  {
+    return new NodeType(e);
+  }
+}
+
+ExpressionNode* makeUnaryMinusNode(ExpressionNode* e)
+{
+  return makeUnaryExpresisonNode<UnaryMinusNode, IntegerLiteralNode>(
+    e, [](auto v) { return -v; });
+}
+
 ExpressionNode* makeAddNode(ExpressionNode* e1, ExpressionNode* e2)
 {
-  return makeNode<AddNode, IntegerLiteralNode>(
+  return makeBinaryExpressionNode<AddNode, IntegerLiteralNode>(
     e1, e2, [](auto v1, auto v2) { return v1 + v2; });
 }
 
 ExpressionNode* makeSubtractNode(ExpressionNode* e1, ExpressionNode* e2)
 {
-  return makeNode<SubtractNode, IntegerLiteralNode>(
+  return makeBinaryExpressionNode<SubtractNode, IntegerLiteralNode>(
     e1, e2, [](auto v1, auto v2) { return v1 - v2; });
 }
 
 ExpressionNode* makeMultiplyNode(ExpressionNode* e1, ExpressionNode* e2)
 {
-  return makeNode<MultiplyNode, IntegerLiteralNode>(
+  return makeBinaryExpressionNode<MultiplyNode, IntegerLiteralNode>(
     e1, e2, [](auto v1, auto v2) { return v1 * v2; });
 }
 
 ExpressionNode* makeDivideNode(ExpressionNode* e1, ExpressionNode* e2)
 {
-  return makeNode<DivideNode, IntegerLiteralNode>(
+  return makeBinaryExpressionNode<DivideNode, IntegerLiteralNode>(
     e1, e2, [](auto v1, auto v2) { return v1 / v2; });
 }
 
 ExpressionNode* makeModuloNode(ExpressionNode* e1, ExpressionNode* e2)
 {
-  return makeNode<ModuloNode, IntegerLiteralNode>(
+  return makeBinaryExpressionNode<ModuloNode, IntegerLiteralNode>(
     e1, e2, [](auto v1, auto v2) { return v1 % v2; });
 }
 
 ExpressionNode* makeNotEqualNode(ExpressionNode* e1, ExpressionNode* e2)
 {
-  return makeNode<NotEqualExpressionNode, IntegerLiteralNode>(
+  return makeBinaryExpressionNode<NotEqualExpressionNode, IntegerLiteralNode>(
     e1, e2, [](auto v1, auto v2) { return v1 != v2; });
 }
 
 ExpressionNode* makeEqualNode(ExpressionNode* e1, ExpressionNode* e2)
 {
-  return makeNode<EqualExpressionNode, IntegerLiteralNode>(
+  return makeBinaryExpressionNode<EqualExpressionNode, IntegerLiteralNode>(
     e1, e2, [](auto v1, auto v2) { return v1 == v2; });
 }
 

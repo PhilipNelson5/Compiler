@@ -10,9 +10,9 @@ public:
     : ExpressionNode(type)
   {}
 
-  //bool isConstant() { return true; }
+  bool isConstant() { return true; }
 
-  //bool isLiteral() { return true; }
+  bool isLiteral() { return true; }
 };
 
 #endif
