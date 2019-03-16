@@ -8,11 +8,18 @@
 #include <utility>
 #include <variant>
 
-using pair = std::pair<int, int>;
-using Register = RegisterPool::Register;
-
 struct Value
 {
+  enum RegisterIs
+  {
+    VALUE,
+    ADDRESS
+  };
+
+  using intPair = std::pair<int, int>;
+  using Register = RegisterPool::Register;
+  using registerPair = std::pair<Register, RegisterIs>;
+
   Value()
     : value()
   {}
@@ -33,20 +40,45 @@ struct Value
     : value(std::make_pair(offset, memoryLocation))
   {}
 
-  Value(RegisterPool::Register&& reg)
-    : value(std::move(reg))
+  Value(RegisterPool::Register&& reg, RegisterIs regIs = RegisterIs::VALUE)
+    : value(std::make_pair(std::move(reg), regIs))
   {}
 
-  bool isLvalue() { return std::holds_alternative<pair>(value); }
+  bool isLvalue() const { return std::holds_alternative<intPair>(value); }
 
-  std::string getLocation()
+  bool isRegister() const
+  {
+    return std::holds_alternative<registerPair>(value);
+  }
+
+  bool holdsAddress() const
+  {
+    if (!isRegister())
+    {
+      LOG(ERROR) << "Not a register";
+      exit(EXIT_FAILURE);
+    }
+    return std::get<registerPair>(value).second == RegisterIs::ADDRESS;
+  }
+
+  Register getRegister()
+  {
+    if (!isRegister())
+    {
+      LOG(ERROR) << "Not a register";
+      exit(EXIT_FAILURE);
+    }
+    return std::move(std::get<registerPair>(value).first);
+  }
+
+  std::string getLocation() const
   {
     if (!isLvalue())
     {
       LOG(ERROR) << "No memory associated with this value";
       exit(EXIT_FAILURE);
     }
-    auto p = std::get<pair>(value);
+    auto p = std::get<intPair>(value);
     return std::to_string(p.first) + "($" + std::to_string(p.second) + ")";
   }
 
@@ -91,16 +123,21 @@ struct Value
                 << '\n';
       return result;
     }
-    else if (std::holds_alternative<pair>(value))
+    else if (std::holds_alternative<intPair>(value))
     {
       RegisterPool::Register result;
-      std::cout << "lw " << result << ", " << std::get<pair>(value).first
-                << "($" << std::get<pair>(value).second << ")\n";
+      std::cout << "lw " << result << ", " << std::get<intPair>(value).first
+                << "($" << std::get<intPair>(value).second << ")\n";
       return result;
     }
-    else if (std::holds_alternative<Register>(value))
+    else if (std::holds_alternative<registerPair>(value))
     {
-      return std::move(std::get<Register>(value));
+      if (std::get<registerPair>(value).second == RegisterIs::ADDRESS)
+      {
+        std::cout << "lw " << std::get<registerPair>(value).first << ", "
+                  << "0(" << std::get<registerPair>(value).first << ")" << '\n';
+      }
+      return std::move(std::get<registerPair>(value).first);
     }
     else if (std::holds_alternative<std::monostate>(value))
     {
@@ -109,12 +146,13 @@ struct Value
     throw "Uninitialized Value";
   }
 
-  std::variant<std::monostate,      // uninitialized state
-               int,                 // const int value
-               char,                // const char value
-               std::string,         // const string label
-               std::pair<int, int>, // offset, memory location
-               Register>            // Register
+  std::variant<std::monostate,                  // uninitialized state
+               int,                             // const int value
+               char,                            // const char value
+               std::string,                     // const string label
+               std::pair<int, int>,             // offset, memory location
+               std::pair<Register, RegisterIs>> // Register, Register is value
+                                                // or address
     value;
 };
 

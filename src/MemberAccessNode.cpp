@@ -49,16 +49,24 @@ Value MemberAccessNode::emit()
   if (RecordType* record = dynamic_cast<RecordType*>(lValue->type.get()))
   {
     auto v_lval = lValue->emit();
-    if (!v_lval.isLvalue())
+    if (v_lval.isLvalue())
     {
-      LOG(ERROR) << lValue->getId() << " is not an lvalue";
-      exit(EXIT_FAILURE);
-    }
-    auto [offset1, memoryLocation]
-      = std::get<std::pair<int, int>>(v_lval.value);
-    auto [offset2, type] = record->lookupId(id);
+      auto [offset1, memoryLocation]
+        = std::get<std::pair<int, int>>(v_lval.value);
+      auto [offset2, type] = record->lookupId(id);
 
-    return {offset1 + offset2, memoryLocation};
+      return {offset1 + offset2, memoryLocation};
+    }
+    if (v_lval.isRegister())
+    {
+      auto r_lval = v_lval.getRegister();
+      auto [offset2, type] = record->lookupId(id);
+      std::cout << "addi " << r_lval << ", " << offset2
+                << " # access member: " << id << '\n';
+      return {std::move(r_lval), Value::RegisterIs::ADDRESS};
+    }
+    LOG(ERROR) << lValue->getId() << " is not an lvalue";
+    exit(EXIT_FAILURE);
   }
   else
   {

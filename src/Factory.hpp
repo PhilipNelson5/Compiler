@@ -8,61 +8,52 @@
 #include "DivideNode.hpp"              // for DivideNode
 #include "EqualExpressionNode.hpp"     // for EqualExpressionNode
 #include "ExpressionNode.hpp"          // for ExpressionNode
-#include "IdentifierNode.hpp"          // for IdentifierNode
 #include "IntegerLiteralNode.hpp"      // for IntegerLiteralNode
 #include "LiteralNode.hpp"             // for LiteralNode
+#include "LvalueNode.hpp"              // for LvalueNode
 #include "ModuloNode.hpp"              // for ModuloNode
 #include "MultiplyNode.hpp"            // for MultiplyNode
 #include "NotEqualExpressionNode.hpp"  // for NotEqualExpressionNode
 #include "StringLiteralNode.hpp"       // for StringLiteralNode
 #include "SubtractNode.hpp"            // for SubtractNode
 #include "SymbolTable.hpp"             // for SymbolTable, symbol_table
-#include "Type.hpp"                    // for BooleanType, CharacterType
+#include "Type.hpp"                    // for ArrayType, IntegerType, Chara...
 #include "log/easylogging++.h"         // for Writer, CERROR, LOG
 
-#include <memory>   // for shared_ptr, operator==, __sha...
+#include <memory>   // for shared_ptr, operator==, make_...
 #include <stdlib.h> // for exit, EXIT_FAILURE
 #include <string>   // for string
+
+template<typename LiteralType>
+LiteralType* literalize(ExpressionNode* e)
+{
+  if (e->isLiteral())
+  {
+    return dynamic_cast<LiteralType*>(e);
+  }
+  else if (e->isConstant())
+  {
+    auto c1 = dynamic_cast<LvalueNode*>(e);
+    return dynamic_cast<LiteralType*>(
+      symbol_table.lookupConst(c1->getId()).get());
+  }
+  return nullptr;
+}
 
 template<typename NodeType, typename LiteralType, typename F>
 ExpressionNode* makeNode(ExpressionNode* e1, ExpressionNode* e2, F f)
 {
-  LiteralType* lit1 = nullptr;
-  LiteralType* lit2 = nullptr;
 
   // ----------------------------------------
   // Find expression 1 as literal or constant
   // ----------------------------------------
-  if (e1->isLiteral())
-  {
-    lit1 = dynamic_cast<LiteralType*>(e1);
-  }
-  else if (e1->isConstant())
-  {
-    auto c1 = dynamic_cast<LvalueNode*>(e1);
-    lit1 = dynamic_cast<LiteralType*>(symbol_table.lookupConst(c1->getId()).get());
-  }
-  else
-  {
-    return new NodeType(e1, e2);
-  }
+  LiteralType* lit1 = literalize<LiteralType>(e1);
+
 
   // ----------------------------------------
   // Find expression 2 as literal or constant
   // ----------------------------------------
-  if (e2->isLiteral())
-  {
-    lit2 = dynamic_cast<LiteralType*>(e2);
-  }
-  else if (e2->isConstant())
-  {
-    auto c2 = dynamic_cast<LvalueNode*>(e2);
-    lit2 = dynamic_cast<LiteralType*>(symbol_table.lookupConst(c2->getId()).get());
-  }
-  else
-  {
-    return new NodeType(e1, e2);
-  }
+  LiteralType* lit2 = literalize<LiteralType>(e2);
 
   // ---------------------------------
   // If both are found, constant fold;
@@ -170,6 +161,34 @@ ConstantDeclarationNode* makeConstantDeclarationNode(std::string id,
     LOG(ERROR) << "Non-Const expression in Constant Declaration";
     exit(EXIT_FAILURE);
   }
+}
+
+std::shared_ptr<ArrayType> makeArray(ExpressionNode* e1,
+                                     ExpressionNode* e2,
+                                     TypeNode* type)
+{
+  if (e1->type != e2->type)
+  {
+    LOG(ERROR) << "array bounds must have the same type";
+    exit(EXIT_FAILURE);
+  }
+  if (e1->type == IntegerType::get())
+  {
+    IntegerLiteralNode* i1 = literalize<IntegerLiteralNode>(e1);
+    IntegerLiteralNode* i2 = literalize<IntegerLiteralNode>(e2);
+    return std::make_shared<ArrayType>(
+      i1->value, i2->value, type->type, IntegerType::get());
+  }
+  if (e1->type == CharacterType::get())
+  {
+    CharacterLiteralNode* c1 = literalize<CharacterLiteralNode>(e1);
+    CharacterLiteralNode* c2 = literalize<CharacterLiteralNode>(e2);
+    return std::make_shared<ArrayType>(
+      c1->character, c2->character, type->type, IntegerType::get());
+  }
+
+  LOG(ERROR) << "array bounds must be integer or character type";
+  exit(EXIT_FAILURE);
 }
 
 #if 0

@@ -30,18 +30,47 @@ Value AssignmentStatementNode::emit()
   emitSource("");
 
   auto v_id = identifier->emit();
-  if (!v_id.isLvalue())
+  auto v_expr = expr->emit();
+  // auto size = expr->type->size();
+  // assign(v_expr, v_id, size);
+  if (v_id.isLvalue())
+  {
+    if (ArrayType* array = dynamic_cast<ArrayType*>(expr->type.get()))
+    {
+      auto size = array->size();
+      auto r_expr = v_expr.getRegister();
+      auto [offset, memoryLocation] = std::get<std::pair<int, int>>(v_id.value);
+      RegisterPool::Register tmp;
+      std::cout << "# Deep Copy\n";
+      for (auto i = 0; i < size; i += 4)
+      {
+        std::cout << "lw " << tmp << ", " << i << "(" << r_expr << ")"
+                  << " # copy\n";
+        std::cout << "sw " << tmp << ", " << offset + i << "($"
+                  << memoryLocation << ")"
+                  << " # paste\n";
+      }
+    }
+    else
+    {
+      auto r_expr = v_expr.getTheeIntoARegister();
+      std::cout << "sw " << r_expr << ", " << v_id.getLocation();
+    }
+  }
+  else if (v_id.isRegister())
+  {
+    auto r_id = v_id.getRegister();
+    auto r_expr = v_expr.getTheeIntoARegister();
+    std::cout << "sw " << r_expr << ", 0(" << r_id << ")";
+  }
+  else
   {
     LOG(ERROR) << identifier->getId() << " is not an Lvalue";
     exit(EXIT_FAILURE);
   }
-  auto v_expr = expr->emit();
-  auto r_expr = v_expr.getTheeIntoARegister();
-
-  std::cout << "sw " << r_expr << ", " << v_id.getLocation();
-
   std::cout << " # ";
   emitSource("");
 
-  return r_expr;
+  // return r_expr;
+  return {};
 }

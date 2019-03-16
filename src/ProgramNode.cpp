@@ -35,7 +35,7 @@ void ProgramNode::emitSource(std::string indent)
 
   // Type Declarations
   // ---------------------
-  if (varDecls.size() > 0)
+  if (typeDecls.size() > 0)
   {
     std::cout << indent << "TYPE" << std::endl;
     for (auto&& typeDecl : typeDecls)

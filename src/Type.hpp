@@ -144,14 +144,15 @@ public:
   virtual void emitSource(std::string indent) override
   {
     (void)indent;
-    std::cout << name();
+    std::cout << "array [" << lb << ":" << ub << "] of ";
+    elementType->emitSource(indent + "  ");
   }
 
   const int lb, ub;
   const std::shared_ptr<Type> indexType;
   const std::shared_ptr<Type> elementType;
 
-  virtual int size() override { return ub - lb + 1 * elementType->size(); }
+  virtual int size() override { return (ub - lb + 1) * elementType->size(); }
 };
 
 //------------------------------------------------------------------------------

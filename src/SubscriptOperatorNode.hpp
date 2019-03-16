@@ -6,7 +6,8 @@
 class SubscriptOperatorNode : public LvalueNode
 {
 public:
-  SubscriptOperatorNode(LvalueNode* lVal, ExpressionNode* expr);
+  SubscriptOperatorNode(LvalueNode* lValue, ExpressionNode* expr);
+  virtual std::string getId() override;
   virtual void emitSource(std::string indent) override;
   virtual Value emit() override;
 

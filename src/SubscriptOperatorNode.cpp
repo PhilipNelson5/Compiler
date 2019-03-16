@@ -1,5 +1,10 @@
 #include "SubscriptOperatorNode.hpp"
 
+std::string SubscriptOperatorNode::getId()
+{
+  return lValue->getId() + "[ expr ]";
+}
+
 std::shared_ptr<Type> getArrayType(LvalueNode* lValue)
 {
   if (ArrayType* array = dynamic_cast<ArrayType*>(lValue->type.get()))
@@ -21,12 +26,64 @@ SubscriptOperatorNode::SubscriptOperatorNode(LvalueNode* lValue,
 
 void SubscriptOperatorNode::emitSource(std::string indent)
 {
-  std::cout << indent << '[';
+  (void)indent;
+  lValue->emitSource(indent);
+  std::cout << '[';
   expr->emitSource("");
   std::cout << ']';
 }
 
 Value SubscriptOperatorNode::emit()
 {
-  throw "SubscriptOperatorNode::emit() not implemented";
+  if (ArrayType* array = dynamic_cast<ArrayType*>(lValue->type.get()))
+  {
+    auto v_lval = lValue->emit();
+
+    std::cout << "# ";
+    emitSource("");
+    std::cout << '\n';
+
+    auto r_index = expr->emit().getTheeIntoARegister();
+    std::cout << "addi " << r_index << ", " << r_index << ", " << -array->lb
+              << " # adjust the index ( indx - lb )\n";
+
+    RegisterPool::Register elementSize;
+    std::cout << "li " << elementSize << ", " << array->elementType->size()
+              << " # get array element size\n";
+
+    std::cout << "mult " << r_index << ", " << elementSize << '\n';
+    std::cout << "mflo " << r_index
+              << " # multiply the number of elements by the element size\n";
+
+    if (v_lval.isLvalue())
+    {
+      auto [offset, memoryLocation]
+        = std::get<std::pair<int, int>>(v_lval.value);
+
+      std::cout << "addi " << r_index << ", " << r_index << ", " << offset
+                << " # add the offset to the index\n";
+
+      std::cout << "add " << r_index << ", " << r_index << ", $"
+                << memoryLocation
+                << " # add the memory location to the index\n";
+
+      return {std::move(r_index), Value::RegisterIs::ADDRESS};
+    }
+    if (v_lval.isRegister())
+    {
+      auto r_lval = v_lval.getRegister();
+
+      std::cout << "add " << r_index << ", " << r_index << ", " << r_lval
+                << " # add the index to the memory address\n";
+
+      return {std::move(r_index), Value::RegisterIs::ADDRESS};
+    }
+    LOG(ERROR) << lValue->getId() << " is not an Lvalue, no memory associated";
+    exit(EXIT_FAILURE);
+  }
+  else
+  {
+    LOG(ERROR) << lValue->getId() << " is not an array type";
+    exit(EXIT_FAILURE);
+  }
 }

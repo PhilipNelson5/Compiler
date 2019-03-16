@@ -42,6 +42,7 @@
 #include "src/StopStatementNode.hpp"
 #include "src/StringLiteralNode.hpp"
 #include "src/SubtractNode.hpp"
+#include "src/SubscriptOperatorNode.hpp"
 #include "src/SuccessorExpressionNode.hpp"
 #include "src/SymbolTable.hpp"
 #include "src/TypeDeclarationNode.hpp"
@@ -363,7 +364,7 @@ Field                           : IdentList COLON_T Type SEMI_COLON_T { $$ = new
 
 ArrayType                       : ARRAY_T
                                   OPEN_BRACKET_T Expression COLON_T Expression CLOSE_BRACKET_T
-                                  OF_T Type {}
+                                  OF_T Type { $$ = new TypeNode(makeArray($3, $5, $8)); }
                                 ;
 
 IdentList                       : IdentList COMMA_T ID_T
@@ -540,7 +541,7 @@ LValue                          : LValue DOT_T ID_T
                                   }
                                 | LValue OPEN_BRACKET_T Expression CLOSE_BRACKET_T
                                   {
-                                    $$ = nullptr;
+                                    $$ = new SubscriptOperatorNode($1, $3);
                                   }
                                 | ID_T
                                   {
