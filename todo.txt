@@ -7,3 +7,12 @@
 [X] [X] test/simple_expressions/io.cpsl
 [X] [X] test/simple_expressions/long_expression.cpsl
 [X] [X] test/simple_expressions/stop.cpsl
+
+[X] [X] test/udt/array_char.cpsl
+[X] [X] test/udt/array.cpsl
+[X] [X] test/udt/multi_array.cpsl
+[X] [X] test/udt/record_array.cpsl
+[X] [X] test/udt/record.cpsl
+[X] [X] test/udt/record_decl.cpsl
+[X] [X] test/udt/simple_array.cpsl
+[X] [X] test/udt/simple_record.cpsl
