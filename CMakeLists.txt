@@ -109,6 +109,8 @@ set(cpsl_srcs
 )
 source_group("Cpsl" FILES ${cpsl_srcs})
 
+add_subdirectory(fmt)
+
 add_executable(cpsl ${cpsl_srcs})
-target_link_libraries(cpsl ${FLEX_LIBRARIES} ${BISON_LIBRARIES})
+target_link_libraries(cpsl ${FLEX_LIBRARIES} ${BISON_LIBRARIES} fmt)
 target_include_directories(cpsl PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

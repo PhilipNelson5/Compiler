@@ -1,8 +1,9 @@
 #include "RegisterPool.hpp"
 
-#include "log/easylogging++.h"
+#include "log/easylogging++.h" // for Writer, CERROR, LOG
 
-#include <cmath>
+#include <algorithm> // for min
+#include <stdlib.h>  // for exit, EXIT_FAILURE
 
 namespace RegisterPool
 {

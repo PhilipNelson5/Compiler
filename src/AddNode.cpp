@@ -1,11 +1,12 @@
 #include "AddNode.hpp"
 
-#include "IntegerLiteralNode.hpp" // for IntegerLiteralNode
-#include "RegisterPool.hpp"       // for operator<<, Register
-#include "Type.hpp"               // for IntegerType, Type, CharacterType
-#include "log/easylogging++.h"    // for Writer, CERROR, LOG
+#include "../fmt/include/fmt/core.h" // for print, format
+#include "IntegerLiteralNode.hpp"    // for IntegerLiteralNode
+#include "RegisterPool.hpp"          // for Register
+#include "Type.hpp"                  // for IntegerType, Type, CharacterType
+#include "log/easylogging++.h"       // for Writer, CERROR, LOG
 
-#include <iostream> // for operator<<, ostream, cout, basic_o...
+#include <iostream> // for operator<<, cout, ostream
 
 AddNode::AddNode(ExpressionNode*& left, ExpressionNode*& right)
   : ExpressionNode(IntegerType::get())
@@ -25,8 +26,9 @@ Value AddNode::emit()
 {
   if (lhs->type != rhs->type)
   {
-    LOG(ERROR) << "mismatched types in add expression: " << lhs->type->name()
-               << " and " << rhs->type->name();
+    LOG(ERROR) << fmt::format("mismatched types in add expression: {} and {}",
+                              lhs->type->name(),
+                              rhs->type->name());
   }
 
   if (lhs->type != IntegerType::get() && lhs->type != CharacterType::get())
@@ -45,8 +47,8 @@ Value AddNode::emit()
     auto r_rhs = v_rhs.getTheeIntoARegister();
     RegisterPool::Register result;
 
-    std::cout << "addi " << result << ", " << lhs_const->value << ", " << r_rhs
-              << " # ";
+    fmt::print("addi {0}, {1}, {2} # ", result, lhs_const->value, r_rhs);
+
     emitSource("");
     std::cout << '\n';
 
@@ -59,8 +61,8 @@ Value AddNode::emit()
     auto r_lhs = v_lhs.getTheeIntoARegister();
     RegisterPool::Register result;
 
-    std::cout << "addi " << result << ", " << r_lhs << ", " << rhs_const->value
-              << " # ";
+    fmt::print("addi {0}, {1}, {2} # ", result, r_lhs, rhs_const->value);
+
     emitSource("");
     std::cout << '\n';
 
@@ -74,7 +76,8 @@ Value AddNode::emit()
     auto r_rhs = v_rhs.getTheeIntoARegister();
     RegisterPool::Register result;
 
-    std::cout << "add " << result << ", " << r_lhs << ", " << r_rhs << " # ";
+    fmt::print("add {0}, {1}, {2} # ", result, r_lhs, r_rhs);
+
     emitSource("");
     std::cout << '\n';
 
