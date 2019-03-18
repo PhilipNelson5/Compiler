@@ -1,5 +1,6 @@
 #include "UnaryMinusNode.hpp"
 
+#include "Type.hpp"
 #include <iostream>
 
 UnaryMinusNode::UnaryMinusNode(ExpressionNode*& right)

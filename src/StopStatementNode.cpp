@@ -1,6 +1,6 @@
 #include "StopStatementNode.hpp"
 
-#include <iostream>
+#include <iostream> // for operator<<, basic_ostream, char_traits, cout
 
 StopStatementNode::StopStatementNode() {}
 
@@ -12,8 +12,8 @@ void StopStatementNode::emitSource(std::string indent)
 Value StopStatementNode::emit()
 {
   std::cout << "li $v0, 10"
-            << " # load exit instruction" << std::endl;
-  std::cout << "syscall" << std::endl;
+            << " # load exit instruction" << '\n';
+  std::cout << "syscall" << '\n';
 
   return {};
 }

@@ -1,11 +1,14 @@
 #include "SymbolTable.hpp"
 
-#include "BooleanLiteralNode.hpp"
-#include "IntegerLiteralNode.hpp"
-#include "log/easylogging++.h"
+#include "../fmt/include/fmt/core.h" // for format
+#include "BooleanLiteralNode.hpp"    // for BooleanLiteralNode
+#include "LiteralNode.hpp"           // for LiteralNode
+#include "Type.hpp"                  // for Type, BooleanType, CharacterType
+#include "log/easylogging++.h"       // for Writer, LOG, CDEBUG, CERROR
 
-#include <iostream>
-#include <optional>
+#include <iostream> // for cout
+#include <stdlib.h> // for exit, EXIT_FAILURE
+#include <utility>  // for pair
 
 SymbolTable symbol_table;
 
@@ -14,10 +17,8 @@ SymbolTable::SymbolTable()
   // Enter Predefined Scope
   scopes.emplace_back();
   auto itPredefines = scopes.rbegin();
-  itPredefines->constants.emplace(std::string("true"),
-                                  new BooleanLiteralNode(1));
-  itPredefines->constants.emplace(std::string("false"),
-                                  new BooleanLiteralNode(0));
+  itPredefines->constants.emplace(std::string("true"), new BooleanLiteralNode(1));
+  itPredefines->constants.emplace(std::string("false"), new BooleanLiteralNode(0));
 
   itPredefines->types.emplace(std::string("integer"), IntegerType::get());
   itPredefines->types.emplace(std::string("char"), CharacterType::get());
@@ -118,15 +119,13 @@ void SymbolTable::storeVariable(std::string id, std::shared_ptr<Type> type)
 
   if (foundVar != top->variables.end())
   {
-    LOG(ERROR) << id
-               << " is already defined as a variable in the current scope\n";
+    LOG(ERROR) << id << " is already defined as a variable in the current scope\n";
     exit(EXIT_FAILURE);
   }
 
   if (foundConst != top->constants.end())
   {
-    LOG(ERROR) << id
-               << " is already defined as a constant in the current scope\n";
+    LOG(ERROR) << id << " is already defined as a constant in the current scope\n";
     exit(EXIT_FAILURE);
   }
 
@@ -136,13 +135,11 @@ void SymbolTable::storeVariable(std::string id, std::shared_ptr<Type> type)
 
   // Insert in top level scope
   top->variables.emplace(id, var);
-  LOG(DEBUG) << id << ":" << type->name()
-             << " stored in variable symbol table at scope "
-             << scopes.size() - 1;
+  LOG(DEBUG) << fmt::format(
+    "{}:{} stored in variable symbol table at scope {}", id, type->name(), scopes.size() - 1);
 }
 
-void SymbolTable::storeConst(std::string id,
-                             std::shared_ptr<LiteralNode> literal)
+void SymbolTable::storeConst(std::string id, std::shared_ptr<LiteralNode> literal)
 {
   // Find on top level - error if already defined
   auto top = scopes.rbegin();
@@ -151,24 +148,23 @@ void SymbolTable::storeConst(std::string id,
 
   if (foundVar != top->variables.end())
   {
-    LOG(ERROR) << id
-               << " is already defined as a variable in the current scope\n";
+    LOG(ERROR) << id << " is already defined as a variable in the current scope\n";
     exit(EXIT_FAILURE);
   }
 
   if (foundConst != top->constants.end())
   {
-    LOG(ERROR) << id
-               << " is already defined as a constant in the current scope\n";
+    LOG(ERROR) << id << " is already defined as a constant in the current scope\n";
     exit(EXIT_FAILURE);
   }
 
   // Insert in top level scope
   top->constants.emplace(id, literal);
 
-  LOG(DEBUG) << id << ":" << literal->type->name()
-             << " stored in constant symbol table at scope "
-             << scopes.size() - 1;
+  LOG(DEBUG) << fmt::format("{}:{} stored in constant symbol table at scope {}",
+                            id,
+                            literal->type->name(),
+                            scopes.size() - 1);
 }
 
 void SymbolTable::storeType(std::string id, std::shared_ptr<Type> type)
@@ -185,8 +181,8 @@ void SymbolTable::storeType(std::string id, std::shared_ptr<Type> type)
 
   // Insert in top level scope
   top->types.emplace(id, type);
-  LOG(DEBUG) << id << ":" << type->name()
-             << " stored in type symbol table at scope " << scopes.size() - 1;
+  LOG(DEBUG) << fmt::format(
+    "{}:{} stored in type symbol table at scope {}", id, type->name(), scopes.size() - 1);
 }
 
 void SymbolTable::printStrings() const

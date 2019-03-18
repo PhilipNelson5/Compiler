@@ -1,7 +1,7 @@
 #ifndef LITERAL_NODE_HPP
 #define LITERAL_NODE_HPP
 
-#include "ExpressionNode.hpp"
+#include "ExpressionNode.hpp" // for ExpressionNode
 
 class LiteralNode : public ExpressionNode
 {

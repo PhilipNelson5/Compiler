@@ -1,6 +1,10 @@
 #include "LessThanEqualNode.hpp"
 
-#include <iostream>
+#include "../fmt/include/fmt/core.h" // for print
+#include "RegisterPool.hpp" // for operator<<, Register
+#include "Type.hpp"         // for BooleanType
+
+#include <iostream> // for operator<<, ostream, cout, basic_ostream
 
 LessThanEqualNode::LessThanEqualNode(ExpressionNode*& left,
                                      ExpressionNode*& right)
@@ -29,7 +33,7 @@ Value LessThanEqualNode::emit()
   auto r_rhs = v_rhs.getTheeIntoARegister();
   RegisterPool::Register result;
 
-  std::cout << "sle " << result << ", " << r_lhs << ", " << r_rhs << '\n';
+  fmt::print("sle {}, {}, {}\n", result, r_lhs, r_rhs);
 
   return result;
 }

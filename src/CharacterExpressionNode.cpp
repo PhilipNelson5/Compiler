@@ -1,7 +1,11 @@
 #include "CharacterExpressionNode.hpp"
-#include "log/easylogging++.h"
 
-#include <iostream>
+#include "../fmt/include/fmt/core.h" // for format
+#include "Type.hpp"                  // for CharacterType, IntegerType, Type
+#include "log/easylogging++.h"       // for Writer, CERROR, LOG
+
+#include <iostream> // for operator<<, char_traits, cout
+#include <stdlib.h> // for exit, EXIT_FAILURE
 
 CharacterExpressionNode::CharacterExpressionNode(ExpressionNode*& expr)
   : ExpressionNode(CharacterType::get())
@@ -19,8 +23,8 @@ Value CharacterExpressionNode::emit()
 {
   if (expr->type != IntegerType::get())
   {
-    LOG(ERROR) << "chr is not defined on " << expr->type->name()
-               << ". Must use integer type";
+    LOG(ERROR) << fmt::format("chr is not defined on {}. Must use integer type",
+                              expr->type->name());
     exit(EXIT_FAILURE);
   }
 

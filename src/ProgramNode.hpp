@@ -1,17 +1,18 @@
 #ifndef PROGRAM_NODE_HPP
 #define PROGRAM_NODE_HPP
 
-#include "ConstantDeclarationNode.hpp"
-#include "ListNode.hpp"
-#include "Node.hpp"
-#include "RegisterPool.hpp"
-#include "StatementNode.hpp"
-#include "TypeDeclarationNode.hpp"
-#include "VariableDeclarationNode.hpp"
+#include "Node.hpp"  // for Node
+#include "Value.hpp" // for Value
 
-#include <memory>
-#include <vector>
-
+#include <memory> // for shared_ptr
+#include <string> // for string
+#include <vector> // for vector
+class ConstantDeclarationNode;
+class StatementNode;
+class TypeDeclarationNode;
+class VariableDeclarationNode;
+template<typename T>
+class ListNode;
 
 class ProgramNode : public Node
 {

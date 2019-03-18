@@ -1,7 +1,7 @@
 #ifndef STATEMENT_NODE_HPP
 #define STATEMENT_NODE_HPP
 
-#include "Node.hpp"
+#include "Node.hpp" // for Node
 
 class StatementNode : public Node
 {

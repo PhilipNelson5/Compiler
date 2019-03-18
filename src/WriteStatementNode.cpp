@@ -1,5 +1,6 @@
 #include "WriteStatementNode.hpp"
 
+#include "Type.hpp"
 #include "log/easylogging++.h"
 
 #include <iostream>

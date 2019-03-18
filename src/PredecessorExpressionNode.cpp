@@ -1,6 +1,6 @@
 #include "PredecessorExpressionNode.hpp"
 
-#include <iostream>
+#include <iostream> // for operator<<, char_traits, cout, ostream, basic_os...
 
 PredecessorExpressionNode::PredecessorExpressionNode(ExpressionNode*& expr)
   : ExpressionNode(expr->type)

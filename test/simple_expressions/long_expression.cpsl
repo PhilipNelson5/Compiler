@@ -1,5 +1,5 @@
 var
- a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r : integer;
+ a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p : integer;
  x,y,z:integer;
 
 begin
@@ -19,11 +19,9 @@ begin
  n:=14;
  o:=15;
  p:=16;
- q:=17;
- r:=18;
 
 x:=(((a+b)*(c+d))-((e+f)*(g+h)))/(((i+j)*(k+l))-((m+n)*(o+p)));
-y:=(a+(b+(c+(d+(e+(f+(g+(h+(i+(j+(k+(l+(m+(n+(o+(p+(q+(r))))))))))))))))));
+y:=(a+(b+(c+(d+(e+(f+(g+(h+(i+(j+(k+(l+(m+(n+(o+(p))))))))))))))));
 z:=(a)/(b)
   +(a*a)/(b*b)
   +(a*a*a)/(b*b*b)
@@ -42,7 +40,7 @@ z:=(a)/(b)
   +(a*a*a*a*a*a*a*a*a*a*a*a*a*a*a*a)/(b*b*b*b*b*b*b*b*b*b*b*b*b*b*b*b)
   +(a*a*a*a*a*a*a*a*a*a*a*a*a*a*a*a*a)/(b*b*b*b*b*b*b*b*b*b*b*b*b*b*b*b*b)
   ;
-write(x,'\n');
-write(y,'\n');
-write(z,'\n');
+write("x = ",x,"    should be 0",'\n');
+write("y = ",y,"  should be 136\n");
+write("z = ",z," should be 2944\n");
 end.

@@ -1,7 +1,5 @@
 #include "ExpressionNode.hpp"
-
-#include "SymbolTable.hpp"
-#include "log/easylogging++.h"
+class Type;
 
 ExpressionNode::ExpressionNode(std::shared_ptr<Type> type)
   : type(type)

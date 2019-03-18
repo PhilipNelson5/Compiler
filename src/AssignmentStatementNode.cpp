@@ -1,13 +1,15 @@
 #include "AssignmentStatementNode.hpp"
 
 #include "ExpressionNode.hpp"  // for ExpressionNode
-#include "IdentifierNode.hpp"  // for IdentifierNode
-#include "RegisterPool.hpp"    // for operator<<
-#include "SymbolTable.hpp"     // for SymbolTable, Variable, symbol_table
+#include "LvalueNode.hpp"      // for LvalueNode
+#include "RegisterPool.hpp"    // for operator<<, Register
+#include "Type.hpp"            // for RecordType, ArrayType
 #include "log/easylogging++.h" // for Writer, CERROR, LOG
 
-#include <iostream> // for operator<<, ostream, cout, basic_ostream
+#include <iostream> // for operator<<, ostream, basic_ostream
 #include <stdlib.h> // for exit, EXIT_FAILURE
+#include <utility>  // for pair
+#include <variant>  // for get
 
 AssignmentStatementNode::AssignmentStatementNode(LvalueNode*& identifier,
                                                  ExpressionNode* expr)
@@ -44,11 +46,8 @@ Value AssignmentStatementNode::emit()
       std::cout << "# Deep Copy Array\n";
       for (auto i = 0; i < size; i += 4)
       {
-        std::cout << "lw " << tmp << ", " << i << "(" << r_expr << ")"
-                  << " # copy\n";
-        std::cout << "sw " << tmp << ", " << offset + i << "($"
-                  << memoryLocation << ")"
-                  << " # paste\n";
+        fmt::print("lw {}, {}({}) # copy\n", tmp, i, r_expr);
+        fmt::print("sw {}, {}(${}) # paste\n", tmp, offset + i, memoryLocation);
       }
     }
     else if (RecordType* record = dynamic_cast<RecordType*>(expr->type.get()))
@@ -60,17 +59,14 @@ Value AssignmentStatementNode::emit()
       std::cout << "# Deep Copy Record\n";
       for (auto i = 0; i < size; i += 4)
       {
-        std::cout << "lw " << tmp << ", " << i << "(" << r_expr << ")"
-                  << " # copy\n";
-        std::cout << "sw " << tmp << ", " << offset + i << "($"
-                  << memoryLocation << ")"
-                  << " # paste\n";
+        fmt::print("lw {}, {}({}) # copy\n", tmp, i, r_expr);
+        fmt::print("sw {}, {}(${}) # copy\n", tmp, offset + i, r_expr);
       }
     }
     else
     {
       auto r_expr = v_expr.getTheeIntoARegister();
-      std::cout << "sw " << r_expr << ", " << v_id.getLocation();
+      fmt::print("sw {}, {}", r_expr, v_id.getLocation());
     }
   }
   else if (v_id.isRegister())
@@ -84,17 +80,15 @@ Value AssignmentStatementNode::emit()
       std::cout << "# Deep Copy Record\n";
       for (auto i = 0; i < size; i += 4)
       {
-        std::cout << "lw " << tmp << ", " << i << "(" << r_expr << ")"
-                  << " # copy\n";
-        std::cout << "sw " << tmp << ", " << i << "(" << r_id << ")"
-                  << " # paste\n";
+        fmt::print("lw {}, {}({}) # copy\n", tmp, i, r_expr);
+        fmt::print("sw {}, {}({}) # paste\n", tmp, i, r_id);
       }
     }
     else
     {
       auto r_id = v_id.getRegister();
       auto r_expr = v_expr.getTheeIntoARegister();
-      std::cout << "sw " << r_expr << ", 0(" << r_id << ")";
+      fmt::print("sw {}, 0({}) # paste\n", r_expr, r_id);
     }
   }
   else
@@ -105,6 +99,5 @@ Value AssignmentStatementNode::emit()
   std::cout << " # ";
   emitSource("");
 
-  // return r_expr;
   return {};
 }

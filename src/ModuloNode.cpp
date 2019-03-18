@@ -1,8 +1,11 @@
 #include "ModuloNode.hpp"
 
-#include "log/easylogging++.h"
+#include "../fmt/include/fmt/core.h" // for print
+#include "RegisterPool.hpp"          // for operator<<, Register
+#include "Type.hpp"                  // for IntegerType, Type
+#include "log/easylogging++.h"       // for Writer, CERROR, LOG
 
-#include <iostream>
+#include <iostream> // for operator<<, ostream, cout, basic_ostream
 
 ModuloNode::ModuloNode(ExpressionNode*& left, ExpressionNode*& right)
   : ExpressionNode(IntegerType::get())
@@ -22,8 +25,10 @@ Value ModuloNode::emit()
 {
   if (lhs->type != rhs->type)
   {
-    LOG(ERROR) << "mismatched types in divide expression: "
-               << lhs->type->name() << " and " << rhs->type->name();
+    LOG(ERROR) << fmt::format(
+      "mismatched types in modulo expression: {} and {}",
+      lhs->type->name(),
+      rhs->type->name());
   }
 
   if (lhs->type != IntegerType::get())
@@ -41,8 +46,8 @@ Value ModuloNode::emit()
   auto r_rhs = v_rhs.getTheeIntoARegister();
   RegisterPool::Register result;
 
-  std::cout << "div " << r_lhs << ", " << r_rhs << '\n';
-  std::cout << "mfhi " << result << " # ";
+  fmt::print("div {}, {}\n", r_lhs, r_rhs);
+  fmt::print("mfhi {} # ", result);
   emitSource("");
   std::cout << '\n';
 

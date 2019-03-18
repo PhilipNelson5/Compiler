@@ -1,6 +1,8 @@
 #include "NotNode.hpp"
 
-#include <iostream>
+#include "Type.hpp" // for IntegerType
+
+#include <iostream> // for operator<<, cout, ostream
 
 NotNode::NotNode(ExpressionNode*& right)
   : ExpressionNode(IntegerType::get())

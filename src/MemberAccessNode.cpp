@@ -1,17 +1,19 @@
 #include "MemberAccessNode.hpp"
 
+#include "RegisterPool.hpp"    // for operator<<
 #include "Type.hpp"            // for RecordType
 #include "log/easylogging++.h" // for Writer, CERROR, LOG
 
-#include <iostream> // for operator<<, basic_ostream, cout, ostream
+#include <iostream> // for operator<<, basic_ostream, ostream
 #include <iterator> // for end
 #include <map>      // for _Rb_tree_iterator, map
 #include <stdlib.h> // for exit, EXIT_FAILURE
-#include <utility>  // for pair
+#include <utility>  // for move, pair
+#include <variant>  // for get
 
 std::string MemberAccessNode::getId()
 {
-  return lValue->getId() + "." + id;
+  return fmt::format("{}.{}", lValue->getId(), id);
 }
 
 std::shared_ptr<Type> lookupId(LvalueNode* lValue, std::string id)
@@ -25,7 +27,7 @@ std::shared_ptr<Type> lookupId(LvalueNode* lValue, std::string id)
     }
     else
     {
-      LOG(ERROR) << "Member " << id << " does not exist";
+      LOG(ERROR) << fmt::format("Member {} does not exist", id);
       exit(EXIT_FAILURE);
     }
   }
@@ -41,7 +43,7 @@ MemberAccessNode::MemberAccessNode(LvalueNode* lValue, std::string id)
 
 void MemberAccessNode::emitSource(std::string indent)
 {
-  std::cout << indent << lValue->getId() << '.' << id;
+  std::cout << indent << getId();
 }
 
 Value MemberAccessNode::emit()
@@ -51,8 +53,7 @@ Value MemberAccessNode::emit()
     auto v_lval = lValue->emit();
     if (v_lval.isLvalue())
     {
-      auto [offset1, memoryLocation]
-        = std::get<std::pair<int, int>>(v_lval.value);
+      auto [offset1, memoryLocation] = std::get<std::pair<int, int>>(v_lval.value);
       auto [offset2, type] = record->lookupId(id);
 
       return {offset1 + offset2, memoryLocation};
@@ -61,10 +62,13 @@ Value MemberAccessNode::emit()
     {
       auto r_lval = v_lval.getRegister();
       auto [offset2, type] = record->lookupId(id);
-      std::cout << "addi " << r_lval << ", " << r_lval << ", " << offset2
-                << " # access member: " << id << '\n';
+
+      fmt::print("addi {0}, {0}, {1}", r_lval, offset2);
+      fmt::print(" # access member: {}\n", id);
+
       return {std::move(r_lval), Value::RegisterIs::ADDRESS};
     }
+
     LOG(ERROR) << lValue->getId() << " is not an lvalue";
     exit(EXIT_FAILURE);
   }

@@ -1,17 +1,20 @@
 #ifndef TYPE_HPP
 #define TYPE_HPP
 
-#include "ListNode.hpp"
-#include "TypeNode.hpp"
-#include "log/easylogging++.h"
+#include "../fmt/include/fmt/core.h" // for print
+#include "ListNode.hpp"              // for ListNode
+#include "TypeNode.hpp"              // for TypeNode
+#include "log/easylogging++.h"       // for Writer, CERROR, LOG
 
-#include <iostream>
-#include <map>
-#include <memory>
-#include <numeric>
-#include <string>
-#include <utility>
-#include <vector>
+#include <iostream> // for operator<<, cout, ostream, basi...
+#include <iterator> // for end
+#include <map>      // for map, map<>::iterator, _Rb_tree_...
+#include <memory>   // for shared_ptr, make_shared, allocator
+#include <numeric>  // for accumulate
+#include <stdlib.h> // for exit, EXIT_FAILURE
+#include <string>   // for string, operator<<, operator+
+#include <utility>  // for pair, make_pair
+#include <vector>   // for vector
 
 //------------------------------------------------------------------------------
 // Type
@@ -144,7 +147,7 @@ public:
   virtual void emitSource(std::string indent) override
   {
     (void)indent;
-    std::cout << "array [" << lb << ":" << ub << "] of ";
+    fmt::print("array[{}:{}] of ", lb, ub);
     elementType->emitSource(indent + "  ");
   }
 

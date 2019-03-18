@@ -1,6 +1,0 @@
-var
-  a : array['A':'Z'] of integer;
-begin
-  a['B'] := 42;
-  write(a['B']);
-end.

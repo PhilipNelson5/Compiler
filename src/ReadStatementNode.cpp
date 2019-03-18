@@ -1,13 +1,13 @@
 #include "ReadStatementNode.hpp"
 
-#include "ListNode.hpp"        // for ListNode
-#include "LvalueNode.hpp"      // for LvalueNode
-#include "RegisterPool.hpp"    // for operator<<
-#include "Type.hpp"            // for CharacterType, IntegerType, Type
-#include "log/easylogging++.h" // for Writer, CERROR, LOG
+#include "../fmt/include/fmt/core.h" // for format, print
+#include "ListNode.hpp"              // for ListNode
+#include "LvalueNode.hpp"            // for LvalueNode
+#include "Type.hpp"                  // for CharacterType, IntegerType, Type
+#include "log/easylogging++.h"       // for Writer, CERROR, LOG
 
 #include <ext/alloc_traits.h> // for __alloc_traits<>::value_type
-#include <iostream>           // for operator<<, basic_ostream, cout, ostream
+#include <iostream>           // for operator<<, basic_ostream, cout
 #include <stdlib.h>           // for exit, EXIT_FAILURE
 
 ReadStatementNode::ReadStatementNode(ListNode<LvalueNode>*& identifiers)
@@ -36,7 +36,7 @@ Value ReadStatementNode::emit()
     auto v_id = identifier->emit();
     if (!v_id.isLvalue())
     {
-      LOG(ERROR) << identifier->getId() << " is not an Lvalue";
+      LOG(ERROR) << fmt::format("{} is not an Lvalue", identifier->getId());
       exit(EXIT_FAILURE);
     }
 
@@ -52,14 +52,14 @@ Value ReadStatementNode::emit()
     }
     else
     {
-      LOG(ERROR) << "type " << identifier->type->name()
-                 << " can not be read into";
+      LOG(ERROR) << fmt::format("type {} can not be read into",
+                                identifier->type->name());
       exit(EXIT_FAILURE);
     }
 
     std::cout << "syscall" << '\n';
-    std::cout << "sw $v0, " << v_id.getLocation();
-    std::cout << " # " << identifier->getId() << " = input" << '\n' << '\n';
+    fmt::print("sw $v0, {}", v_id.getLocation());
+    fmt::print(" # {} = user input\n\n", identifier->getId());
   }
 
   return {};

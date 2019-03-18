@@ -1,9 +1,14 @@
 #include "ProgramNode.hpp"
 
-#include "SymbolTable.hpp"
+#include "ConstantDeclarationNode.hpp" // for ConstantDeclarationNode
+#include "ListNode.hpp"                // for ListNode
+#include "StatementNode.hpp"           // for StatementNode
+#include "SymbolTable.hpp"             // for SymbolTable, symbol_table
+#include "TypeDeclarationNode.hpp"     // for TypeDeclarationNode
+#include "VariableDeclarationNode.hpp" // for VariableDeclarationNode
 
-#include <iostream>
-#include <memory>
+#include <iostream> // for operator<<, endl, basic_ostream
+#include <memory>   // for shared_ptr, __shared_ptr_access
 
 ProgramNode::ProgramNode(ListNode<ConstantDeclarationNode>*& cds,
                          ListNode<TypeDeclarationNode>*& tds,

@@ -1,6 +1,10 @@
 #include "NotEqualExpressionNode.hpp"
 
-#include <iostream>
+#include "../fmt/include/fmt/core.h" // for print
+#include "RegisterPool.hpp"          // for Register
+#include "Type.hpp"                  // for BooleanType
+
+#include <iostream> // for operator<<, cout, ostream, endl
 
 NotEqualExpressionNode::NotEqualExpressionNode(ExpressionNode*& lhs,
                                                ExpressionNode*& rhs)
@@ -29,7 +33,7 @@ Value NotEqualExpressionNode::emit()
   auto r_rhs = v_rhs.getTheeIntoARegister();
   RegisterPool::Register result;
 
-  std::cout << "sne " << result << ", " << r_lhs << ", " << r_rhs << '\n';
+  fmt::print("sne {}, {}, {}\n", result, r_lhs, r_rhs);
 
   return result;
 }

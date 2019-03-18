@@ -30,7 +30,7 @@ BraceWrapping:
   AfterUnion: 'true'
   BeforeCatch: 'true'
   BeforeElse: 'true'
-ColumnLimit: '80'
+ColumnLimit: '95'
 Cpp11BracedListStyle: 'true'
 FixNamespaceComments: 'true'
 IncludeBlocks: Regroup

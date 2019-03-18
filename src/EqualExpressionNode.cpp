@@ -1,6 +1,9 @@
 #include "EqualExpressionNode.hpp"
 
-#include <iostream>
+#include "RegisterPool.hpp" // for operator<<, Register
+#include "Type.hpp"         // for BooleanType
+
+#include <iostream> // for operator<<, ostream, cout, basic_ostream
 
 EqualExpressionNode::EqualExpressionNode(ExpressionNode*& lhs,
                                          ExpressionNode*& rhs)
@@ -29,7 +32,7 @@ Value EqualExpressionNode::emit()
   auto r_rhs = v_rhs.getTheeIntoARegister();
   RegisterPool::Register result;
 
-  std::cout << "seq " << result << ", " << r_lhs << ", " << r_rhs << '\n';
+  fmt::print("seq {}, {}, {}\n", result, r_lhs, r_rhs);
 
   return result;
 }

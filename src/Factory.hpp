@@ -1,6 +1,7 @@
 #ifndef FACTORY_HPP
 #define FACTORY_HPP
 
+#include "../fmt/include/fmt/core.h"   // for format
 #include "AddNode.hpp"                 // for AddNode
 #include "BooleanLiteralNode.hpp"      // for BooleanLiteralNode
 #include "CharacterLiteralNode.hpp"    // for CharacterLiteralNode
@@ -18,8 +19,9 @@
 #include "SubtractNode.hpp"            // for SubtractNode
 #include "SymbolTable.hpp"             // for SymbolTable, symbol_table
 #include "Type.hpp"                    // for ArrayType, IntegerType, Chara...
-#include "UnaryMinusNode.hpp"
-#include "log/easylogging++.h" // for Writer, CERROR, LOG
+#include "TypeNode.hpp"                // for TypeNode
+#include "UnaryMinusNode.hpp"          // for UnaryMinusNode
+#include "log/easylogging++.h"         // for Writer, CERROR, LOG
 
 #include <memory>   // for shared_ptr, operator==, make_...
 #include <stdlib.h> // for exit, EXIT_FAILURE
@@ -161,11 +163,12 @@ ExpressionNode* makeLiteralNode(LvalueNode* e)
       return new StringLiteralNode(
         dynamic_cast<StringLiteralNode*>(const_info.get())->string);
     }
-    LOG(ERROR) << e->getId() << " : " << e->type->name()
-               << " can not be turned into a literal";
+    LOG(ERROR) << fmt::format(
+      "{}:{} can not be turned into a literal!", e->getId(), e->type->name());
     exit(EXIT_FAILURE);
   }
-  LOG(ERROR) << e->getId() << "is not defined in the const symbol table";
+  LOG(ERROR) << fmt::format("{} is not defined in the const symbol table",
+                            e->getId());
   exit(EXIT_FAILURE);
 }
 
@@ -216,37 +219,5 @@ std::shared_ptr<ArrayType> makeArray(ExpressionNode* e1,
   LOG(ERROR) << "array bounds must be integer or character type";
   exit(EXIT_FAILURE);
 }
-
-#if 0
-ExpressionNode* makeIdentifierNode(std::string id)
-{
-  auto const_info = symbol_table.lookupConst(id);
-  if (const_info != nullptr)
-  {
-    if (const_info->type == IntegerType::get())
-    {
-      return new IntegerLiteralNode(
-        dynamic_cast<IntegerLiteralNode*>(const_info.get())->value);
-    }
-    if (const_info->type == BooleanType::get())
-    {
-      return new BooleanLiteralNode(
-        dynamic_cast<BooleanLiteralNode*>(const_info.get())->value);
-    }
-    if (const_info->type == CharacterType::get())
-    {
-      return new CharacterLiteralNode(
-        dynamic_cast<CharacterLiteralNode*>(const_info.get())->character);
-    }
-    if (const_info->type == StringType::get())
-    {
-      return new StringLiteralNode(
-        dynamic_cast<StringLiteralNode*>(const_info.get())->string);
-    }
-  }
-
-  return new IdentifierNode(id);
-}
-#endif
 
 #endif

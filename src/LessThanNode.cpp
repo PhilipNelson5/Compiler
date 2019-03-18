@@ -1,6 +1,10 @@
 #include "LessThanNode.hpp"
 
-#include <iostream>
+#include "../fmt/include/fmt/core.h" // for print
+#include "RegisterPool.hpp"          // for Register
+#include "Type.hpp"                  // for BooleanType
+
+#include <iostream> // for operator<<, cout, ostream, endl
 
 LessThanNode::LessThanNode(ExpressionNode*& left, ExpressionNode*& right)
   : ExpressionNode(BooleanType::get())
@@ -28,7 +32,7 @@ Value LessThanNode::emit()
   auto r_rhs = v_rhs.getTheeIntoARegister();
   RegisterPool::Register result;
 
-  std::cout << "slt " << result << ", " << r_lhs << ", " << r_rhs << '\n';
+  fmt::print("slt {}, {}, {}\n", result, r_lhs, r_rhs);
 
   return result;
 }

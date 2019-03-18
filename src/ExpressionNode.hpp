@@ -1,10 +1,11 @@
 #ifndef EXPRESSION_NODE_HPP
 #define EXPRESSION_NODE_HPP
 
-#include "Node.hpp"
-#include "Type.hpp"
+#include "Node.hpp" // for Node
 
-#include <memory>
+#include <memory> // for shared_ptr
+
+class Type;
 
 class ExpressionNode : public Node
 {

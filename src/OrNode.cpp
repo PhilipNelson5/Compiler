@@ -1,6 +1,8 @@
 #include "OrNode.hpp"
 
-#include <iostream>
+#include "Type.hpp" // for BooleanType
+
+#include <iostream> // for operator<<, cout, ostream
 
 OrNode::OrNode(ExpressionNode*& left, ExpressionNode*& right)
   : ExpressionNode(BooleanType::get())

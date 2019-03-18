@@ -1,8 +1,9 @@
 #include "IdentifierNode.hpp"
 
-#include "LiteralNode.hpp"     // for LiteralNode
-#include "SymbolTable.hpp"     // for SymbolTable, symbol_table, Variable
-#include "log/easylogging++.h" // for Writer, CERROR, LOG
+#include "../fmt/include/fmt/core.h" // for print
+#include "LiteralNode.hpp"           // for LiteralNode
+#include "SymbolTable.hpp"           // for SymbolTable, symbol_table, Variable
+#include "log/easylogging++.h"       // for Writer, CERROR, LOG
 
 #include <iostream> // for basic_ostream, cout, ostream
 #include <memory>   // for operator!=, shared_ptr, __shared_ptr_...
@@ -42,7 +43,7 @@ Value IdentifierNode::emit()
     return const_info->emit();
   }
 
-  LOG(ERROR) << id << " is not defined";
+  LOG(ERROR) << fmt::format("{} is not defined", id);
   exit(EXIT_FAILURE);
 }
 

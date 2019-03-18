@@ -1,16 +1,14 @@
 #include "StringLiteralNode.hpp"
 
-#include "SymbolTable.hpp"
-#include "log/easylogging++.h"
+#include "SymbolTable.hpp" // for SymbolTable, symbol_table
+#include "Type.hpp"        // for StringType
 
-#include <iostream>
+#include <iostream> // for basic_ostream, cout, ostream
 
 StringLiteralNode::StringLiteralNode(std::string string)
   : LiteralNode(StringType::get())
   , string(string)
-{
-  LOG(DEBUG) << "NEW STRING NODE";
-}
+{}
 
 void StringLiteralNode::emitSource(std::string indent)
 {

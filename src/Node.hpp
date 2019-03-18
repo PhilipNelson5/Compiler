@@ -1,10 +1,9 @@
 #ifndef NODE_HPP
 #define NODE_HPP
 
-#include "RegisterPool.hpp"
-#include "Value.hpp"
+#include "Value.hpp" // for Value
 
-#include <memory>
+#include <string> // for string
 
 class Node
 {

@@ -1,9 +1,11 @@
 #include "SubtractNode.hpp"
 
-#include "IntegerLiteralNode.hpp"
-#include "log/easylogging++.h"
+#include "IntegerLiteralNode.hpp" // for IntegerLiteralNode
+#include "RegisterPool.hpp"       // for operator<<, Register
+#include "Type.hpp"               // for IntegerType, Type
+#include "log/easylogging++.h"    // for Writer, CERROR, LOG
 
-#include <iostream>
+#include <iostream> // for operator<<, ostream, cout, basic_o...
 
 SubtractNode::SubtractNode(ExpressionNode*& left, ExpressionNode*& right)
   : ExpressionNode(IntegerType::get())
@@ -23,8 +25,8 @@ Value SubtractNode::emit()
 {
   if (lhs->type != rhs->type)
   {
-    LOG(ERROR) << "mismatched types in subtract expression: "
-               << lhs->type->name() << " and " << rhs->type->name();
+    LOG(ERROR) << "mismatched types in subtract expression: " << lhs->type->name() << " and "
+               << rhs->type->name();
   }
 
   if (lhs->type != IntegerType::get())
@@ -43,8 +45,7 @@ Value SubtractNode::emit()
     auto r_rhs = v_rhs.getTheeIntoARegister();
     RegisterPool::Register result;
 
-    std::cout << "addi " << result << ", " << r_rhs << ", " << -lhs_const->value 
-              << " # ";
+    fmt::print("addi {}, {}, {} # ", result, r_rhs, -lhs_const->value);
     emitSource("");
     std::cout << std::endl;
 
@@ -57,8 +58,7 @@ Value SubtractNode::emit()
     auto r_lhs = v_lhs.getTheeIntoARegister();
     RegisterPool::Register result;
 
-    std::cout << "addi " << result << ", " << r_lhs << ", " << -rhs_const->value
-              << " # ";
+    fmt::print("addi {}, {}, {} # ", result, r_lhs, -rhs_const->value);
     emitSource("");
     std::cout << std::endl;
 
@@ -72,7 +72,7 @@ Value SubtractNode::emit()
     auto r_rhs = v_rhs.getTheeIntoARegister();
     RegisterPool::Register result;
 
-    std::cout << "sub " << result << ", " << r_lhs << ", " << r_rhs << " # ";
+    fmt::print("sub {}, {}, {} # ", result, r_lhs, r_rhs);
     emitSource("");
     std::cout << '\n';
 

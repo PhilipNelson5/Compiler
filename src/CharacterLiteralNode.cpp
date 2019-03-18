@@ -1,10 +1,10 @@
 #include "CharacterLiteralNode.hpp"
 
-#include "Type.hpp"
-#include "log/easylogging++.h"
+#include "../fmt/include/fmt/core.h" // for print
+#include "Type.hpp"                  // for CharacterType
+#include "log/easylogging++.h"       // for Writer, CDEBUG, LOG
 
-#include <iostream>
-#include <string>
+#include <string> // for allocator, string
 
 CharacterLiteralNode::CharacterLiteralNode(char character)
   : LiteralNode(CharacterType::get())
@@ -40,7 +40,7 @@ std::string CharacterLiteralNode::toString() const
 void CharacterLiteralNode::emitSource(std::string indent)
 {
   (void)indent;
-  std::cout << "'" << toString() << "'";
+  fmt::print("'{}'", toString());
 }
 
 Value CharacterLiteralNode::emit()

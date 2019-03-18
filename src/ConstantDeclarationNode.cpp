@@ -1,8 +1,10 @@
 #include "ConstantDeclarationNode.hpp"
 
-#include "SymbolTable.hpp"
+#include "ExpressionNode.hpp" // for ExpressionNode
+#include "LiteralNode.hpp"    // for LiteralNode
+#include "SymbolTable.hpp"    // for SymbolTable, symbol_table
 
-#include <iostream>
+#include <iostream> // for operator<<, basic_ostream, cout, endl
 
 ConstantDeclarationNode::ConstantDeclarationNode(std::string id,
                                                  ExpressionNode* expr)

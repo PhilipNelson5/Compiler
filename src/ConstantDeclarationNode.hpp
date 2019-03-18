@@ -1,13 +1,14 @@
 #ifndef CONST_DECL_NODE_HPP
 #define CONST_DECL_NODE_HPP
 
-#include "LiteralNode.hpp"
-#include "ListNode.hpp"
-#include "Node.hpp"
-#include "RegisterPool.hpp"
+#include "Node.hpp"  // for Node
+#include "Value.hpp" // for Value
 
-#include <memory>
-#include <string>
+#include <memory> // for shared_ptr
+#include <string> // for string
+
+class ExpressionNode;
+class LiteralNode;
 
 class ConstantDeclarationNode : public Node
 {

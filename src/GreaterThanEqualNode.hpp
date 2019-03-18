@@ -1,10 +1,11 @@
 #ifndef GREATER_THAN_EQUAL_NODE_HPP
 #define GREATER_THAN_EQUAL_NODE_HPP
 
-#include "ExpressionNode.hpp"
-#include "RegisterPool.hpp"
+#include "ExpressionNode.hpp" // for ExpressionNode
+#include "Value.hpp"          // for Value
 
-#include <memory>
+#include <memory> // for shared_ptr
+#include <string> // for string
 
 class GreaterThanEqualNode : public ExpressionNode
 {

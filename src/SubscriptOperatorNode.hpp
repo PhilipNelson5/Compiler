@@ -1,7 +1,12 @@
 #ifndef SUBSCRIPT_OPERATOR_NODE_HPP
 #define SUBSCRIPT_OPERATOR_NODE_HPP
 
-#include "LvalueNode.hpp"
+#include "LvalueNode.hpp" // for LvalueNode
+#include "Value.hpp"      // for Value
+
+#include <memory> // for shared_ptr
+#include <string> // for string
+class ExpressionNode;
 
 class SubscriptOperatorNode : public LvalueNode
 {

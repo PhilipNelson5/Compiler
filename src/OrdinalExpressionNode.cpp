@@ -1,10 +1,10 @@
 #include "OrdinalExpressionNode.hpp"
 
-#include "Type.hpp"            // for IntegerType, CharacterType, Type
-#include "Value.hpp"           // for Value
-#include "log/easylogging++.h" // for Writer, CERROR, LOG
+#include "../fmt/include/fmt/core.h" // for format
+#include "Type.hpp"                  // for IntegerType, CharacterType, Type
+#include "Value.hpp"                 // for Value
 
-#include <iostream> // for operator<<, cout, ostream, basic_ostream
+#include <iostream> // for operator<<, cout, ostream, basi...
 #include <stdlib.h> // for exit, EXIT_FAILURE
 
 OrdinalExpressionNode::OrdinalExpressionNode(ExpressionNode*& expr)
@@ -23,8 +23,8 @@ Value OrdinalExpressionNode::emit()
 {
   if (expr->type != CharacterType::get())
   {
-    LOG(ERROR) << "ord is not defined on " << expr->type->name()
-               << ". Must use character type";
+    fmt::print("ord is not defined on {}. Must use character type",
+                expr->type->name());
     exit(EXIT_FAILURE);
   }
 

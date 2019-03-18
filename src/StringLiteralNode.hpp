@@ -1,10 +1,10 @@
 #ifndef STRING_CONSTANT_NODE_HPP
 #define STRING_CONSTANT_NODE_HPP
 
-#include "LiteralNode.hpp"
-#include "RegisterPool.hpp"
+#include "LiteralNode.hpp" // for LiteralNode
+#include "Value.hpp"       // for Value
 
-#include <string>
+#include <string> // for string
 
 class StringLiteralNode : public LiteralNode
 {

@@ -1,12 +1,16 @@
 #ifndef VALUE_HPP
 #define VALUE_HPP
 
-#include "RegisterPool.hpp"
-#include "log/easylogging++.h"
+#include "../fmt/include/fmt/core.h" // for format
+#include "RegisterPool.hpp"          // for operator<<, Register
+#include "log/easylogging++.h"       // for Writer, CERROR, LOG
 
-#include <iostream>
-#include <utility>
-#include <variant>
+#include <iostream>    // for operator<<, basic_ostream, ostream
+#include <stdlib.h>    // for exit, EXIT_FAILURE
+#include <string>      // for string, allocator, operator<<
+#include <type_traits> // for remove_reference<>::type
+#include <utility>     // for pair, move, make_pair
+#include <variant>     // for get, holds_alternative, monostate
 
 struct Value
 {
@@ -79,7 +83,7 @@ struct Value
       exit(EXIT_FAILURE);
     }
     auto p = std::get<intPair>(value);
-    return std::to_string(p.first) + "($" + std::to_string(p.second) + ")";
+    return fmt::format("{}(${})", p.first, p.second);
   }
 
   std::string toString(char character) const
@@ -106,36 +110,32 @@ struct Value
     if (std::holds_alternative<int>(value))
     {
       RegisterPool::Register result;
-      std::cout << "li " << result << ", " << std::get<int>(value) << '\n';
+      fmt::print("li {}, {}\n", result, std::get<int>(value));
       return result;
     }
     else if (std::holds_alternative<char>(value))
     {
       RegisterPool::Register result;
-      std::cout << "li " << result << ", '" << toString(std::get<char>(value))
-                << '\'' << '\n';
+      fmt::print("li {}, '{}'\n", result, toString(std::get<char>(value)));
       return result;
     }
     else if (std::holds_alternative<std::string>(value))
     {
       RegisterPool::Register result;
-      std::cout << "la " << result << ", " << std::get<std::string>(value)
-                << '\n';
+      fmt::print("la {}, {}\n", result, std::get<std::string>(value));
       return result;
     }
     else if (std::holds_alternative<intPair>(value))
     {
       RegisterPool::Register result;
-      std::cout << "lw " << result << ", " << std::get<intPair>(value).first
-                << "($" << std::get<intPair>(value).second << ")\n";
+      fmt::print("lw {}, {}\n", result, getLocation());
       return result;
     }
     else if (std::holds_alternative<registerPair>(value))
     {
       if (std::get<registerPair>(value).second == RegisterIs::ADDRESS)
       {
-        std::cout << "lw " << std::get<registerPair>(value).first << ", "
-                  << "0(" << std::get<registerPair>(value).first << ")" << '\n';
+        fmt::print("lw {0}, 0({0})\n", std::get<registerPair>(value).first);
       }
       return std::move(std::get<registerPair>(value).first);
     }

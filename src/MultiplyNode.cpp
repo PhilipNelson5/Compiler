@@ -1,9 +1,11 @@
 #include "MultiplyNode.hpp"
 
-#include "IntegerLiteralNode.hpp"
-#include "log/easylogging++.h"
+#include "../fmt/include/fmt/core.h" // for print, format
+#include "RegisterPool.hpp"          // for Register
+#include "Type.hpp"                  // for IntegerType, Type
+#include "log/easylogging++.h"       // for Writer, CERROR, LOG
 
-#include <iostream>
+#include <iostream> // for operator<<, cout, ostream
 
 MultiplyNode::MultiplyNode(ExpressionNode*& left, ExpressionNode*& right)
   : ExpressionNode(IntegerType::get())
@@ -23,8 +25,10 @@ Value MultiplyNode::emit()
 {
   if (lhs->type != rhs->type)
   {
-    LOG(ERROR) << "mismatched types in multiply expression: "
-               << lhs->type->name() << " and " << rhs->type->name();
+    LOG(ERROR) << fmt::format(
+      "mismatched types in multiply expression: {} and {}",
+      lhs->type->name(),
+      rhs->type->name());
   }
 
   if (lhs->type != IntegerType::get())
@@ -42,8 +46,8 @@ Value MultiplyNode::emit()
   auto r_rhs = v_rhs.getTheeIntoARegister();
   RegisterPool::Register result;
 
-  std::cout << "mult " << r_lhs << ", " << r_rhs << '\n';
-  std::cout << "mflo " << result << " # ";
+  fmt::print("mult {}, {}\n", r_lhs, r_rhs);
+  fmt::print("mflo {} # ", result);
   emitSource("");
   std::cout << '\n';
 

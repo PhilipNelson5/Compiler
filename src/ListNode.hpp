@@ -1,9 +1,9 @@
 #ifndef LIST_NODE_HPP
 #define LIST_NODE_HPP
 
-#include <algorithm>
-#include <memory>
-#include <vector>
+#include <algorithm> // for reverse
+#include <memory>    // for shared_ptr
+#include <vector>    // for vector
 
 template<typename T>
 class ListNode
