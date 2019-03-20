@@ -4,20 +4,21 @@
 #include <memory>
 #include <sstream>
 #include <string>
+#include <utility>
 
 #include "src/Factory.hpp"
 
 // abstract node classes
 #include "src/Node.hpp"
-#include "src/StatementNode.hpp"
 #include "src/ExpressionNode.hpp"
+#include "src/StatementNode.hpp"
 
 // concrete node classes
 #include "src/AddNode.hpp"
 #include "src/AndNode.hpp"
 #include "src/AssignmentStatementNode.hpp"
-#include "src/CharacterLiteralNode.hpp"
 #include "src/CharacterExpressionNode.hpp"
+#include "src/CharacterLiteralNode.hpp"
 #include "src/ConstantDeclarationNode.hpp"
 #include "src/DivideNode.hpp"
 #include "src/EqualExpressionNode.hpp"
@@ -42,8 +43,8 @@
 #include "src/ReadStatementNode.hpp"
 #include "src/StopStatementNode.hpp"
 #include "src/StringLiteralNode.hpp"
-#include "src/SubtractNode.hpp"
 #include "src/SubscriptOperatorNode.hpp"
+#include "src/SubtractNode.hpp"
 #include "src/SuccessorExpressionNode.hpp"
 #include "src/SymbolTable.hpp"
 #include "src/TypeDeclarationNode.hpp"
@@ -103,6 +104,8 @@ void yyerror(const char*);
   ListNode<TypeDeclarationNode> * typeDeclarationList;
   ListNode<VariableDeclarationNode> * varDelcList;
   ListNode<std::string> * identList;
+  /*ListNode<std::pair<ExpressionNode*&, ListNode<StatementNode>*&>> * elseIfList;*/
+  ListNode<std::pair<std::shared_ptr<ExpressionNode>, std::vector<std::shared_ptr<StatementNode>>>> * elseIfList;
 }
 
 %token ARRAY_T
@@ -206,9 +209,9 @@ void yyerror(const char*);
 %type <statementNode> Statement
 %type <assignmentNode> Assignment
 %type <ifStatementNode> IfStatement
-%type <node> OptElseIfStatementList
-%type <node> ElseIfStatementList
-%type <node> OptElseStatement
+%type <elseIfList> OptElseIfStatementList
+%type <elseIfList> ElseIfStatementList
+%type <statementList> OptElseStatement
 %type <node> WhileStatement
 %type <node> RepeatStatement
 %type <node> ForStatement
@@ -431,20 +434,45 @@ Assignment                      : LValue ASSIGN_T Expression
                                   }
                                 ;
 
-IfStatement                     : IF_T Expression THEN_T StatementList OptElseIfStatementList OptElseStatement END_T
+IfStatement                     : IF_T Expression THEN_T
+                                  StatementList
+                                  OptElseIfStatementList
+                                  OptElseStatement END_T
                                   {
-                                    $$ = new IfStatementNode($2, $4);
+                                    $$ = new IfStatementNode($2, $4, $5, $6);
                                   }
                                 ;
 
-OptElseIfStatementList          : ElseIfStatementList {}
+OptElseIfStatementList          : ElseIfStatementList { $$ = $1; }
                                 | /* λ */ { $$ = nullptr; }
                                 ;
 
-ElseIfStatementList             : ElseIfStatementList ELSEIF_T Expression THEN_T StatementList {}
-                                | ELSEIF_T Expression THEN_T StatementList {}
+ElseIfStatementList             : ElseIfStatementList ELSEIF_T Expression THEN_T StatementList
+                                  {
+                                    $$ = new ListNode<
+                                               std::pair<
+                                                 std::shared_ptr<ExpressionNode>,
+                                                 std::vector<std::shared_ptr<StatementNode>>
+                                               >
+                                             >(new std::pair<
+                                                     std::shared_ptr<ExpressionNode>,
+                                                     std::vector<std::shared_ptr<StatementNode>>
+                                                   > ($3, ListNode<StatementNode>::makeVector($5)), $1);
+                                  }
+                                | ELSEIF_T Expression THEN_T StatementList
+                                  {
+                                    $$ = new ListNode<
+                                               std::pair<
+                                                 std::shared_ptr<ExpressionNode>,
+                                                 std::vector<std::shared_ptr<StatementNode>>
+                                               >
+                                             >(new std::pair<
+                                                     std::shared_ptr<ExpressionNode>,
+                                                     std::vector<std::shared_ptr<StatementNode>>
+                                                   > ($2, ListNode<StatementNode>::makeVector($4)));
+                                  }
 
-OptElseStatement                : ELSE_T StatementList {}
+OptElseStatement                : ELSE_T StatementList { $$ = $2; }
                                 | /* λ */ { $$ = nullptr; }
                                 ;
 

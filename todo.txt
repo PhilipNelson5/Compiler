@@ -20,7 +20,7 @@
 [ ] [ ] test/control/factorial.cpsl
 [ ] [ ] test/control/for_down.cpsl
 [ ] [ ] test/control/for_to.cpsl
-[ ] [ ] test/control/ifelseif_nested.cpsl
+[X] [X] test/control/ifelseif_nested.cpsl
 [ ] [ ] test/control/repeat.cpsl
 [ ] [ ] test/control/simple_while.cpsl
 [ ] [ ] test/control/while_and_if.cpsl
