@@ -22,6 +22,7 @@
 #include "src/ConstantDeclarationNode.hpp"
 #include "src/DivideNode.hpp"
 #include "src/EqualExpressionNode.hpp"
+#include "src/ForStatementNode.hpp"
 #include "src/GreaterThanEqualNode.hpp"
 #include "src/GreaterThanNode.hpp"
 #include "src/IdentifierNode.hpp"
@@ -51,6 +52,7 @@
 #include "src/TypeNode.hpp"
 #include "src/UnaryMinusNode.hpp"
 #include "src/VariableDeclarationNode.hpp"
+#include "src/WhileStatementNode.hpp"
 #include "src/WriteStatementNode.hpp"
 
 class Type;
@@ -104,7 +106,6 @@ void yyerror(const char*);
   ListNode<TypeDeclarationNode> * typeDeclarationList;
   ListNode<VariableDeclarationNode> * varDelcList;
   ListNode<std::string> * identList;
-  /*ListNode<std::pair<ExpressionNode*&, ListNode<StatementNode>*&>> * elseIfList;*/
   ListNode<std::pair<std::shared_ptr<ExpressionNode>, std::vector<std::shared_ptr<StatementNode>>>> * elseIfList;
 }
 
@@ -212,7 +213,7 @@ void yyerror(const char*);
 %type <elseIfList> OptElseIfStatementList
 %type <elseIfList> ElseIfStatementList
 %type <statementList> OptElseStatement
-%type <node> WhileStatement
+%type <statementNode> WhileStatement
 %type <node> RepeatStatement
 %type <node> ForStatement
 %type <stopStatementNode> StopStatement
@@ -289,9 +290,13 @@ ProcedureDecl                   : PROCEDURE_T ID_T OPEN_PAREN_T FormalParameters
                                 ;
 
 FunctionDecl                    : FUNCTION_T ID_T OPEN_PAREN_T FormalParameters CLOSE_PAREN_T
-                                    COLON_T Type SEMI_COLON_T FORWARD_T SEMI_COLON_T  {}
+                                    COLON_T Type SEMI_COLON_T FORWARD_T SEMI_COLON_T
+                                  {
+                                  }
                                 | FUNCTION_T ID_T OPEN_PAREN_T FormalParameters CLOSE_PAREN_T
-                                    COLON_T Type SEMI_COLON_T Body SEMI_COLON_T {}
+                                    COLON_T Type SEMI_COLON_T Body SEMI_COLON_T
+                                  {
+                                  }
                                 ;
 
 FormalParameters                : FormalParameterList  {}
@@ -476,16 +481,25 @@ OptElseStatement                : ELSE_T StatementList { $$ = $2; }
                                 | /* λ */ { $$ = nullptr; }
                                 ;
 
-WhileStatement                  : WHILE_T Expression DO_T StatementList END_T {}
+WhileStatement                  : WHILE_T Expression DO_T StatementList END_T
+                                  {
+                                    $$ = new WhileStatementNode($2, $4);
+                                  }
                                 ;
 
 RepeatStatement                 : REPEAT_T StatementList UNTIL_T Expression {}
                                 ;
 
 ForStatement                    : FOR_T ID_T ASSIGN_T Expression TO_T Expression
-                                    DO_T StatementList END_T {}
+                                    DO_T StatementList END_T
+                                  {
+                                    $$ = new ForStatementNode($2, $4, $6, $8, ForStatementNode::Type::TO);
+                                  }
                                 | FOR_T ID_T ASSIGN_T Expression DOWNTO_T Expression
-                                    DO_T StatementList END_T {}
+                                    DO_T StatementList END_T
+                                  {
+                                    $$ = new ForStatementNode($2, $4, $6, $8, ForStatementNode::Type::DOWNTO);
+                                  }
                                 ;
 
 StopStatement                   : STOP_T { $$ = new StopStatementNode(); }

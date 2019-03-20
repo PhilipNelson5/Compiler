@@ -39,4 +39,4 @@
 * Is it okay to print to std::cerr?
   - ANSWER: Yes, that's fine.
 
-* Is the pointer to a shared_ptr bad?
+* Should pred and succ operators wrap when using characters?

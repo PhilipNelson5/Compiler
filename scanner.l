@@ -16,6 +16,7 @@
 #include "src/ConstantDeclarationNode.hpp"
 #include "src/DivideNode.hpp"
 #include "src/EqualExpressionNode.hpp"
+#include "src/ForStatementNode.hpp"
 #include "src/GreaterThanEqualNode.hpp"
 #include "src/GreaterThanNode.hpp"
 #include "src/IdentifierNode.hpp"
@@ -43,6 +44,7 @@
 #include "src/TypeDeclarationNode.hpp"
 #include "src/UnaryMinusNode.hpp"
 #include "src/VariableDeclarationNode.hpp"
+#include "src/WhileStatementNode.hpp"
 #include "src/WriteStatementNode.hpp"
 
 #include "parser.hpp"

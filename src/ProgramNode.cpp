@@ -125,4 +125,3 @@ Value ProgramNode::emit()
   std::cout << "\n.align 2\nGLOBAL_AREA:" << std::endl;
   return {};
 }
-

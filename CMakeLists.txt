@@ -37,6 +37,8 @@ set(cpsl_srcs
   src/EqualExpressionNode.hpp
   src/ExpressionNode.cpp
   src/ExpressionNode.hpp
+  src/ForStatementNode.cpp
+  src/ForStatementNode.hpp
   src/GreaterThanEqualNode.cpp
   src/GreaterThanEqualNode.hpp
   src/GreaterThanNode.cpp
@@ -100,6 +102,8 @@ set(cpsl_srcs
   src/VariableDeclarationNode.cpp
   src/VariableDeclarationNode.hpp
   src/Value.hpp
+  src/WhileStatementNode.cpp
+  src/WhileStatementNode.hpp
   src/WriteStatementNode.cpp
   src/WriteStatementNode.hpp
 

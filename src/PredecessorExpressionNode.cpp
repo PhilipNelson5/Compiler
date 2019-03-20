@@ -1,4 +1,5 @@
 #include "PredecessorExpressionNode.hpp"
+#include "Type.hpp"
 
 #include <iostream> // for operator<<, char_traits, cout, ostream, basic_os...
 
@@ -16,5 +17,32 @@ void PredecessorExpressionNode::emitSource(std::string indent)
 
 Value PredecessorExpressionNode::emit()
 {
-  throw "not implemented PredecessorExpressionNode";
+  std::cout << "# ";
+  emitSource("");
+  std::cout << '\n';
+
+  if (expr->type == BooleanType::get())
+  {
+    auto r_expr = expr->emit().getTheeIntoARegister();
+    fmt::print("xori {}, 1\n", r_expr);
+    return r_expr;
+  }
+  else if (expr->type == IntegerType::get())
+  {
+    auto r_expr = expr->emit().getTheeIntoARegister();
+    fmt::print("addi {0}, {0}, -1\n", r_expr);
+    return r_expr;
+  }
+  else if (expr->type == CharacterType::get())
+  {
+    auto r_expr = expr->emit().getTheeIntoARegister();
+    fmt::print("addi {0}, {0}, -1\n", r_expr);
+
+    return r_expr;
+  }
+  else
+  {
+    LOG(ERROR) << fmt::format("pred is not defined for type {}", expr->type->name());
+    exit(EXIT_FAILURE);
+  }
 }
