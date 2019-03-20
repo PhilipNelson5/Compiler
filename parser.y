@@ -24,6 +24,7 @@
 #include "src/GreaterThanEqualNode.hpp"
 #include "src/GreaterThanNode.hpp"
 #include "src/IdentifierNode.hpp"
+#include "src/IfStatementNode.hpp"
 #include "src/IntegerLiteralNode.hpp"
 #include "src/LessThanEqualNode.hpp"
 #include "src/LessThanNode.hpp"
@@ -86,6 +87,7 @@ void yyerror(const char*);
   AssignmentStatementNode * assignmentNode;
   ConstantDeclarationNode * constDeclNode;
   IdentifierNode * identifier;
+  IfStatementNode * ifStatementNode;
   LvalueNode * lvalue;
   ReadStatementNode * readStatementNode;
   StopStatementNode * stopStatementNode;
@@ -203,7 +205,8 @@ void yyerror(const char*);
 %type <statementList> StatementList
 %type <statementNode> Statement
 %type <assignmentNode> Assignment
-%type <node> IfStatement
+%type <ifStatementNode> IfStatement
+%type <node> OptElseIfStatementList
 %type <node> ElseIfStatementList
 %type <node> OptElseStatement
 %type <node> WhileStatement
@@ -428,24 +431,21 @@ Assignment                      : LValue ASSIGN_T Expression
                                   }
                                 ;
 
-IfStatement                     : IfHeader ThenBody ElseIfStatementList OptElseStatement END_T {}
+IfStatement                     : IF_T Expression THEN_T StatementList OptElseIfStatementList OptElseStatement END_T
+                                  {
+                                    $$ = new IfStatementNode($2, $4);
+                                  }
                                 ;
 
-IfHeader                        : IF_T Expression {}
+OptElseIfStatementList          : ElseIfStatementList {}
+                                | /* λ */ { $$ = nullptr; }
                                 ;
 
-ThenBody                        : THEN_T StatementList {}
-                                ;
-
-ElseIfStatementList             : ElseIfStatementList ElseIfHeader ThenBody{}
-                                | /* λ */ {}
-                                ;
-
-ElseIfHeader                    : ELSEIF_T Expression {}
-                                ;
+ElseIfStatementList             : ElseIfStatementList ELSEIF_T Expression THEN_T StatementList {}
+                                | ELSEIF_T Expression THEN_T StatementList {}
 
 OptElseStatement                : ELSE_T StatementList {}
-                                | /* λ */ {}
+                                | /* λ */ { $$ = nullptr; }
                                 ;
 
 WhileStatement                  : WHILE_T Expression DO_T StatementList END_T {}

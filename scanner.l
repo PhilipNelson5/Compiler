@@ -19,6 +19,7 @@
 #include "src/GreaterThanEqualNode.hpp"
 #include "src/GreaterThanNode.hpp"
 #include "src/IdentifierNode.hpp"
+#include "src/IfStatementNode.hpp"
 #include "src/IntegerLiteralNode.hpp"
 #include "src/LessThanEqualNode.hpp"
 #include "src/LessThanNode.hpp"

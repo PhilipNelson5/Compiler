@@ -55,6 +55,7 @@ public:
   std::shared_ptr<Variable> lookupLval(std::string id) const;
   std::shared_ptr<Type> lookupType(std::string id) const;
   const std::string lookupString(std::string str);
+  const std::string newLabel(std::string name);
   void storeConst(std::string id, std::shared_ptr<LiteralNode> expr);
   void storeVariable(std::string id, std::shared_ptr<Type> type);
   void storeType(std::string id, std::shared_ptr<Type> type);

@@ -78,6 +78,12 @@ const std::string SymbolTable::lookupString(std::string str)
   return found->second;
 }
 
+const std::string SymbolTable::newLabel(std::string name)
+{
+  static unsigned n = 0u;
+  return fmt::format("{}_{}", name, n++);
+}
+
 std::shared_ptr<Variable> SymbolTable::lookupLval(std::string id) const
 {
   LOG(DEBUG) << "lookupLval(" << id << ")";

@@ -43,6 +43,8 @@ set(cpsl_srcs
   src/GreaterThanNode.hpp
   src/IdentifierNode.cpp
   src/IdentifierNode.hpp
+  src/IfStatementNode.cpp
+  src/IfStatementNode.hpp
   src/IntegerLiteralNode.cpp
   src/IntegerLiteralNode.hpp
   src/LessThanEqualNode.cpp

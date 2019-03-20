@@ -16,3 +16,12 @@
 [X] [X] test/udt/record_decl.cpsl
 [X] [X] test/udt/simple_array.cpsl
 [X] [X] test/udt/simple_record.cpsl
+
+[ ] [ ] test/control/factorial.cpsl
+[ ] [ ] test/control/for_down.cpsl
+[ ] [ ] test/control/for_to.cpsl
+[ ] [ ] test/control/ifelseif_nested.cpsl
+[ ] [ ] test/control/repeat.cpsl
+[ ] [ ] test/control/simple_while.cpsl
+[ ] [ ] test/control/while_and_if.cpsl
+[ ] [ ] test/control/while_nested.cpsl
