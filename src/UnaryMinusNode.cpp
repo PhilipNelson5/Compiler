@@ -17,5 +17,11 @@ void UnaryMinusNode::emitSource(std::string indent)
 
 Value UnaryMinusNode::emit()
 {
-  throw "not implemented UnaryMinusNode";
+  auto v_rhs = rhs->emit();
+  auto r_rhs = v_rhs.getTheeIntoARegister();
+  RegisterPool::Register result;
+
+  fmt::print("subu {}, $0, {}\n", result, r_rhs);
+
+  return result;
 }

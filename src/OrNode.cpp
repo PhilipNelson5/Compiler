@@ -1,6 +1,7 @@
 #include "OrNode.hpp"
 
-#include "Type.hpp" // for BooleanType
+#include "../fmt/include/fmt/core.h" // for print
+#include "Type.hpp"                  // for BooleanType
 
 #include <iostream> // for operator<<, cout, ostream
 
@@ -20,5 +21,13 @@ void OrNode::emitSource(std::string indent)
 
 Value OrNode::emit()
 {
-  throw "not implemented OrNode";
+  auto v_lhs = lhs->emit();
+  auto v_rhs = rhs->emit();
+  auto r_lhs = v_lhs.getTheeIntoARegister();
+  auto r_rhs = v_rhs.getTheeIntoARegister();
+  RegisterPool::Register result;
+
+  fmt::print("or {}, {}, {}\n", result, r_lhs, r_rhs);
+
+  return result;
 }

@@ -18,5 +18,11 @@ void NotNode::emitSource(std::string indent)
 
 Value NotNode::emit()
 {
-  throw "not implemented NotNode";
+  auto v_rhs = rhs->emit();
+  auto r_rhs = v_rhs.getTheeIntoARegister();
+  RegisterPool::Register result;
+
+  fmt::print("not {}, {}\n", result, r_rhs);
+
+  return result;
 }

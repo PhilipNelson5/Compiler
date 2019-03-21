@@ -1,4 +1,5 @@
 #include "PredecessorExpressionNode.hpp"
+
 #include "Type.hpp"
 
 #include <iostream> // for operator<<, char_traits, cout, ostream, basic_os...
@@ -27,17 +28,10 @@ Value PredecessorExpressionNode::emit()
     fmt::print("xori {}, 1\n", r_expr);
     return r_expr;
   }
-  else if (expr->type == IntegerType::get())
+  else if (expr->type == IntegerType::get() || expr->type == CharacterType::get())
   {
     auto r_expr = expr->emit().getTheeIntoARegister();
     fmt::print("addi {0}, {0}, -1\n", r_expr);
-    return r_expr;
-  }
-  else if (expr->type == CharacterType::get())
-  {
-    auto r_expr = expr->emit().getTheeIntoARegister();
-    fmt::print("addi {0}, {0}, -1\n", r_expr);
-
     return r_expr;
   }
   else
