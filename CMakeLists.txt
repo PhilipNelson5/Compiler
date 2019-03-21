@@ -79,6 +79,8 @@ set(cpsl_srcs
   src/ReadStatementNode.hpp
   src/RegisterPool.cpp
   src/RegisterPool.hpp
+  src/RepeatStatementNode.cpp
+  src/RepeatStatementNode.hpp
   src/StatementNode.hpp
   src/StopStatementNode.cpp
   src/StopStatementNode.hpp

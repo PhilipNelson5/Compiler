@@ -42,6 +42,7 @@
 #include "src/PredecessorExpressionNode.hpp"
 #include "src/ProgramNode.hpp"
 #include "src/ReadStatementNode.hpp"
+#include "src/RepeatStatementNode.hpp"
 #include "src/StopStatementNode.hpp"
 #include "src/StringLiteralNode.hpp"
 #include "src/SubscriptOperatorNode.hpp"
@@ -214,7 +215,7 @@ void yyerror(const char*);
 %type <elseIfList> ElseIfStatementList
 %type <statementList> OptElseStatement
 %type <statementNode> WhileStatement
-%type <node> RepeatStatement
+%type <statementNode> RepeatStatement
 %type <node> ForStatement
 %type <stopStatementNode> StopStatement
 %type <node> ReturnStatement
@@ -487,7 +488,10 @@ WhileStatement                  : WHILE_T Expression DO_T StatementList END_T
                                   }
                                 ;
 
-RepeatStatement                 : REPEAT_T StatementList UNTIL_T Expression {}
+RepeatStatement                 : REPEAT_T StatementList UNTIL_T Expression
+                                  {
+                                    $$ = new RepeatStatementNode($2, $4);
+                                  }
                                 ;
 
 ForStatement                    : FOR_T ID_T ASSIGN_T Expression TO_T Expression

@@ -35,6 +35,7 @@
 #include "src/PredecessorExpressionNode.hpp"
 #include "src/ProgramNode.hpp"
 #include "src/ReadStatementNode.hpp"
+#include "src/RepeatStatementNode.hpp"
 #include "src/StopStatementNode.hpp"
 #include "src/StringLiteralNode.hpp"
 #include "src/SubtractNode.hpp"

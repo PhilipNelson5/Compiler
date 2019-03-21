@@ -17,7 +17,7 @@ void WhileStatementNode::emitSource(std::string indent)
   {
     statement->emitSource(indent + "  ");
   }
-  std::cout << "end;";
+  std::cout << indent << "end;\n";
 }
 
 Value WhileStatementNode::emit()
