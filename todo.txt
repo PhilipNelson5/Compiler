@@ -21,7 +21,7 @@
 [ ] [ ] test/control/for_down.cpsl
 [ ] [ ] test/control/for_to.cpsl
 [X] [X] test/control/ifelseif_nested.cpsl
-[ ] [ ] test/control/repeat.cpsl
-[ ] [ ] test/control/simple_while.cpsl
-[ ] [ ] test/control/while_and_if.cpsl
-[ ] [ ] test/control/while_nested.cpsl
+[X] [X] test/control/repeat.cpsl
+[X] [X] test/control/simple_while.cpsl
+[X] [X] test/control/while_and_if.cpsl
+[X] [X] test/control/while_nested.cpsl

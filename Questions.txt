@@ -40,3 +40,4 @@
   - ANSWER: Yes, that's fine.
 
 * Should pred and succ operators wrap when using characters?
+  - ANSWER: Nope.
