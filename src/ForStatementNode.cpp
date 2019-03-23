@@ -18,7 +18,7 @@ ForStatementNode::ForStatementNode(char*& id,
   if (!symbol_table.lookupLval(id))
   {
     LOG(DEBUG) << "insert " << id;
-    symbol_table.storeVariable(id, startExpr->type);
+    symbol_table.storeVariable(id, startExpr->getType());
   }
 }
 
@@ -41,7 +41,4 @@ void ForStatementNode::emitSource(std::string indent)
   // symbol_table.exit_scope();
 }
 
-Value ForStatementNode::emit()
-{
-  return {};
-}
+void ForStatementNode::emit() {}

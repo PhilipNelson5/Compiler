@@ -11,11 +11,6 @@ BooleanLiteralNode::BooleanLiteralNode(int value)
   , value(value)
 {}
 
-bool BooleanLiteralNode::isLiteral()
-{
-  return true;
-}
-
 void BooleanLiteralNode::emitSource(std::string indent)
 {
   std::cout << indent << std::boolalpha << value << std::noboolalpha;

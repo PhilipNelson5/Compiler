@@ -11,12 +11,13 @@ class MemberAccessNode : public LvalueNode
 {
 public:
   MemberAccessNode(LvalueNode* lValue, std::string id);
-  virtual std::string getId() override;
+  virtual const std::shared_ptr<Type> getType() override;
+  virtual std::string getId() const override;
   virtual void emitSource(std::string indent) override;
   virtual Value emit() override;
 
-  std::shared_ptr<LvalueNode> lValue;
-  std::string id;
+  const std::shared_ptr<LvalueNode> lValue;
+  const std::string id;
 };
 
 #endif

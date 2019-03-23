@@ -5,7 +5,7 @@
 #include "ListNode.hpp"              // for ListNode
 #include "SymbolTable.hpp"           // for SymbolTable, symbol_table
 
-#include <iostream>  // for operator<<, cout, ostream, basi...
+#include <iostream> // for operator<<, cout, ostream, basi...
 
 std::vector<IfStatement> makeElseIfStatements(ListNode<IfStatement>*& elseIfStatements)
 {
@@ -81,7 +81,7 @@ void IfStatementNode::emitSource(std::string indent)
   std::cout << indent << "end;\n";
 }
 
-Value IfStatementNode::emit()
+void IfStatementNode::emit()
 {
   // --
   // if
@@ -129,6 +129,4 @@ Value IfStatementNode::emit()
   // end
   // ---
   std::cout << lblEnd << ":\n\n";
-
-  return {};
 }

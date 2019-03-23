@@ -22,15 +22,15 @@ void DivideNode::emitSource(std::string indent)
 
 Value DivideNode::emit()
 {
-  if (lhs->type != rhs->type)
+  if (lhs->getType() != rhs->getType())
   {
     LOG(ERROR) << fmt::format(
       "mismatched types in divide expression: {} and {}",
-      lhs->type->name(),
-      rhs->type->name());
+      lhs->getType()->name(),
+      rhs->getType()->name());
   }
 
-  if (lhs->type != IntegerType::get())
+  if (lhs->getType() != IntegerType::get())
   {
     LOG(ERROR) << "can not divide non integer types";
   }

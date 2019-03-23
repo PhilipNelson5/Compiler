@@ -24,7 +24,7 @@ public:
                   ListNode<StatementNode>*& elseStatement);
   virtual void emitSource(std::string indent) override;
   virtual ~IfStatementNode() override = default;
-  virtual Value emit() override;
+  virtual void emit() override;
 
   const IfStatement ifStatement;
   const std::vector<IfStatement> elseIfStatements;

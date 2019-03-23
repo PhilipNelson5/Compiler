@@ -12,6 +12,6 @@ public:
     : type(type)
   {}
 
-  std::shared_ptr<Type> type;
+  const std::shared_ptr<Type> type;
 };
 #endif

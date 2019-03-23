@@ -10,10 +10,10 @@ class CharacterLiteralNode : public LiteralNode
 {
 public:
   CharacterLiteralNode(char character);
-  virtual bool isLiteral() override;
   virtual void emitSource(std::string indent) override;
   virtual Value emit() override;
   std::string toString() const;
+
   const char character;
 };
 

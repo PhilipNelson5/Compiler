@@ -7,6 +7,8 @@ class StatementNode : public Node
 {
 public:
   StatementNode() = default;
+  virtual ~StatementNode() = default;
+  virtual void emit() = 0;
 };
 
 #endif

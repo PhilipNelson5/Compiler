@@ -10,10 +10,15 @@ class Type;
 class LvalueNode : public ExpressionNode
 {
 public:
+  LvalueNode()
+    : ExpressionNode()
+  {}
+
   LvalueNode(std::shared_ptr<Type> type)
     : ExpressionNode(type)
   {}
-  virtual std::string getId() = 0;
+
+  virtual std::string getId() const = 0;
 };
 
 #endif

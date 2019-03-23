@@ -10,11 +10,11 @@ class IdentifierNode : public LvalueNode
 {
 public:
   IdentifierNode(std::string id);
-  virtual std::string getId() override;
-  virtual bool isConstant() override;
+  virtual const std::shared_ptr<Type> getType() override;
+  virtual std::string getId() const override;
+  virtual bool isConstant() const override;
   virtual void emitSource(std::string indent) override;
   virtual Value emit() override;
-
 
   const std::string id;
 };

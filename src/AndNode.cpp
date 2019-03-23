@@ -1,6 +1,7 @@
 #include "AndNode.hpp"
 
 #include "Type.hpp"
+
 #include <iostream>
 
 AndNode::AndNode(ExpressionNode*& left, ExpressionNode*& right)

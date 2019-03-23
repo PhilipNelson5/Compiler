@@ -26,7 +26,7 @@ void ReadStatementNode::emitSource(std::string indent)
   std::cout << ");" << std::endl;
 }
 
-Value ReadStatementNode::emit()
+void ReadStatementNode::emit()
 {
   std::cout << "\n# ";
   emitSource("");
@@ -40,20 +40,19 @@ Value ReadStatementNode::emit()
       exit(EXIT_FAILURE);
     }
 
-    if (identifier->type == IntegerType::get())
+    if (identifier->getType() == IntegerType::get())
     {
       std::cout << "li $v0, 5"
                 << " # load read integer instruction" << '\n';
     }
-    else if (identifier->type == CharacterType::get())
+    else if (identifier->getType() == CharacterType::get())
     {
       std::cout << "li $v0, 12"
                 << " # load read character instruction" << '\n';
     }
     else
     {
-      LOG(ERROR) << fmt::format("type {} can not be read into",
-                                identifier->type->name());
+      LOG(ERROR) << fmt::format("type {} can not be read into", identifier->getType()->name());
       exit(EXIT_FAILURE);
     }
 
@@ -61,7 +60,5 @@ Value ReadStatementNode::emit()
     fmt::print("sw $v0, {}", v_id.getLocation());
     fmt::print(" # {} = user input\n\n", identifier->getId());
   }
-
-  return {};
 }
 

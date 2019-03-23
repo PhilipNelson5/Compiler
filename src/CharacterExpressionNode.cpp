@@ -21,14 +21,14 @@ void CharacterExpressionNode::emitSource(std::string indent)
 
 Value CharacterExpressionNode::emit()
 {
-  if (expr->type != IntegerType::get())
+  if (expr->getType() != IntegerType::get())
   {
     LOG(ERROR) << fmt::format("chr is not defined on {}. Must use integer type",
-                              expr->type->name());
+                              expr->getType()->name());
     exit(EXIT_FAILURE);
   }
 
-  expr->type = CharacterType::get();
+  expr->setType(CharacterType::get());
 
   return expr->emit();
 }

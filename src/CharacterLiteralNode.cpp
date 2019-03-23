@@ -13,11 +13,6 @@ CharacterLiteralNode::CharacterLiteralNode(char character)
   LOG(DEBUG) << "NEW CHARACTER NODE";
 }
 
-bool CharacterLiteralNode::isLiteral()
-{
-  return true;
-}
-
 std::string CharacterLiteralNode::toString() const
 {
   switch (character)

@@ -1,7 +1,7 @@
 #ifndef CONST_DECL_NODE_HPP
 #define CONST_DECL_NODE_HPP
 
-#include "Node.hpp"  // for Node
+#include "DeclarationNode.hpp"
 #include "Value.hpp" // for Value
 
 #include <memory> // for shared_ptr
@@ -10,16 +10,16 @@
 class ExpressionNode;
 class LiteralNode;
 
-class ConstantDeclarationNode : public Node
+class ConstantDeclarationNode : public DeclarationNode
 {
 public:
   ConstantDeclarationNode(std::string ident, ExpressionNode* type);
   virtual void emitSource(std::string indent) override;
-  virtual Value emit() override;
+  virtual void emit() override;
 
 private:
-  std::string m_id;
-  std::shared_ptr<LiteralNode> m_expr;
+  const std::string m_id;
+  const std::shared_ptr<LiteralNode> m_expr;
 };
 
 #endif

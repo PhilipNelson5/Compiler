@@ -7,11 +7,12 @@ class SuccessorExpressionNode : public ExpressionNode
 {
 public:
   SuccessorExpressionNode(ExpressionNode*& expr);
+  virtual const std::shared_ptr<Type> getType() override;
   virtual void emitSource(std::string indent) override;
   virtual Value emit() override;
 
 private:
-  std::shared_ptr<ExpressionNode> expr;
+  const std::shared_ptr<ExpressionNode> expr;
 };
 
 #endif

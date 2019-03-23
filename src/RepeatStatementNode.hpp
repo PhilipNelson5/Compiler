@@ -15,10 +15,10 @@ public:
   RepeatStatementNode(ListNode<StatementNode>*& statements, ExpressionNode*& expr);
 
   virtual void emitSource(std::string indent) override;
-  virtual Value emit() override;
+  virtual void emit() override;
 
-  std::vector<std::shared_ptr<StatementNode>> statements;
-  std::shared_ptr<ExpressionNode> expr;
+  const std::vector<std::shared_ptr<StatementNode>> statements;
+  const std::shared_ptr<ExpressionNode> expr;
 };
 
 #endif

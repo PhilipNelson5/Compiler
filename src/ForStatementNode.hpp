@@ -24,13 +24,13 @@ public:
                    Type type);
 
   virtual void emitSource(std::string indent) override;
-  virtual Value emit() override;
+  virtual void emit() override;
 
-  std::string id;
-  std::shared_ptr<ExpressionNode> startExpr;
-  std::shared_ptr<ExpressionNode> endExpr;
-  std::vector<std::shared_ptr<StatementNode>> statements;
-  Type type;
+  const std::string id;
+  const std::shared_ptr<ExpressionNode> startExpr;
+  const std::shared_ptr<ExpressionNode> endExpr;
+  const std::vector<std::shared_ptr<StatementNode>> statements;
+  const Type type;
 };
 
 #endif

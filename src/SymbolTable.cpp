@@ -29,7 +29,7 @@ SymbolTable::SymbolTable()
   enter_scope();
 }
 
-std::shared_ptr<Type> SymbolTable::getType(std::string id)
+std::shared_ptr<Type> SymbolTable::getType(std::string id) const
 {
   auto lval_info = lookupLval(id);
   if (lval_info != nullptr)
@@ -40,7 +40,7 @@ std::shared_ptr<Type> SymbolTable::getType(std::string id)
   auto const_info = lookupConst(id);
   if (const_info != nullptr)
   {
-    return const_info->type;
+    return const_info->getType();
   }
 
   LOG(ERROR) << id << " is not defined";
@@ -169,7 +169,7 @@ void SymbolTable::storeConst(std::string id, std::shared_ptr<LiteralNode> litera
 
   LOG(DEBUG) << fmt::format("{}:{} stored in constant symbol table at scope {}",
                             id,
-                            literal->type->name(),
+                            literal->getType()->name(),
                             scopes.size() - 1);
 }
 

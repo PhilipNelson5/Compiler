@@ -11,10 +11,9 @@
 #include <utility>  // for pair
 #include <variant>  // for get
 
-AssignmentStatementNode::AssignmentStatementNode(LvalueNode*& identifier,
-                                                 ExpressionNode* expr)
-  : identifier(std::shared_ptr<LvalueNode>(identifier))
-  , expr(std::shared_ptr<ExpressionNode>(expr))
+AssignmentStatementNode::AssignmentStatementNode(LvalueNode*& identifier, ExpressionNode* expr)
+  : identifier(identifier)
+  , expr(expr)
 {}
 
 void AssignmentStatementNode::emitSource(std::string indent)
@@ -26,18 +25,18 @@ void AssignmentStatementNode::emitSource(std::string indent)
   std::cout << ";\n";
 }
 
-Value AssignmentStatementNode::emit()
+void AssignmentStatementNode::emit()
 {
   std::cout << "\n# ";
   emitSource("");
 
   auto v_id = identifier->emit();
   auto v_expr = expr->emit();
-  // auto size = expr->type->size();
+  // auto size = expr->getType()->size();
   // assign(v_expr, v_id, size);
   if (v_id.isLvalue())
   {
-    if (ArrayType* array = dynamic_cast<ArrayType*>(expr->type.get()))
+    if (ArrayType* array = dynamic_cast<ArrayType*>(expr->getType().get()))
     {
       auto size = array->size();
       auto r_expr = v_expr.getRegister();
@@ -50,7 +49,7 @@ Value AssignmentStatementNode::emit()
         fmt::print("sw {}, {}(${}) # paste\n", tmp, offset + i, memoryLocation);
       }
     }
-    else if (RecordType* record = dynamic_cast<RecordType*>(expr->type.get()))
+    else if (RecordType* record = dynamic_cast<RecordType*>(expr->getType().get()))
     {
       auto size = record->size();
       auto r_expr = v_expr.getRegister();
@@ -71,7 +70,7 @@ Value AssignmentStatementNode::emit()
   }
   else if (v_id.isRegister())
   {
-    if (RecordType* record = dynamic_cast<RecordType*>(expr->type.get()))
+    if (RecordType* record = dynamic_cast<RecordType*>(expr->getType().get()))
     {
       auto size = record->size();
       auto r_expr = v_expr.getRegister();
@@ -98,6 +97,4 @@ Value AssignmentStatementNode::emit()
   }
   std::cout << " # ";
   emitSource("");
-
-  return {};
 }

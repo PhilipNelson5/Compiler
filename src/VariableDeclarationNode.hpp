@@ -18,11 +18,11 @@ public:
   VariableDeclarationNode(ListNode<std::string>* identList,
                           TypeNode*& typeNode);
   virtual void emitSource(std::string indent) override;
-  virtual Value emit() override;
+  void emit();
 
 private:
-  std::vector<std::string> m_ids;
-  std::shared_ptr<Type> m_type;
+  const std::vector<std::string> m_ids;
+  const std::shared_ptr<Type> m_type;
 };
 
 #endif

@@ -21,14 +21,14 @@ void OrdinalExpressionNode::emitSource(std::string indent)
 
 Value OrdinalExpressionNode::emit()
 {
-  if (expr->type != CharacterType::get())
+  if (expr->getType() != CharacterType::get())
   {
     fmt::print("ord is not defined on {}. Must use character type",
-                expr->type->name());
+                expr->getType()->name());
     exit(EXIT_FAILURE);
   }
 
-  expr->type = IntegerType::get();
+  expr->setType(IntegerType::get());
 
   return expr->emit();
 }

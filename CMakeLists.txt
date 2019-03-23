@@ -31,6 +31,7 @@ set(cpsl_srcs
   src/CharacterLiteralNode.hpp
   src/ConstantDeclarationNode.cpp
   src/ConstantDeclarationNode.hpp
+  src/DeclarationNode.hpp
   src/DivideNode.cpp
   src/DivideNode.hpp
   src/EqualExpressionNode.cpp

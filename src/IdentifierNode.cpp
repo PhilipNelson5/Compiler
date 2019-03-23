@@ -10,16 +10,25 @@
 #include <stdlib.h> // for exit, EXIT_FAILURE
 
 IdentifierNode::IdentifierNode(std::string id)
-  : LvalueNode(symbol_table.getType(id))
+  : LvalueNode()
   , id(id)
 {}
 
-std::string IdentifierNode::getId()
+const std::shared_ptr<Type> IdentifierNode::getType() 
+{
+  if(type == nullptr)
+  {
+    type = symbol_table.getType(id);
+  }
+  return type;
+}
+
+std::string IdentifierNode::getId() const
 {
   return id;
 }
 
-bool IdentifierNode::isConstant()
+bool IdentifierNode::isConstant() const
 {
   return (symbol_table.lookupConst(id) != nullptr);
 }

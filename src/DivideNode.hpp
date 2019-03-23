@@ -15,8 +15,8 @@ public:
   virtual Value emit() override;
 
 private:
-  std::shared_ptr<ExpressionNode> lhs;
-  std::shared_ptr<ExpressionNode> rhs;
+  const std::shared_ptr<ExpressionNode> lhs;
+  const std::shared_ptr<ExpressionNode> rhs;
 };
 
 #endif

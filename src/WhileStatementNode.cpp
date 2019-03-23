@@ -20,7 +20,7 @@ void WhileStatementNode::emitSource(std::string indent)
   std::cout << indent << "end;\n";
 }
 
-Value WhileStatementNode::emit()
+void WhileStatementNode::emit()
 {
   std::cout << "# while ";
   expr->emitSource("");
@@ -42,6 +42,4 @@ Value WhileStatementNode::emit()
   fmt::print("j {}\n", lblStart);
 
   std::cout << lblEnd << ":\n\n";
-
-  return {};
 }

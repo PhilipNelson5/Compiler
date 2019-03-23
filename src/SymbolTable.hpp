@@ -50,7 +50,7 @@ class SymbolTable
 {
 public:
   SymbolTable();
-  std::shared_ptr<Type> getType(std::string id);
+  std::shared_ptr<Type> getType(std::string id) const;
   std::shared_ptr<LiteralNode> lookupConst(std::string id) const;
   std::shared_ptr<Variable> lookupLval(std::string id) const;
   std::shared_ptr<Type> lookupType(std::string id) const;

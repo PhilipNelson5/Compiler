@@ -15,11 +15,11 @@ class TypeDeclarationNode : public Node
 public:
   TypeDeclarationNode(std::string ident, TypeNode*& type);
   virtual void emitSource(std::string indent) override;
-  virtual Value emit() override;
+  void emit();
 
 private:
-  std::string m_id;
-  std::shared_ptr<Type> m_type;
+  const std::string m_id;
+  const std::shared_ptr<Type> m_type;
 };
 
 #endif

@@ -43,9 +43,9 @@ public:
     return vec;
   }
 
-  std::shared_ptr<T> data;
+  const std::shared_ptr<T> data;
 
-  std::shared_ptr<ListNode<T>> next;
+  const std::shared_ptr<ListNode<T>> next;
 };
 
 #endif

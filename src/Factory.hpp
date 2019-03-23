@@ -140,31 +140,31 @@ ExpressionNode* makeEqualNode(ExpressionNode* e1, ExpressionNode* e2)
 
 ExpressionNode* makeLiteralNode(LvalueNode* e)
 {
-  auto const_info = symbol_table.lookupConst(e->getId());
-  if (const_info != nullptr)
+  auto literalExpr = symbol_table.lookupConst(e->getId());
+  if (literalExpr != nullptr)
   {
-    if (const_info->type == IntegerType::get())
+    if (literalExpr->getType() == IntegerType::get())
     {
       return new IntegerLiteralNode(
-        dynamic_cast<IntegerLiteralNode*>(const_info.get())->value);
+        dynamic_cast<IntegerLiteralNode*>(literalExpr.get())->value);
     }
-    if (const_info->type == BooleanType::get())
+    if (literalExpr->getType() == BooleanType::get())
     {
       return new BooleanLiteralNode(
-        dynamic_cast<BooleanLiteralNode*>(const_info.get())->value);
+        dynamic_cast<BooleanLiteralNode*>(literalExpr.get())->value);
     }
-    if (const_info->type == CharacterType::get())
+    if (literalExpr->getType() == CharacterType::get())
     {
       return new CharacterLiteralNode(
-        dynamic_cast<CharacterLiteralNode*>(const_info.get())->character);
+        dynamic_cast<CharacterLiteralNode*>(literalExpr.get())->character);
     }
-    if (const_info->type == StringType::get())
+    if (literalExpr->getType() == StringType::get())
     {
       return new StringLiteralNode(
-        dynamic_cast<StringLiteralNode*>(const_info.get())->string);
+        dynamic_cast<StringLiteralNode*>(literalExpr.get())->string);
     }
     LOG(ERROR) << fmt::format(
-      "{}:{} can not be turned into a literal!", e->getId(), e->type->name());
+      "{}:{} can not be turned into a literal!", e->getId(), e->getType()->name());
     exit(EXIT_FAILURE);
   }
   LOG(ERROR) << fmt::format("{} is not defined in the const symbol table",
@@ -196,19 +196,19 @@ std::shared_ptr<ArrayType> makeArray(ExpressionNode* e1,
                                      ExpressionNode* e2,
                                      TypeNode* type)
 {
-  if (e1->type != e2->type)
+  if (e1->getType() != e2->getType())
   {
     LOG(ERROR) << "array bounds must have the same type";
     exit(EXIT_FAILURE);
   }
-  if (e1->type == IntegerType::get())
+  if (e1->getType() == IntegerType::get())
   {
     IntegerLiteralNode* i1 = literalize<IntegerLiteralNode>(e1);
     IntegerLiteralNode* i2 = literalize<IntegerLiteralNode>(e2);
     return std::make_shared<ArrayType>(
       i1->value, i2->value, type->type, IntegerType::get());
   }
-  if (e1->type == CharacterType::get())
+  if (e1->getType() == CharacterType::get())
   {
     CharacterLiteralNode* c1 = literalize<CharacterLiteralNode>(e1);
     CharacterLiteralNode* c2 = literalize<CharacterLiteralNode>(e2);

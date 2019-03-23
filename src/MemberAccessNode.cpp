@@ -11,14 +11,14 @@
 #include <utility>  // for move, pair
 #include <variant>  // for get
 
-std::string MemberAccessNode::getId()
+std::string MemberAccessNode::getId() const
 {
   return fmt::format("{}.{}", lValue->getId(), id);
 }
 
-std::shared_ptr<Type> lookupId(LvalueNode* lValue, std::string id)
+std::shared_ptr<Type> lookupId(std::shared_ptr<LvalueNode> lValue, std::string id)
 {
-  if (RecordType* pRecord = dynamic_cast<RecordType*>(lValue->type.get()))
+  if (RecordType* pRecord = dynamic_cast<RecordType*>(lValue->getType().get()))
   {
     auto member = pRecord->table.find(id);
     if (member != std::end(pRecord->table))
@@ -27,7 +27,7 @@ std::shared_ptr<Type> lookupId(LvalueNode* lValue, std::string id)
     }
     else
     {
-      LOG(ERROR) << fmt::format("Member {} does not exist", id);
+      LOG(ERROR) << fmt::format("Member {} does not exist in {}", id, lValue->getId());
       exit(EXIT_FAILURE);
     }
   }
@@ -36,10 +36,19 @@ std::shared_ptr<Type> lookupId(LvalueNode* lValue, std::string id)
 }
 
 MemberAccessNode::MemberAccessNode(LvalueNode* lValue, std::string id)
-  : LvalueNode(lookupId(lValue, id))
-  , lValue(std::shared_ptr<LvalueNode>(lValue))
+  : LvalueNode()
+  , lValue(lValue)
   , id(id)
 {}
+
+const std::shared_ptr<Type> MemberAccessNode::getType()
+{
+  if (type == nullptr)
+  {
+    type = lookupId(lValue, id);
+  }
+  return type;
+}
 
 void MemberAccessNode::emitSource(std::string indent)
 {
@@ -48,7 +57,7 @@ void MemberAccessNode::emitSource(std::string indent)
 
 Value MemberAccessNode::emit()
 {
-  if (RecordType* record = dynamic_cast<RecordType*>(lValue->type.get()))
+  if (RecordType* record = dynamic_cast<RecordType*>(lValue->getType().get()))
   {
     auto v_lval = lValue->emit();
     if (v_lval.isLvalue())

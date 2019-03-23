@@ -10,11 +10,6 @@ IntegerLiteralNode::IntegerLiteralNode(int value)
   , value(value)
 {}
 
-bool IntegerLiteralNode::isLiteral()
-{
-  return true;
-}
-
 void IntegerLiteralNode::emitSource(std::string indent)
 {
   std::cout << indent << value;

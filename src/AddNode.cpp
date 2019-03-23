@@ -24,14 +24,14 @@ void AddNode::emitSource(std::string indent)
 
 Value AddNode::emit()
 {
-  if (lhs->type != rhs->type)
+  if (lhs->getType() != rhs->getType())
   {
     LOG(ERROR) << fmt::format("mismatched types in add expression: {} and {}",
-                              lhs->type->name(),
-                              rhs->type->name());
+                              lhs->getType()->name(),
+                              rhs->getType()->name());
   }
 
-  if (lhs->type != IntegerType::get() && lhs->type != CharacterType::get())
+  if (lhs->getType() != IntegerType::get() && lhs->getType() != CharacterType::get())
   {
     LOG(ERROR) << "can not add non integer types";
   }

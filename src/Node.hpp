@@ -9,8 +9,7 @@ class Node
 {
 public:
   virtual void emitSource(std::string indent) = 0;
-  virtual ~Node(){};
-  virtual Value emit() = 0;
+  virtual ~Node() = default;
 };
 
 #endif

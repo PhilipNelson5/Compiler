@@ -11,7 +11,7 @@ class StopStatementNode : public StatementNode
 public:
   StopStatementNode();
   virtual void emitSource(std::string indent) override;
-  virtual Value emit() override;
+  virtual void emit() override;
 };
 
 #endif

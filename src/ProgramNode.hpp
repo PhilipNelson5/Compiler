@@ -22,7 +22,7 @@ public:
               ListNode<VariableDeclarationNode>*& vds,
               ListNode<StatementNode>*& mb);
   virtual void emitSource(std::string indent) override;
-  virtual Value emit() override;
+  void emit();
 
 private:
   std::vector<std::shared_ptr<ConstantDeclarationNode>> constantDecls;

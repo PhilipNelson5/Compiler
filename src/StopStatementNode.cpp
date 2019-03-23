@@ -6,14 +6,12 @@ StopStatementNode::StopStatementNode() {}
 
 void StopStatementNode::emitSource(std::string indent)
 {
-  std::cout << indent << "stop;" << std::endl;
+  std::cout << indent << "stop;" << '\n';
 }
 
-Value StopStatementNode::emit()
+void StopStatementNode::emit()
 {
   std::cout << "li $v0, 10"
             << " # load exit instruction" << '\n';
   std::cout << "syscall" << '\n';
-
-  return {};
 }

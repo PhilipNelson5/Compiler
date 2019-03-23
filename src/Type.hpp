@@ -22,10 +22,10 @@
 class Type
 {
 public:
-  virtual int size() { return 4; };
-  virtual std::string name() = 0;
+  virtual int size() const { return 4; };
+  virtual std::string name() const = 0;
   virtual ~Type() = default;
-  virtual void emitSource(std::string indent) = 0;
+  virtual void emitSource(std::string indent) const = 0;
 };
 
 //------------------------------------------------------------------------------
@@ -34,7 +34,7 @@ public:
 class IntegerType : public Type
 {
 public:
-  std::string name() override { return "integer"; }
+  std::string name() const override { return "integer"; }
 
   static std::shared_ptr<Type> get()
   {
@@ -42,7 +42,7 @@ public:
     return pInt;
   }
 
-  virtual void emitSource(std::string indent) override
+  virtual void emitSource(std::string indent) const override
   {
     (void)indent;
     std::cout << name();
@@ -58,7 +58,7 @@ private:
 class CharacterType : public Type
 {
 public:
-  std::string name() override { return "character"; }
+  std::string name() const override { return "character"; }
 
   static std::shared_ptr<Type> get()
   {
@@ -66,7 +66,7 @@ public:
     return pChar;
   }
 
-  virtual void emitSource(std::string indent) override
+  virtual void emitSource(std::string indent) const override
   {
     (void)indent;
     std::cout << name();
@@ -82,7 +82,7 @@ private:
 class BooleanType : public Type
 {
 public:
-  std::string name() override { return "boolean"; }
+  std::string name() const override { return "boolean"; }
 
   static std::shared_ptr<Type> get()
   {
@@ -90,7 +90,7 @@ public:
     return pBool;
   }
 
-  virtual void emitSource(std::string indent) override
+  virtual void emitSource(std::string indent) const override
   {
     (void)indent;
     std::cout << name();
@@ -106,9 +106,9 @@ private:
 class StringType : public Type
 {
 public:
-  int size() override { return 0; }
+  int size() const override { return 0; }
 
-  virtual std::string name() override { return "string"; }
+  virtual std::string name() const override { return "string"; }
 
   static std::shared_ptr<Type> get()
   {
@@ -116,7 +116,7 @@ public:
     return pStr;
   }
 
-  virtual void emitSource(std::string indent) override
+  virtual void emitSource(std::string indent) const override
   {
     (void)indent;
     std::cout << name();
@@ -132,19 +132,16 @@ private:
 class ArrayType : public Type
 {
 public:
-  ArrayType(int lb,
-            int ub,
-            std::shared_ptr<Type> elementType,
-            std::shared_ptr<Type> indexType)
+  ArrayType(int lb, int ub, std::shared_ptr<Type> elementType, std::shared_ptr<Type> indexType)
     : lb(lb)
     , ub(ub)
     , indexType(indexType)
     , elementType(elementType)
   {}
 
-  virtual std::string name() override { return "array"; }
+  virtual std::string name() const override { return "array"; }
 
-  virtual void emitSource(std::string indent) override
+  virtual void emitSource(std::string indent) const override
   {
     (void)indent;
     fmt::print("array[{}:{}] of ", lb, ub);
@@ -155,7 +152,7 @@ public:
   const std::shared_ptr<Type> indexType;
   const std::shared_ptr<Type> elementType;
 
-  virtual int size() override { return (ub - lb + 1) * elementType->size(); }
+  virtual int size() const override { return (ub - lb + 1) * elementType->size(); }
 };
 
 //------------------------------------------------------------------------------
@@ -188,9 +185,9 @@ public:
     }
   }
 
-  virtual std::string name() override { return "record"; }
+  virtual std::string name() const override { return "record"; }
 
-  virtual void emitSource(std::string indent) override
+  virtual void emitSource(std::string indent) const override
   {
     std::cout << "record" << '\n';
     for (auto&& r : table)
@@ -215,7 +212,7 @@ public:
     return found->second;
   }
 
-  virtual int size() override
+  virtual int size() const override
   {
     return std::accumulate(table.begin(), table.end(), 0, [](int sum, auto e) {
       return sum + e.second.second->size();

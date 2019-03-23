@@ -75,7 +75,7 @@ void ProgramNode::emitSource(std::string indent)
   std::cout << indent << "END." << std::endl;
 }
 
-Value ProgramNode::emit()
+void ProgramNode::emit()
 {
   std::cout << ".text" << std::endl;
   std::cout << "la $gp, GLOBAL_AREA" << std::endl;
@@ -123,5 +123,4 @@ Value ProgramNode::emit()
   std::cout << "\n.data" << std::endl;
   symbol_table.printStrings();
   std::cout << "\n.align 2\nGLOBAL_AREA:" << std::endl;
-  return {};
 }

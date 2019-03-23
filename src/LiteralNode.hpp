@@ -10,9 +10,9 @@ public:
     : ExpressionNode(type)
   {}
 
-  bool isConstant() { return true; }
+  virtual bool isConstant() const override { return true; }
 
-  bool isLiteral() { return true; }
+  virtual bool isLiteral() const override { return true; }
 };
 
 #endif

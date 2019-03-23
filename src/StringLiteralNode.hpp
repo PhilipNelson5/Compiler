@@ -12,6 +12,7 @@ public:
   StringLiteralNode(std::string);
   virtual void emitSource(std::string indent) override;
   virtual Value emit() override;
+
   const std::string string;
 };
 

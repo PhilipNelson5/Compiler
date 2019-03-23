@@ -26,7 +26,7 @@ void RepeatStatementNode::emitSource(std::string indent)
   std::cout << "\n\n";
 }
 
-Value RepeatStatementNode::emit()
+void RepeatStatementNode::emit()
 {
   std::cout << "# repeat\n";
   auto lblStart = symbol_table.newLabel("start");
@@ -40,6 +40,4 @@ Value RepeatStatementNode::emit()
   auto r_expr = expr->emit().getTheeIntoARegister();
 
   fmt::print("beq {}, $0, {}", r_expr, lblStart);
-
-  return {};
 }

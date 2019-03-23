@@ -8,12 +8,12 @@
 #include <iostream> // for operator<<, cout, ostream, basic_ostream
 #include <string>   // for string, operator<<, char_traits
 
-VariableDeclarationNode::VariableDeclarationNode(
-  ListNode<std::string>* identList,
-  TypeNode*& typeNode)
+VariableDeclarationNode::VariableDeclarationNode(ListNode<std::string>* identList,
+                                                 TypeNode*& typeNode)
   : m_ids(ListNode<std::string>::makeDerefVector(identList))
   , m_type(typeNode->type)
 {
+  // TODO move to the emit function;
   for (auto&& id : m_ids)
     symbol_table.storeVariable(id, m_type);
 }
@@ -30,7 +30,7 @@ void VariableDeclarationNode::emitSource(std::string indent)
   std::cout << ";" << '\n';
 }
 
-Value VariableDeclarationNode::emit()
+void VariableDeclarationNode::emit()
 {
   throw "VariableDeclarationNode::emit() should not be called";
 }

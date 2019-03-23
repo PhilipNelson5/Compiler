@@ -1,9 +1,10 @@
 #include "SubtractNode.hpp"
 
-#include "IntegerLiteralNode.hpp" // for IntegerLiteralNode
-#include "RegisterPool.hpp"       // for operator<<, Register
-#include "Type.hpp"               // for IntegerType, Type
-#include "log/easylogging++.h"    // for Writer, CERROR, LOG
+#include "../fmt/include/fmt/core.h" // for print
+#include "IntegerLiteralNode.hpp"    // for IntegerLiteralNode
+#include "RegisterPool.hpp"          // for operator<<, Register
+#include "Type.hpp"                  // for IntegerType, Type
+#include "log/easylogging++.h"       // for Writer, CERROR, LOG
 
 #include <iostream> // for operator<<, ostream, cout, basic_o...
 
@@ -23,13 +24,14 @@ void SubtractNode::emitSource(std::string indent)
 
 Value SubtractNode::emit()
 {
-  if (lhs->type != rhs->type)
+  if (lhs->getType() != rhs->getType())
   {
-    LOG(ERROR) << "mismatched types in subtract expression: " << lhs->type->name() << " and "
-               << rhs->type->name();
+    LOG(ERROR) << fmt::format("mismatched types in subtract expression: {} and {}",
+                              lhs->getType()->name(),
+                              rhs->getType()->name());
   }
 
-  if (lhs->type != IntegerType::get())
+  if (lhs->getType() != IntegerType::get())
   {
     LOG(ERROR) << "can not subtract non integer types";
   }

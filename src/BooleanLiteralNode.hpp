@@ -8,9 +8,9 @@ class BooleanLiteralNode : public LiteralNode
 {
 public:
   BooleanLiteralNode(int value);
-  virtual bool isLiteral() override;
   virtual void emitSource(std::string indent) override;
   virtual Value emit() override;
+
   const bool value;
 };
 

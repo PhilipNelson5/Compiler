@@ -12,12 +12,13 @@ class SubscriptOperatorNode : public LvalueNode
 {
 public:
   SubscriptOperatorNode(LvalueNode* lValue, ExpressionNode* expr);
-  virtual std::string getId() override;
+  virtual const std::shared_ptr<Type> getType() override;
+  virtual std::string getId() const override;
   virtual void emitSource(std::string indent) override;
   virtual Value emit() override;
 
-  std::shared_ptr<LvalueNode> lValue;
-  std::shared_ptr<ExpressionNode> expr;
+  const std::shared_ptr<LvalueNode> lValue;
+  const std::shared_ptr<ExpressionNode> expr;
 };
 
 #endif

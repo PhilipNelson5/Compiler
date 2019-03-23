@@ -1,16 +1,29 @@
 #include "ExpressionNode.hpp"
-class Type;
+
+ExpressionNode::ExpressionNode()
+  : type(nullptr)
+{}
 
 ExpressionNode::ExpressionNode(std::shared_ptr<Type> type)
   : type(type)
 {}
 
-bool ExpressionNode::isLiteral()
+const std::shared_ptr<Type> ExpressionNode::getType()
+{
+  return type;
+}
+
+void ExpressionNode::setType(std::shared_ptr<Type> newType)
+{
+  type = newType;
+}
+
+bool ExpressionNode::isLiteral() const
 {
   return false;
 }
 
-bool ExpressionNode::isConstant()
+bool ExpressionNode::isConstant() const
 {
   return false;
 }

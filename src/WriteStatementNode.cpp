@@ -21,7 +21,7 @@ void WriteStatementNode::emitSource(std::string indent)
   std::cout << ");" << std::endl;
 }
 
-Value WriteStatementNode::emit()
+void WriteStatementNode::emit()
 {
   std::cout << "\n# ";
   emitSource("");
@@ -30,24 +30,24 @@ Value WriteStatementNode::emit()
   {
     auto v_reg = expr->emit();
 
-    if (expr->type == IntegerType::get() | expr->type == BooleanType::get())
+    if (expr->getType() == IntegerType::get() | expr->getType() == BooleanType::get())
     {
       std::cout << "li $v0, 1"
                 << " # load print integer instruction" << std::endl;
     }
-    else if (expr->type == CharacterType::get())
+    else if (expr->getType() == CharacterType::get())
     {
       std::cout << "li $v0, 11"
                 << " # load print character instruction" << std::endl;
     }
-    else if (expr->type == StringType::get())
+    else if (expr->getType() == StringType::get())
     {
       std::cout << "li $v0, 4"
                 << " # load print string instruction" << std::endl;
     }
     else
     {
-      LOG(ERROR) << "write is not defined for type " << expr->type->name();
+      LOG(ERROR) << "write is not defined for type " << expr->getType()->name();
       exit(EXIT_FAILURE);
     }
 
@@ -59,6 +59,4 @@ Value WriteStatementNode::emit()
     std::cout << ")" << std::endl;
     std::cout << "syscall" << std::endl << std::endl;
   }
-
-  return {};
 }

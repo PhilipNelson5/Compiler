@@ -23,15 +23,15 @@ void ModuloNode::emitSource(std::string indent)
 
 Value ModuloNode::emit()
 {
-  if (lhs->type != rhs->type)
+  if (lhs->getType() != rhs->getType())
   {
     LOG(ERROR) << fmt::format(
       "mismatched types in modulo expression: {} and {}",
-      lhs->type->name(),
-      rhs->type->name());
+      lhs->getType()->name(),
+      rhs->getType()->name());
   }
 
-  if (lhs->type != IntegerType::get())
+  if (lhs->getType() != IntegerType::get())
   {
     LOG(ERROR) << "can not divide non integer types";
   }

@@ -24,7 +24,7 @@ private:
   std::streambuf* old;
 };
 
-std::string SubscriptOperatorNode::getId()
+std::string SubscriptOperatorNode::getId() const
 {
   std::stringstream s_expr;
   { // remporarily redirect stdout to the s_expr stringstream
@@ -34,9 +34,9 @@ std::string SubscriptOperatorNode::getId()
   return fmt::format("{}[{}]", lValue->getId(), s_expr.str());
 }
 
-std::shared_ptr<Type> getArrayType(LvalueNode* lValue)
+std::shared_ptr<Type> getArrayType(std::shared_ptr<LvalueNode> lValue)
 {
-  if (ArrayType* array = dynamic_cast<ArrayType*>(lValue->type.get()))
+  if (ArrayType* array = dynamic_cast<ArrayType*>(lValue->getType().get()))
   {
     return array->elementType;
   }
@@ -46,11 +46,19 @@ std::shared_ptr<Type> getArrayType(LvalueNode* lValue)
 }
 
 SubscriptOperatorNode::SubscriptOperatorNode(LvalueNode* lValue, ExpressionNode* expr)
-  : LvalueNode(getArrayType(lValue))
+  : LvalueNode()
   , lValue(std::shared_ptr<LvalueNode>(lValue))
   , expr(std::shared_ptr<ExpressionNode>(expr))
 {}
 
+const std::shared_ptr<Type> SubscriptOperatorNode::getType()
+{
+  if (type == nullptr)
+  {
+    type = getArrayType(lValue);
+  }
+  return type;
+}
 void SubscriptOperatorNode::emitSource(std::string indent)
 {
   (void)indent;
@@ -62,7 +70,7 @@ void SubscriptOperatorNode::emitSource(std::string indent)
 
 Value SubscriptOperatorNode::emit()
 {
-  if (ArrayType* array = dynamic_cast<ArrayType*>(lValue->type.get()))
+  if (ArrayType* array = dynamic_cast<ArrayType*>(lValue->getType().get()))
   {
     auto v_lval = lValue->emit();
 
