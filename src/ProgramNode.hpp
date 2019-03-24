@@ -1,8 +1,7 @@
 #ifndef PROGRAM_NODE_HPP
 #define PROGRAM_NODE_HPP
 
-#include "Node.hpp"  // for Node
-#include "Value.hpp" // for Value
+#include "Node.hpp" // for Node
 
 #include <memory> // for shared_ptr
 #include <string> // for string

@@ -10,8 +10,8 @@ public:
     : ExpressionNode(type)
   {}
 
+  virtual std::variant<std::monostate, int, char, bool> eval() const override = 0;
   virtual bool isConstant() const override { return true; }
-
   virtual bool isLiteral() const override { return true; }
 };
 

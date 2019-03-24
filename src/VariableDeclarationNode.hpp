@@ -22,7 +22,7 @@ public:
 
 private:
   const std::vector<std::string> m_ids;
-  const std::shared_ptr<Type> m_type;
+  const std::shared_ptr<TypeNode> m_typeNode;
 };
 
 #endif

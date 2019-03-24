@@ -22,8 +22,3 @@ bool ExpressionNode::isLiteral() const
 {
   return false;
 }
-
-bool ExpressionNode::isConstant() const
-{
-  return false;
-}

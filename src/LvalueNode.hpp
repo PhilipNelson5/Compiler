@@ -18,6 +18,8 @@ public:
     : ExpressionNode(type)
   {}
 
+  virtual std::variant<std::monostate, int, char, bool> eval() const = 0;
+  virtual bool isConstant() const = 0;
   virtual std::string getId() const = 0;
 };
 

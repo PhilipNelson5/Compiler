@@ -11,6 +11,11 @@ BooleanLiteralNode::BooleanLiteralNode(int value)
   , value(value)
 {}
 
+std::variant<std::monostate, int, char, bool> BooleanLiteralNode::eval() const
+{
+  return {value};
+}
+
 void BooleanLiteralNode::emitSource(std::string indent)
 {
   std::cout << indent << std::boolalpha << value << std::noboolalpha;

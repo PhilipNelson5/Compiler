@@ -10,6 +10,7 @@ class StringLiteralNode : public LiteralNode
 {
 public:
   StringLiteralNode(std::string);
+  virtual std::variant<std::monostate, int, char, bool> eval() const override;
   virtual void emitSource(std::string indent) override;
   virtual Value emit() override;
 

@@ -10,6 +10,42 @@ AndNode::AndNode(ExpressionNode*& left, ExpressionNode*& right)
   , rhs(right)
 {}
 
+bool AndNode::isConstant() const
+{
+  return lhs->isConstant() && rhs->isConstant();
+}
+
+std::variant<std::monostate, int, char, bool> AndNode::eval() const
+{
+  auto var_lhs = lhs->eval();
+  auto var_rhs = rhs->eval();
+
+  if (var_lhs.index() != var_rhs.index())
+  {
+    LOG(ERROR) << fmt::format("Type mismatch, can not compare {} & {}",
+                              lhs->getType()->name(),
+                              rhs->getType()->name());
+    exit(EXIT_FAILURE);
+  }
+  if ((var_lhs.index() == 0) || (var_rhs.index() == 0))
+  {
+    return {};
+  }
+  if (std::holds_alternative<int>(var_lhs))
+  {
+    return std::get<int>(var_lhs) & std::get<int>(var_rhs);
+  }
+  if (std::holds_alternative<char>(var_lhs))
+  {
+    return std::get<char>(var_lhs) & std::get<char>(var_rhs);
+  }
+  if (std::holds_alternative<bool>(var_lhs))
+  {
+    return std::get<bool>(var_lhs) && std::get<bool>(var_rhs);
+  }
+  return {};
+}
+
 void AndNode::emitSource(std::string indent)
 {
   std::cout << indent;

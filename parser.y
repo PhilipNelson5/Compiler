@@ -347,7 +347,7 @@ Type                            : SimpleType { $$ = $1; }
 
 SimpleType                      : ID_T
                                   {
-                                    $$ = new TypeNode(symbol_table.lookupType($1));
+                                    $$ = new TypeNode($1);
                                   }
                                 ;
 
@@ -376,7 +376,10 @@ Field                           : IdentList COLON_T Type SEMI_COLON_T { $$ = new
 
 ArrayType                       : ARRAY_T
                                   OPEN_BRACKET_T Expression COLON_T Expression CLOSE_BRACKET_T
-                                  OF_T Type { $$ = new TypeNode(makeArray($3, $5, $8)); }
+                                  OF_T Type
+                                  {
+                                    $$ = new TypeNode(std::make_shared<ArrayType>($3, $5, $8));
+                                  }
                                 ;
 
 IdentList                       : IdentList COMMA_T ID_T
@@ -497,12 +500,12 @@ RepeatStatement                 : REPEAT_T StatementList UNTIL_T Expression
 ForStatement                    : FOR_T ID_T ASSIGN_T Expression TO_T Expression
                                     DO_T StatementList END_T
                                   {
-                                    $$ = new ForStatementNode($2, $4, $6, $8, ForStatementNode::Type::TO);
+                                    $$ = new ForStatementNode(new IdentifierNode($2), $4, $6, $8, ForStatementNode::Type::TO);
                                   }
                                 | FOR_T ID_T ASSIGN_T Expression DOWNTO_T Expression
                                     DO_T StatementList END_T
                                   {
-                                    $$ = new ForStatementNode($2, $4, $6, $8, ForStatementNode::Type::DOWNTO);
+                                    $$ = new ForStatementNode(new IdentifierNode($2), $4, $6, $8, ForStatementNode::Type::DOWNTO);
                                   }
                                 ;
 

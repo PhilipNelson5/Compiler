@@ -1,12 +1,41 @@
 #include "UnaryMinusNode.hpp"
 
 #include "Type.hpp"
+
 #include <iostream>
 
 UnaryMinusNode::UnaryMinusNode(ExpressionNode*& right)
   : ExpressionNode(IntegerType::get())
   , rhs(right)
 {}
+
+bool UnaryMinusNode::isConstant() const
+{
+  return rhs->isConstant();
+}
+
+std::variant<std::monostate, int, char, bool> UnaryMinusNode::eval() const
+{
+  auto var_rhs = rhs->eval();
+
+  if (var_rhs.index() == 0)
+  {
+    return {};
+  }
+  if (std::holds_alternative<int>(var_rhs))
+  {
+    return -std::get<int>(var_rhs);
+  }
+  if (std::holds_alternative<char>(var_rhs))
+  {
+    return -std::get<char>(var_rhs);
+  }
+  if (std::holds_alternative<bool>(var_rhs))
+  {
+    return -std::get<bool>(var_rhs);
+  }
+  return {};
+}
 
 void UnaryMinusNode::emitSource(std::string indent)
 {

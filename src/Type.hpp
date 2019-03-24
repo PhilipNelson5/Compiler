@@ -2,9 +2,10 @@
 #define TYPE_HPP
 
 #include "../fmt/include/fmt/core.h" // for print
-#include "ListNode.hpp"              // for ListNode
-#include "TypeNode.hpp"              // for TypeNode
-#include "log/easylogging++.h"       // for Writer, CERROR, LOG
+#include "ExpressionNode.hpp"
+#include "ListNode.hpp"        // for ListNode
+#include "TypeNode.hpp"        // for TypeNode
+#include "log/easylogging++.h" // for Writer, CERROR, LOG
 
 #include <iostream> // for operator<<, cout, ostream, basi...
 #include <iterator> // for end
@@ -22,10 +23,10 @@
 class Type
 {
 public:
-  virtual int size() const { return 4; };
-  virtual std::string name() const = 0;
+  virtual int size() { return 4; };
+  virtual std::string name() = 0;
   virtual ~Type() = default;
-  virtual void emitSource(std::string indent) const = 0;
+  virtual void emitSource(std::string indent) = 0;
 };
 
 //------------------------------------------------------------------------------
@@ -34,7 +35,7 @@ public:
 class IntegerType : public Type
 {
 public:
-  std::string name() const override { return "integer"; }
+  std::string name() override { return "integer"; }
 
   static std::shared_ptr<Type> get()
   {
@@ -42,7 +43,7 @@ public:
     return pInt;
   }
 
-  virtual void emitSource(std::string indent) const override
+  virtual void emitSource(std::string indent) override
   {
     (void)indent;
     std::cout << name();
@@ -58,7 +59,7 @@ private:
 class CharacterType : public Type
 {
 public:
-  std::string name() const override { return "character"; }
+  std::string name() override { return "character"; }
 
   static std::shared_ptr<Type> get()
   {
@@ -66,7 +67,7 @@ public:
     return pChar;
   }
 
-  virtual void emitSource(std::string indent) const override
+  virtual void emitSource(std::string indent) override
   {
     (void)indent;
     std::cout << name();
@@ -82,7 +83,7 @@ private:
 class BooleanType : public Type
 {
 public:
-  std::string name() const override { return "boolean"; }
+  std::string name() override { return "boolean"; }
 
   static std::shared_ptr<Type> get()
   {
@@ -90,7 +91,7 @@ public:
     return pBool;
   }
 
-  virtual void emitSource(std::string indent) const override
+  virtual void emitSource(std::string indent) override
   {
     (void)indent;
     std::cout << name();
@@ -106,9 +107,9 @@ private:
 class StringType : public Type
 {
 public:
-  int size() const override { return 0; }
+  int size() override { return 0; }
 
-  virtual std::string name() const override { return "string"; }
+  virtual std::string name() override { return "string"; }
 
   static std::shared_ptr<Type> get()
   {
@@ -116,7 +117,7 @@ public:
     return pStr;
   }
 
-  virtual void emitSource(std::string indent) const override
+  virtual void emitSource(std::string indent) override
   {
     (void)indent;
     std::cout << name();
@@ -132,27 +133,83 @@ private:
 class ArrayType : public Type
 {
 public:
-  ArrayType(int lb, int ub, std::shared_ptr<Type> elementType, std::shared_ptr<Type> indexType)
-    : lb(lb)
-    , ub(ub)
-    , indexType(indexType)
-    , elementType(elementType)
+  ArrayType(ExpressionNode*& lb, ExpressionNode*& ub, TypeNode*& elementType)
+    : lbExpr(lb)
+    , ubExpr(ub)
+    , elementTypeNode(elementType)
+    , indexType(nullptr)
+    , elementType(nullptr)
   {}
 
-  virtual std::string name() const override { return "array"; }
+  int lb, ub;
+  const std::shared_ptr<ExpressionNode> lbExpr, ubExpr;
+  const std::shared_ptr<TypeNode> elementTypeNode;
+  std::shared_ptr<Type> indexType;
+  std::shared_ptr<Type> elementType;
 
-  virtual void emitSource(std::string indent) const override
+private:
+  bool initialized = false;
+
+public:
+  virtual std::string name() override { return "array"; }
+
+  virtual void emitSource(std::string indent) override
   {
     (void)indent;
+    init();
     fmt::print("array[{}:{}] of ", lb, ub);
     elementType->emitSource(indent + "  ");
   }
 
-  const int lb, ub;
-  const std::shared_ptr<Type> indexType;
-  const std::shared_ptr<Type> elementType;
+  virtual int size() override
+  {
+    init();
+    return (ub - lb + 1) * elementType->size();
+  }
 
-  virtual int size() const override { return (ub - lb + 1) * elementType->size(); }
+  void init()
+  {
+    // static bool initialized = false;
+    if (initialized) return;
+    initialized = true;
+
+    if (lbExpr->getType() != ubExpr->getType())
+    {
+      LOG(ERROR) << "array bounds must have the same type";
+      exit(EXIT_FAILURE);
+    }
+    if ((!lbExpr->isConstant() && !lbExpr->isLiteral())
+        || (!ubExpr->isConstant() && !ubExpr->isLiteral()))
+    {
+      LOG(ERROR) << "array bounds must be constant expressions";
+      exit(EXIT_FAILURE);
+    }
+
+    auto var_lb = lbExpr->eval();
+    auto var_ub = ubExpr->eval();
+
+    if (lbExpr->getType() == IntegerType::get())
+    {
+      lb = std::get<int>(var_lb);
+      ub = std::get<int>(var_ub);
+      indexType = IntegerType::get();
+    }
+    else if (ubExpr->getType() == CharacterType::get())
+    {
+      lb = std::get<char>(var_lb);
+      ub = std::get<char>(var_ub);
+      indexType = IntegerType::get();
+    }
+    else
+    {
+      LOG(ERROR) << fmt::format(
+        "array bounds must be integer or character type: {} not allowed",
+        lbExpr->getType()->name());
+      exit(EXIT_FAILURE);
+    }
+
+    elementType = elementTypeNode->getType();
+  }
 };
 
 //------------------------------------------------------------------------------
@@ -162,33 +219,45 @@ struct Field
 {
   Field(ListNode<std::string>*& idList, TypeNode* typeNode)
     : ids(ListNode<std::string>::makeDerefVector(idList))
-    , type(typeNode->type)
+    , typeNode(typeNode)
   {}
+
+  const std::shared_ptr<Type> getType()
+  {
+    if (type == nullptr)
+    {
+      type = typeNode->getType();
+    }
+    return type;
+  }
+
   const std::vector<std::string> ids;
-  const std::shared_ptr<Type> type;
+  const std::shared_ptr<TypeNode> typeNode;
+
+private:
+  std::shared_ptr<Type> type;
 };
 
 class RecordType : public Type
 {
 public:
   RecordType(ListNode<Field>*& fields)
-  {
-    int offset = 0;
-    auto vecFields = ListNode<Field>::makeVector(fields);
-    for (auto&& f : vecFields)
-    {
-      for (auto&& id : f->ids)
-      {
-        table.emplace(id, std::make_pair(offset, f->type));
-        offset += f->type->size();
-      }
-    }
-  }
+    : fields(ListNode<Field>::makeVector(fields))
+    , table()
+  {}
 
-  virtual std::string name() const override { return "record"; }
+  std::vector<std::shared_ptr<Field>> fields;
+  std::map<std::string, std::pair<int, std::shared_ptr<Type>>> table;
 
-  virtual void emitSource(std::string indent) const override
+private:
+  bool initialized = false;
+
+public:
+  virtual std::string name() override { return "record"; }
+
+  virtual void emitSource(std::string indent) override
   {
+    init();
     std::cout << "record" << '\n';
     for (auto&& r : table)
     {
@@ -199,10 +268,9 @@ public:
     std::cout << std::string(indent.length() - 2, ' ') << "end";
   }
 
-  std::map<std::string, std::pair<int, std::shared_ptr<Type>>> table;
-
   std::pair<int, std::shared_ptr<Type>> lookupId(std::string id)
   {
+    init();
     auto found = table.find(id);
     if (found == std::end(table))
     {
@@ -212,11 +280,28 @@ public:
     return found->second;
   }
 
-  virtual int size() const override
+  virtual int size() override
   {
+    init();
     return std::accumulate(table.begin(), table.end(), 0, [](int sum, auto e) {
       return sum + e.second.second->size();
     });
+  }
+
+  void init()
+  {
+    if (initialized) return;
+    initialized = true;
+
+    int offset = 0;
+    for (auto&& f : fields)
+    {
+      for (auto&& id : f->ids)
+      {
+        table.emplace(id, std::make_pair(offset, f->getType()));
+        offset += f->getType()->size();
+      }
+    }
   }
 };
 

@@ -12,6 +12,29 @@ CharacterExpressionNode::CharacterExpressionNode(ExpressionNode*& expr)
   , expr(expr)
 {}
 
+bool CharacterExpressionNode::isConstant() const
+{
+  return expr->isConstant();
+}
+
+std::variant<std::monostate, int, char, bool> CharacterExpressionNode::eval() const
+{
+  auto var_expr = expr->eval();
+
+  if (var_expr.index() == 0)
+  {
+    return {};
+  }
+  if (std::holds_alternative<int>(var_expr))
+  {
+    return static_cast<char>(std::get<int>(var_expr));
+  }
+
+  LOG(ERROR) << fmt::format("chr is not defined on {}. Must use integer type",
+                            expr->getType()->name());
+  exit(EXIT_FAILURE);
+}
+
 void CharacterExpressionNode::emitSource(std::string indent)
 {
   std::cout << indent << "chr(";

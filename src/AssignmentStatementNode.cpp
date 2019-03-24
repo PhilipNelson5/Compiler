@@ -38,6 +38,7 @@ void AssignmentStatementNode::emit()
   {
     if (ArrayType* array = dynamic_cast<ArrayType*>(expr->getType().get()))
     {
+      array->init();
       auto size = array->size();
       auto r_expr = v_expr.getRegister();
       auto [offset, memoryLocation] = std::get<std::pair<int, int>>(v_id.value);

@@ -13,6 +13,36 @@ ModuloNode::ModuloNode(ExpressionNode*& left, ExpressionNode*& right)
   , rhs(right)
 {}
 
+bool ModuloNode::isConstant() const
+{
+  return lhs->isConstant() && rhs->isConstant();
+}
+
+std::variant<std::monostate, int, char, bool> ModuloNode::eval() const
+{
+  auto var_lhs = lhs->eval();
+  auto var_rhs = rhs->eval();
+
+  if (var_lhs.index() != var_rhs.index())
+  {
+    LOG(ERROR) << fmt::format("mismatched types in modulo expression: {} and {}",
+                              lhs->getType()->name(),
+                              rhs->getType()->name());
+    exit(EXIT_FAILURE);
+  }
+  if ((var_lhs.index() == 0) || (var_rhs.index() == 0))
+  {
+    return {};
+  }
+  if (std::holds_alternative<int>(var_lhs))
+  {
+    return std::get<int>(var_lhs) % std::get<int>(var_rhs);
+  }
+
+  LOG(ERROR) << "can not take the modulus of non integer types";
+  exit(EXIT_FAILURE);
+}
+
 void ModuloNode::emitSource(std::string indent)
 {
   std::cout << indent;
@@ -25,15 +55,16 @@ Value ModuloNode::emit()
 {
   if (lhs->getType() != rhs->getType())
   {
-    LOG(ERROR) << fmt::format(
-      "mismatched types in modulo expression: {} and {}",
-      lhs->getType()->name(),
-      rhs->getType()->name());
+    LOG(ERROR) << fmt::format("mismatched types in modulo expression: {} and {}",
+                              lhs->getType()->name(),
+                              rhs->getType()->name());
+    exit(EXIT_FAILURE);
   }
 
   if (lhs->getType() != IntegerType::get())
   {
-    LOG(ERROR) << "can not divide non integer types";
+    LOG(ERROR) << "can not take the modulus of non integer types";
+    exit(EXIT_FAILURE);
   }
 
   std::cout << "# ";

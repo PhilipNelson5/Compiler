@@ -12,6 +12,11 @@ SuccessorExpressionNode::SuccessorExpressionNode(ExpressionNode*& expr)
   , expr(expr)
 {}
 
+bool SuccessorExpressionNode::isConstant() const
+{
+  return expr->isConstant();
+}
+
 const std::shared_ptr<Type> SuccessorExpressionNode::getType()
 {
   if (type == nullptr)
@@ -20,6 +25,30 @@ const std::shared_ptr<Type> SuccessorExpressionNode::getType()
   }
   return type;
 }
+
+std::variant<std::monostate, int, char, bool> SuccessorExpressionNode::eval() const
+{
+  auto var_expr = expr->eval();
+
+  if (var_expr.index() == 0)
+  {
+    return {};
+  }
+  if (std::holds_alternative<int>(var_expr))
+  {
+    return std::get<int>(var_expr) + 1;
+  }
+  if (std::holds_alternative<char>(var_expr))
+  {
+    return std::get<char>(var_expr) + 1;
+  }
+  if (std::holds_alternative<bool>(var_expr))
+  {
+    return !std::get<bool>(var_expr);
+  }
+  return {};
+}
+
 void SuccessorExpressionNode::emitSource(std::string indent)
 {
   std::cout << indent << "succ(";

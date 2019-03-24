@@ -4,9 +4,12 @@
 #include "BooleanLiteralNode.hpp"    // for BooleanLiteralNode
 #include "LiteralNode.hpp"           // for LiteralNode
 #include "Type.hpp"                  // for Type, BooleanType, CharacterType
-#include "log/easylogging++.h"       // for Writer, LOG, CDEBUG, CERROR
+#include "cout_redirect.hpp"
+#include "log/easylogging++.h" // for Writer, LOG, CDEBUG, CERROR
+#include "stacktrace.h"
 
 #include <iostream> // for cout
+#include <sstream>
 #include <stdlib.h> // for exit, EXIT_FAILURE
 #include <utility>  // for pair
 
@@ -18,12 +21,18 @@ SymbolTable::SymbolTable()
   scopes.emplace_back();
   auto itPredefines = scopes.rbegin();
   itPredefines->constants.emplace(std::string("true"), new BooleanLiteralNode(1));
+  itPredefines->constants.emplace(std::string("TRUE"), new BooleanLiteralNode(1));
   itPredefines->constants.emplace(std::string("false"), new BooleanLiteralNode(0));
+  itPredefines->constants.emplace(std::string("FALSE"), new BooleanLiteralNode(0));
 
   itPredefines->types.emplace(std::string("integer"), IntegerType::get());
+  itPredefines->types.emplace(std::string("INTEGER"), IntegerType::get());
   itPredefines->types.emplace(std::string("char"), CharacterType::get());
+  itPredefines->types.emplace(std::string("CHAR"), CharacterType::get());
   itPredefines->types.emplace(std::string("boolean"), BooleanType::get());
+  itPredefines->types.emplace(std::string("BOOLEAN"), BooleanType::get());
   itPredefines->types.emplace(std::string("string"), StringType::get());
+  itPredefines->types.emplace(std::string("STRING"), StringType::get());
 
   // Enter Global Scope
   enter_scope();
@@ -118,6 +127,12 @@ void SymbolTable::storeVariable(std::string id, std::shared_ptr<Type> type)
 {
   static int globalOffset = 0;
 
+  if (type == nullptr)
+  {
+    LOG(ERROR) << id << "'s type is a nullptr!";
+    exit(EXIT_FAILURE);
+  }
+
   // Find on top level - error if already defined
   auto top = scopes.rbegin();
   auto foundVar = top->variables.find(id);
@@ -126,6 +141,7 @@ void SymbolTable::storeVariable(std::string id, std::shared_ptr<Type> type)
   if (foundVar != top->variables.end())
   {
     LOG(ERROR) << id << " is already defined as a variable in the current scope\n";
+    print_stacktrace(stderr);
     exit(EXIT_FAILURE);
   }
 
@@ -147,6 +163,12 @@ void SymbolTable::storeVariable(std::string id, std::shared_ptr<Type> type)
 
 void SymbolTable::storeConst(std::string id, std::shared_ptr<LiteralNode> literal)
 {
+  if (literal == nullptr)
+  {
+    LOG(ERROR) << id << "'s LiteralNode is nullptr!";
+    exit(EXIT_FAILURE);
+  }
+
   // Find on top level - error if already defined
   auto top = scopes.rbegin();
   auto foundVar = top->variables.find(id);
@@ -175,6 +197,11 @@ void SymbolTable::storeConst(std::string id, std::shared_ptr<LiteralNode> litera
 
 void SymbolTable::storeType(std::string id, std::shared_ptr<Type> type)
 {
+  if (type == nullptr)
+  {
+    LOG(ERROR) << id << "'s type is a nullptr!";
+    exit(EXIT_FAILURE);
+  }
   // Find on top level - error if already defined
   auto top = scopes.rbegin();
   auto foundType = top->types.find(id);

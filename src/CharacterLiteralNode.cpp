@@ -32,6 +32,11 @@ std::string CharacterLiteralNode::toString() const
   }
 }
 
+std::variant<std::monostate, int, char, bool> CharacterLiteralNode::eval() const
+{
+  return {character};
+}
+
 void CharacterLiteralNode::emitSource(std::string indent)
 {
   (void)indent;

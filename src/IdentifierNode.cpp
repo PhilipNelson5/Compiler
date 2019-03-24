@@ -14,9 +14,14 @@ IdentifierNode::IdentifierNode(std::string id)
   , id(id)
 {}
 
-const std::shared_ptr<Type> IdentifierNode::getType() 
+bool IdentifierNode::isConstant() const
 {
-  if(type == nullptr)
+  return (symbol_table.lookupConst(id) != nullptr);
+}
+
+const std::shared_ptr<Type> IdentifierNode::getType()
+{
+  if (type == nullptr)
   {
     type = symbol_table.getType(id);
   }
@@ -28,9 +33,14 @@ std::string IdentifierNode::getId() const
   return id;
 }
 
-bool IdentifierNode::isConstant() const
+std::variant<std::monostate, int, char, bool> IdentifierNode::eval() const
 {
-  return (symbol_table.lookupConst(id) != nullptr);
+  auto literlNode = symbol_table.lookupConst(id);
+  if (literlNode == nullptr)
+  {
+    return {};
+  }
+  return literlNode->eval();
 }
 
 void IdentifierNode::emitSource(std::string indent)

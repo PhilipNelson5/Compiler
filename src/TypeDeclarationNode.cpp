@@ -7,20 +7,18 @@
 
 TypeDeclarationNode::TypeDeclarationNode(std::string id, TypeNode*& typeNode)
   : m_id(id)
-  , m_type(typeNode->type)
-{
-  // TODO move to the emit function;
-  symbol_table.storeType(m_id, m_type);
-}
+  , m_typeNode(typeNode)
+{}
 
 void TypeDeclarationNode::emitSource(std::string indent)
 {
+  emit();
   std::cout << indent << m_id << " = ";
-  m_type->emitSource(indent + "  ");
+  m_typeNode->getType()->emitSource(indent + "  ");
   std::cout << ";" << std::endl;
 }
 
 void TypeDeclarationNode::emit()
 {
-  throw "TypeDeclarationNode::emit() should not be called";
+  symbol_table.storeType(m_id, m_typeNode->getType());
 }

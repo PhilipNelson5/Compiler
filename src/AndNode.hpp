@@ -10,6 +10,8 @@ class AndNode : public ExpressionNode
 {
 public:
   AndNode(ExpressionNode*& left, ExpressionNode*& right);
+  virtual bool isConstant() const override;
+  virtual std::variant<std::monostate, int, char, bool> eval() const override;
   virtual void emitSource(std::string indent) override;
   virtual Value emit() override;
 

@@ -4,25 +4,14 @@
 #include "ExpressionNode.hpp"        // for ExpressionNode
 #include "RegisterPool.hpp"          // for operator<<, Register
 #include "Type.hpp"                  // for ArrayType, Type
-#include "log/easylogging++.h"       // for Writer, CERROR, LOG
+#include "cout_redirect.hpp"
+#include "log/easylogging++.h" // for Writer, CERROR, LOG
 
 #include <iostream> // for cout
 #include <sstream>  // for operator<<, ostream, basic_ostream
 #include <stdlib.h> // for exit, EXIT_FAILURE
 #include <utility>  // for move, pair
 #include <variant>  // for get
-
-struct cout_redirect
-{
-  cout_redirect(std::streambuf* new_buffer)
-    : old(std::cout.rdbuf(new_buffer))
-  {}
-
-  ~cout_redirect() { std::cout.rdbuf(old); }
-
-private:
-  std::streambuf* old;
-};
 
 std::string SubscriptOperatorNode::getId() const
 {
@@ -38,6 +27,7 @@ std::shared_ptr<Type> getArrayType(std::shared_ptr<LvalueNode> lValue)
 {
   if (ArrayType* array = dynamic_cast<ArrayType*>(lValue->getType().get()))
   {
+    array->init();
     return array->elementType;
   }
 
@@ -51,6 +41,11 @@ SubscriptOperatorNode::SubscriptOperatorNode(LvalueNode* lValue, ExpressionNode*
   , expr(std::shared_ptr<ExpressionNode>(expr))
 {}
 
+bool SubscriptOperatorNode::isConstant() const
+{
+  return lValue->isConstant();
+}
+
 const std::shared_ptr<Type> SubscriptOperatorNode::getType()
 {
   if (type == nullptr)
@@ -59,6 +54,12 @@ const std::shared_ptr<Type> SubscriptOperatorNode::getType()
   }
   return type;
 }
+
+std::variant<std::monostate, int, char, bool> SubscriptOperatorNode::eval() const
+{
+  return {};
+}
+
 void SubscriptOperatorNode::emitSource(std::string indent)
 {
   (void)indent;
@@ -72,6 +73,7 @@ Value SubscriptOperatorNode::emit()
 {
   if (ArrayType* array = dynamic_cast<ArrayType*>(lValue->getType().get()))
   {
+    array->init();
     auto v_lval = lValue->emit();
 
     std::cout << "# ";

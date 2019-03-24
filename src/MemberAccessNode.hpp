@@ -11,8 +11,10 @@ class MemberAccessNode : public LvalueNode
 {
 public:
   MemberAccessNode(LvalueNode* lValue, std::string id);
+  virtual bool isConstant() const override;
   virtual const std::shared_ptr<Type> getType() override;
   virtual std::string getId() const override;
+  virtual std::variant<std::monostate, int, char, bool> eval() const override;
   virtual void emitSource(std::string indent) override;
   virtual Value emit() override;
 

@@ -41,6 +41,11 @@ MemberAccessNode::MemberAccessNode(LvalueNode* lValue, std::string id)
   , id(id)
 {}
 
+bool MemberAccessNode::isConstant() const
+{
+  return lValue->isConstant();
+}
+
 const std::shared_ptr<Type> MemberAccessNode::getType()
 {
   if (type == nullptr)
@@ -48,6 +53,11 @@ const std::shared_ptr<Type> MemberAccessNode::getType()
     type = lookupId(lValue, id);
   }
   return type;
+}
+
+std::variant<std::monostate, int, char, bool> MemberAccessNode::eval() const
+{
+  return {};
 }
 
 void MemberAccessNode::emitSource(std::string indent)

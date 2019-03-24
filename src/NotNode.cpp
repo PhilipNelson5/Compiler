@@ -9,6 +9,34 @@ NotNode::NotNode(ExpressionNode*& right)
   , rhs(right)
 {}
 
+bool NotNode::isConstant() const
+{
+  return rhs->isConstant();
+}
+
+std::variant<std::monostate, int, char, bool> NotNode::eval() const
+{
+  auto var_rhs = rhs->eval();
+
+  if (var_rhs.index() == 0)
+  {
+    return {};
+  }
+  if (std::holds_alternative<int>(var_rhs))
+  {
+    return !std::get<int>(var_rhs);
+  }
+  if (std::holds_alternative<char>(var_rhs))
+  {
+    return !std::get<char>(var_rhs);
+  }
+  if (std::holds_alternative<bool>(var_rhs))
+  {
+    return !std::get<bool>(var_rhs);
+  }
+  return {};
+}
+
 void NotNode::emitSource(std::string indent)
 {
   std::cout << indent;

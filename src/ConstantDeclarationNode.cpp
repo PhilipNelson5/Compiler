@@ -9,13 +9,11 @@
 ConstantDeclarationNode::ConstantDeclarationNode(std::string id, ExpressionNode* expr)
   : m_id(id)
   , m_expr(dynamic_cast<LiteralNode*>(expr))
-{
-  // TODO move to the emit function;
-  symbol_table.storeConst(m_id, m_expr);
-}
+{}
 
 void ConstantDeclarationNode::emitSource(std::string indent)
 {
+  emit();
   std::cout << indent << m_id << " = ";
   m_expr->emitSource("");
   std::cout << ";" << std::endl;
@@ -23,5 +21,5 @@ void ConstantDeclarationNode::emitSource(std::string indent)
 
 void ConstantDeclarationNode::emit()
 {
-  throw "ConstantDeclarationNode::emit() should not be called";
+  symbol_table.storeConst(m_id, m_expr);
 }

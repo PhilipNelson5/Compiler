@@ -10,6 +10,11 @@ StringLiteralNode::StringLiteralNode(std::string string)
   , string(string)
 {}
 
+std::variant<std::monostate, int, char, bool> StringLiteralNode::eval() const
+{
+  return {};
+}
+
 void StringLiteralNode::emitSource(std::string indent)
 {
   std::cout << indent << string;

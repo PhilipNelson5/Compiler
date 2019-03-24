@@ -14,6 +14,36 @@ SubtractNode::SubtractNode(ExpressionNode*& left, ExpressionNode*& right)
   , rhs(right)
 {}
 
+bool SubtractNode::isConstant() const
+{
+  return lhs->isConstant() && rhs->isConstant();
+}
+
+std::variant<std::monostate, int, char, bool> SubtractNode::eval() const
+{
+  auto var_lhs = lhs->eval();
+  auto var_rhs = rhs->eval();
+
+  if (var_lhs.index() != var_rhs.index())
+  {
+    LOG(ERROR) << fmt::format("mismatched types in subtract expression: {} and {}",
+                              lhs->getType()->name(),
+                              rhs->getType()->name());
+    exit(EXIT_FAILURE);
+  }
+  if ((var_lhs.index() == 0) || (var_rhs.index() == 0))
+  {
+    return {};
+  }
+  if (std::holds_alternative<int>(var_lhs))
+  {
+    return std::get<int>(var_lhs) - std::get<int>(var_rhs);
+  }
+
+  LOG(ERROR) << "can not subtract non integer types";
+  exit(EXIT_FAILURE);
+}
+
 void SubtractNode::emitSource(std::string indent)
 {
   std::cout << indent;
@@ -29,11 +59,13 @@ Value SubtractNode::emit()
     LOG(ERROR) << fmt::format("mismatched types in subtract expression: {} and {}",
                               lhs->getType()->name(),
                               rhs->getType()->name());
+    exit(EXIT_FAILURE);
   }
 
   if (lhs->getType() != IntegerType::get())
   {
     LOG(ERROR) << "can not subtract non integer types";
+    exit(EXIT_FAILURE);
   }
 
   std::cout << "# ";

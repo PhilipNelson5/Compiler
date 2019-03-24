@@ -18,12 +18,11 @@
 #include "StringLiteralNode.hpp"       // for StringLiteralNode
 #include "SubtractNode.hpp"            // for SubtractNode
 #include "SymbolTable.hpp"             // for SymbolTable, symbol_table
-#include "Type.hpp"                    // for ArrayType, IntegerType, Chara...
-#include "TypeNode.hpp"                // for TypeNode
+#include "Type.hpp"                    // for BooleanType, CharacterType
 #include "UnaryMinusNode.hpp"          // for UnaryMinusNode
 #include "log/easylogging++.h"         // for Writer, CERROR, LOG
 
-#include <memory>   // for shared_ptr, operator==, make_...
+#include <memory>   // for shared_ptr, operator==, __sha...
 #include <stdlib.h> // for exit, EXIT_FAILURE
 #include <string>   // for string
 
@@ -37,16 +36,13 @@ LiteralType* literalize(ExpressionNode* e)
   else if (e->isConstant())
   {
     auto c1 = dynamic_cast<LvalueNode*>(e);
-    return dynamic_cast<LiteralType*>(
-      symbol_table.lookupConst(c1->getId()).get());
+    return dynamic_cast<LiteralType*>(symbol_table.lookupConst(c1->getId()).get());
   }
   return nullptr;
 }
 
 template<typename NodeType, typename LiteralType, typename F>
-ExpressionNode* makeBinaryExpressionNode(ExpressionNode* e1,
-                                         ExpressionNode* e2,
-                                         F f)
+ExpressionNode* makeBinaryExpressionNode(ExpressionNode* e1, ExpressionNode* e2, F f)
 {
   // ----------------------------------------
   // Find expression 1 as literal or constant
@@ -167,13 +163,11 @@ ExpressionNode* makeLiteralNode(LvalueNode* e)
       "{}:{} can not be turned into a literal!", e->getId(), e->getType()->name());
     exit(EXIT_FAILURE);
   }
-  LOG(ERROR) << fmt::format("{} is not defined in the const symbol table",
-                            e->getId());
+  LOG(ERROR) << fmt::format("{} is not defined in the const symbol table", e->getId());
   exit(EXIT_FAILURE);
 }
 
-ConstantDeclarationNode* makeConstantDeclarationNode(std::string id,
-                                                     ExpressionNode* e)
+ConstantDeclarationNode* makeConstantDeclarationNode(std::string id, ExpressionNode* e)
 {
   // if ( Expression is an IdentifierNode )
   if (LvalueNode* plval = dynamic_cast<LvalueNode*>(e))
@@ -190,34 +184,6 @@ ConstantDeclarationNode* makeConstantDeclarationNode(std::string id,
     LOG(ERROR) << "Non-Const expression in Constant Declaration";
     exit(EXIT_FAILURE);
   }
-}
-
-std::shared_ptr<ArrayType> makeArray(ExpressionNode* e1,
-                                     ExpressionNode* e2,
-                                     TypeNode* type)
-{
-  if (e1->getType() != e2->getType())
-  {
-    LOG(ERROR) << "array bounds must have the same type";
-    exit(EXIT_FAILURE);
-  }
-  if (e1->getType() == IntegerType::get())
-  {
-    IntegerLiteralNode* i1 = literalize<IntegerLiteralNode>(e1);
-    IntegerLiteralNode* i2 = literalize<IntegerLiteralNode>(e2);
-    return std::make_shared<ArrayType>(
-      i1->value, i2->value, type->type, IntegerType::get());
-  }
-  if (e1->getType() == CharacterType::get())
-  {
-    CharacterLiteralNode* c1 = literalize<CharacterLiteralNode>(e1);
-    CharacterLiteralNode* c2 = literalize<CharacterLiteralNode>(e2);
-    return std::make_shared<ArrayType>(
-      c1->character, c2->character, type->type, IntegerType::get());
-  }
-
-  LOG(ERROR) << "array bounds must be integer or character type";
-  exit(EXIT_FAILURE);
 }
 
 #endif
