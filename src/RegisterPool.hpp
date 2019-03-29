@@ -28,7 +28,10 @@ public:
   // register name getter
   std::string toString() const { return "$" + std::to_string(name); }
 
-  // lowest number of registers
+  // get the registers in use
+  const std::vector<int> static getRegistersInUse();
+
+  // lowest number of registers in pool
   static size_t low;
 
 private:
@@ -39,7 +42,7 @@ private:
   Register& operator=(const Register& reg) = delete;
 
   // initialize the pool
-  void init();
+  void static init();
 
   // Register name
   int name;

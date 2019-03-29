@@ -23,7 +23,7 @@ void ReadStatementNode::emitSource(std::string indent)
     std::cout << ", ";
   }
   identifiers.back()->emitSource("");
-  std::cout << ");" << std::endl;
+  std::cout << ");\n";
 }
 
 void ReadStatementNode::emit()

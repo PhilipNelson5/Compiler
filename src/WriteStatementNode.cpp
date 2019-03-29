@@ -18,7 +18,7 @@ void WriteStatementNode::emitSource(std::string indent)
     std::cout << ", ";
   }
   expressionList.back()->emitSource("");
-  std::cout << ");" << std::endl;
+  std::cout << ");\n";
 }
 
 void WriteStatementNode::emit()
@@ -33,17 +33,17 @@ void WriteStatementNode::emit()
     if (expr->getType() == IntegerType::get() | expr->getType() == BooleanType::get())
     {
       std::cout << "li $v0, 1"
-                << " # load print integer instruction" << std::endl;
+                << " # load print integer instruction\n";
     }
     else if (expr->getType() == CharacterType::get())
     {
       std::cout << "li $v0, 11"
-                << " # load print character instruction" << std::endl;
+                << " # load print character instruction\n";
     }
     else if (expr->getType() == StringType::get())
     {
       std::cout << "li $v0, 4"
-                << " # load print string instruction" << std::endl;
+                << " # load print string instruction\n";
     }
     else
     {
@@ -56,7 +56,7 @@ void WriteStatementNode::emit()
 
     std::cout << "write(";
     expr->emitSource("");
-    std::cout << ")" << std::endl;
-    std::cout << "syscall" << std::endl << std::endl;
+    std::cout << ")\n";
+    std::cout << "syscall\n\n";
   }
 }

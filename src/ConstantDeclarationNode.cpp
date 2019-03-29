@@ -16,7 +16,7 @@ void ConstantDeclarationNode::emitSource(std::string indent)
   emit();
   std::cout << indent << m_id << " = ";
   m_expr->emitSource("");
-  std::cout << ";" << std::endl;
+  std::cout << ";\n";
 }
 
 void ConstantDeclarationNode::emit()

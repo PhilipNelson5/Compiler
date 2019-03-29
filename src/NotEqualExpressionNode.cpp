@@ -60,7 +60,7 @@ Value NotEqualExpressionNode::emit()
 {
   std::cout << "# ";
   emitSource("");
-  std::cout << std::endl;
+  std::cout << '\n';
 
   auto v_lhs = lhs->emit();
   auto v_rhs = rhs->emit();

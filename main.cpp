@@ -33,12 +33,9 @@ int main(int argc, char** argv)
       showHelp();
       return EXIT_SUCCESS;
     }
-    if (strcmp(argv[i], "-d") == 0 | strcmp(argv[i], "--debug") == 0)
-      yydebug = 1;
-    if (strcmp(argv[i], "-p") == 0 | strcmp(argv[i], "--parse-only") == 0)
-      f_parseOnly = true;
-    if (strcmp(argv[i], "-s") == 0 | strcmp(argv[i], "--source") == 0)
-      f_source = true;
+    if (strcmp(argv[i], "-d") == 0 | strcmp(argv[i], "--debug") == 0) yydebug = 1;
+    if (strcmp(argv[i], "-p") == 0 | strcmp(argv[i], "--parse-only") == 0) f_parseOnly = true;
+    if (strcmp(argv[i], "-s") == 0 | strcmp(argv[i], "--source") == 0) f_source = true;
   }
 
   LOG(DEBUG) << "Parsing";
@@ -69,9 +66,7 @@ int main(int argc, char** argv)
   }
 }
 
-void setLogLevel(std::string& config,
-                 std::string const& name,
-                 bool const& enabled)
+void setLogLevel(std::string& config, std::string const& name, bool const& enabled)
 {
   config += "* " + name + ":\n";
   if (enabled)
@@ -88,12 +83,9 @@ void initEasyLogging(int argc, char* argv[])
   bool log_error = true;
   for (auto i = 1; i < argc; ++i)
   {
-    if (strcmp(argv[i], "-ld") == 0 | strcmp(argv[i], "--log-debug") == 0)
-      log_debug = true;
-    if (strcmp(argv[i], "-lw") == 0 | strcmp(argv[i], "--log-warning") == 0)
-      log_warn = true;
-    if (strcmp(argv[i], "-li") == 0 | strcmp(argv[i], "--no-log-info") == 0)
-      log_error = false;
+    if (strcmp(argv[i], "-ld") == 0 | strcmp(argv[i], "--log-debug") == 0) log_debug = true;
+    if (strcmp(argv[i], "-lw") == 0 | strcmp(argv[i], "--log-warning") == 0) log_warn = true;
+    if (strcmp(argv[i], "-li") == 0 | strcmp(argv[i], "--no-log-info") == 0) log_error = false;
     if (strcmp(argv[i], "-le") == 0 | strcmp(argv[i], "--no-log-error") == 0)
       log_error = false;
   }

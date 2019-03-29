@@ -31,7 +31,7 @@ void RepeatStatementNode::emit()
   std::cout << "# repeat\n";
   auto lblStart = symbol_table.newLabel("start");
 
-  std::cout << lblStart << ":\n" << std::endl;
+  std::cout << lblStart << ":\n";
   for (auto&& statement : statements)
   {
     statement->emit();

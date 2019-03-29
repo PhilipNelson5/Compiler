@@ -40,6 +40,29 @@ Register::~Register()
   }
 }
 
+const std::vector<int> Register::getRegistersInUse()
+{
+  if (pool.size() == 18) return {};
+
+  const static std::vector fullPool{
+    8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25};
+
+  if (pool.size() == 0) return fullPool;
+
+  std::sort(std::begin(pool), std::end(pool));
+
+  std::vector<int> inUse;
+  inUse.reserve(fullPool.size() - pool.size());
+
+  std::set_difference(std::begin(fullPool),
+                      std::end(fullPool),
+                      std::begin(pool),
+                      std::end(pool),
+                      std::back_inserter(inUse));
+
+  return inUse;
+}
+
 void Register::init()
 {
   static bool initialized = false;

@@ -30,36 +30,36 @@ void ProgramNode::emitSource(std::string indent)
   // ---------------------
   if (constantDecls.size() > 0u)
   {
-    std::cout << indent << "CONST" << std::endl;
+    std::cout << indent << "CONST\n";
     for (auto&& constDecl : constantDecls)
     {
       constDecl->emitSource(indent + "  ");
     }
-    std::cout << std::endl;
+    std::cout << '\n';
   }
 
   // Type Declarations
   // ---------------------
   if (typeDecls.size() > 0)
   {
-    std::cout << indent << "TYPE" << std::endl;
+    std::cout << indent << "TYPE\n";
     for (auto&& typeDecl : typeDecls)
     {
       typeDecl->emitSource(indent + "  ");
     }
-    std::cout << std::endl;
+    std::cout << '\n';
   }
 
   // Variable Declarations
   // ---------------------
   if (varDecls.size() > 0)
   {
-    std::cout << indent << "VAR" << std::endl;
+    std::cout << indent << "VAR\n";
     for (auto&& varDecl : varDecls)
     {
       varDecl->emitSource(indent + "  ");
     }
-    std::cout << std::endl;
+    std::cout << '\n';
   }
 
   // Procedure and Function Declarations
@@ -67,18 +67,18 @@ void ProgramNode::emitSource(std::string indent)
 
   // Main Block
   // ---------------------
-  std::cout << indent << "BEGIN" << std::endl;
+  std::cout << indent << "BEGIN\n";
   for (auto&& statement : mainBlock)
   {
     statement->emitSource(indent + "  ");
   }
-  std::cout << indent << "END." << std::endl;
+  std::cout << indent << "END.\n";
 }
 
 void ProgramNode::emit()
 {
-  std::cout << ".text" << std::endl;
-  std::cout << "la $gp, GLOBAL_AREA" << std::endl;
+  std::cout << ".text\n";
+  std::cout << "la $gp, GLOBAL_AREA\n";
 
   // Constant Declarations
   // ---------------------
@@ -120,7 +120,7 @@ void ProgramNode::emit()
     statement->emit();
   }
 
-  std::cout << "\n.data" << std::endl;
+  std::cout << "\n.data\n";
   symbol_table.printStrings();
-  std::cout << "\n.align 2\nGLOBAL_AREA:" << std::endl;
+  std::cout << "\n.align 2\nGLOBAL_AREA:\n";
 }

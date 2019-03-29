@@ -70,7 +70,7 @@ Value SubtractNode::emit()
 
   std::cout << "# ";
   emitSource("");
-  std::cout << std::endl;
+  std::cout << '\n';
 
   if (lhs->isConstant())
   {
@@ -81,7 +81,7 @@ Value SubtractNode::emit()
 
     fmt::print("addi {}, {}, {} # ", result, r_rhs, -lhs_const->value);
     emitSource("");
-    std::cout << std::endl;
+    std::cout << '\n';
 
     return result;
   }
@@ -94,7 +94,7 @@ Value SubtractNode::emit()
 
     fmt::print("addi {}, {}, {} # ", result, r_lhs, -rhs_const->value);
     emitSource("");
-    std::cout << std::endl;
+    std::cout << '\n';
 
     return result;
   }
