@@ -17,12 +17,16 @@
 #include "src/AddNode.hpp"
 #include "src/AndNode.hpp"
 #include "src/AssignmentStatementNode.hpp"
+#include "src/BodyNode.hpp"
 #include "src/CharacterExpressionNode.hpp"
 #include "src/CharacterLiteralNode.hpp"
 #include "src/ConstantDeclarationNode.hpp"
 #include "src/DivideNode.hpp"
 #include "src/EqualExpressionNode.hpp"
 #include "src/ForStatementNode.hpp"
+#include "src/FormalParameter.hpp"
+#include "src/FunctionCallNode.hpp"
+#include "src/FunctionDeclarationNode.hpp"
 #include "src/GreaterThanEqualNode.hpp"
 #include "src/GreaterThanNode.hpp"
 #include "src/IdentifierNode.hpp"
@@ -40,9 +44,13 @@
 #include "src/OrNode.hpp"
 #include "src/OrdinalExpressionNode.hpp"
 #include "src/PredecessorExpressionNode.hpp"
+#include "src/ProcedureCallNode.hpp"
+#include "src/ProcedureDeclarationNode.hpp"
+#include "src/ProcedureOrFunctionDeclarationNode.hpp"
 #include "src/ProgramNode.hpp"
 #include "src/ReadStatementNode.hpp"
 #include "src/RepeatStatementNode.hpp"
+#include "src/ReturnStatementNode.hpp"
 #include "src/StopStatementNode.hpp"
 #include "src/StringLiteralNode.hpp"
 #include "src/SubscriptOperatorNode.hpp"
@@ -85,15 +93,22 @@ void yyerror(const char*);
   StatementNode * statementNode;
   ExpressionNode * expressionNode;
   TypeNode * type;
-  /*std::shared_ptr<RecordType> * recordType;*/
-  /*std::shared_ptr<ArrayType> * arrayType;*/
 
   AssignmentStatementNode * assignmentNode;
+  BodyNode * bodyNode;
   ConstantDeclarationNode * constDeclNode;
+  FormalParameter * formalParameter;
   IdentifierNode * identifier;
   IfStatementNode * ifStatementNode;
   LvalueNode * lvalue;
+  ProcedureDeclarationNode * procedureDeclarationNode;
+  ProcedureCallNode * procedureCallNode;
+  ForStatementNode * forStatementNode;
+  FunctionCallNode * functionCallNode;
+  FunctionDeclarationNode * functionDeclarationNode;
+  ProcedureOrFunctionDeclarationNode * procedureOrFunctionDeclarationNode;
   ReadStatementNode * readStatementNode;
+  ReturnStatementNode * returnStatementNode;
   StopStatementNode * stopStatementNode;
   TypeDeclarationNode * typeDeclarationNode;
   VariableDeclarationNode * varDeclNode;
@@ -102,12 +117,14 @@ void yyerror(const char*);
   ListNode<ConstantDeclarationNode> * constDelcList;
   ListNode<ExpressionNode> * expressionList;
   ListNode<Field> * fieldList;
+  ListNode<FormalParameter> * formalParameterList;
   ListNode<LvalueNode> * lValueList;
   ListNode<StatementNode> * statementList;
   ListNode<TypeDeclarationNode> * typeDeclarationList;
   ListNode<VariableDeclarationNode> * varDelcList;
-  ListNode<std::string> * identList;
   ListNode<std::pair<std::shared_ptr<ExpressionNode>, std::vector<std::shared_ptr<StatementNode>>>> * elseIfList;
+  ListNode<std::string> * identList;
+  ListNode<ProcedureOrFunctionDeclarationNode> * procedureAndFunctionDeclList;
 }
 
 %token ARRAY_T
@@ -183,13 +200,14 @@ void yyerror(const char*);
 %type <constDelcList> OptConstDecls
 %type <constDelcList> ConstDeclList
 %type <constDeclNode> ConstDecl
-%type <node> OptProcedureAndFunctionDeclList
-%type <node> ProcedureAndFunctionDeclList
-%type <node> ProcedureDecl
-%type <node> FunctionDecl
-%type <node> FormalParameters
-%type <node> FormalParameterList
-%type <node> FormalParameter
+%type <procedureAndFunctionDeclList> OptProcedureAndFunctionDeclList
+%type <procedureAndFunctionDeclList> ProcedureAndFunctionDeclList
+%type <procedureDeclarationNode> ProcedureDecl
+%type <functionDeclarationNode> FunctionDecl
+%type <formalParameterList> FormalParameters
+%type <formalParameterList> FormalParameterList
+%type <formalParameter> FormalParameter
+%type <bodyNode> Body
 %type <statementList> Block
 %type <typeDeclarationList> OptTypeDecls
 %type <typeDeclarationList> TypeDeclList
@@ -216,15 +234,16 @@ void yyerror(const char*);
 %type <statementList> OptElseStatement
 %type <statementNode> WhileStatement
 %type <statementNode> RepeatStatement
-%type <node> ForStatement
+%type <forStatementNode> ForStatement
 %type <stopStatementNode> StopStatement
-%type <node> ReturnStatement
+%type <returnStatementNode> ReturnStatement
 %type <readStatementNode> ReadStatement
 %type <lValueList> LValueList
 %type <writeStatementNode> WriteStatement
 %type <expressionList> OptExpressionList
 %type <expressionList> ExpressionList
-%type <node> ProcedureCall
+%type <functionCallNode> FunctionCall
+%type <procedureCallNode> ProcedureCall
 %type <expressionNode> Expression
 %type <lvalue> LValue
 
@@ -248,7 +267,7 @@ Program                         : OptConstDecls
                                   OptProcedureAndFunctionDeclList
                                   Block DOT_T
                                   {
-                                    programNode = std::make_shared<ProgramNode>($1, $2, $3, $5);
+                                    programNode = std::make_shared<ProgramNode>($1, $2, $3, $4, $5);
                                   }
                                 ;
 
@@ -274,46 +293,62 @@ ConstDecl                       : ID_T EQUAL_T Expression SEMI_COLON_T
                                 ;
 
 /* 3.1.2 Procedure and Function Declarations */
-OptProcedureAndFunctionDeclList : ProcedureAndFunctionDeclList { $$ = nullptr; }
+OptProcedureAndFunctionDeclList : ProcedureAndFunctionDeclList { $$ = $1; }
                                 | /* λ */ { $$ = nullptr; }
                                 ;
 
-ProcedureAndFunctionDeclList    : ProcedureAndFunctionDeclList ProcedureDecl  {}
-                                | ProcedureAndFunctionDeclList FunctionDecl {}
-                                | ProcedureDecl {}
-                                | FunctionDecl {}
+ProcedureAndFunctionDeclList    : ProcedureAndFunctionDeclList ProcedureDecl
+                                  {
+                                   $$ = new ListNode<ProcedureOrFunctionDeclarationNode>($2, $1);
+                                  }
+                                | ProcedureAndFunctionDeclList FunctionDecl
+                                  {
+                                   $$ = new ListNode<ProcedureOrFunctionDeclarationNode>($2, $1);
+                                  }
+                                | ProcedureDecl { $$ = new ListNode<ProcedureOrFunctionDeclarationNode>($1); }
+                                | FunctionDecl { $$ = new ListNode<ProcedureOrFunctionDeclarationNode>($1); }
                                 ;
 
 ProcedureDecl                   : PROCEDURE_T ID_T OPEN_PAREN_T FormalParameters CLOSE_PAREN_T
-                                    SEMI_COLON_T FORWARD_T SEMI_COLON_T {}
+                                    SEMI_COLON_T FORWARD_T SEMI_COLON_T
+                                  {
+                                    BodyNode * body = nullptr;
+                                    $$ = new ProcedureDeclarationNode($2, $4, body);
+                                  }
                                 | PROCEDURE_T ID_T OPEN_PAREN_T FormalParameters CLOSE_PAREN_T
-                                    SEMI_COLON_T Body SEMI_COLON_T {}
+                                    SEMI_COLON_T Body SEMI_COLON_T
+                                  {
+                                    $$ = new ProcedureDeclarationNode($2, $4, $7);
+                                  }
                                 ;
 
 FunctionDecl                    : FUNCTION_T ID_T OPEN_PAREN_T FormalParameters CLOSE_PAREN_T
                                     COLON_T Type SEMI_COLON_T FORWARD_T SEMI_COLON_T
                                   {
+                                    BodyNode * body = nullptr;
+                                    $$ = new FunctionDeclarationNode($2, $4, $7, body);
                                   }
                                 | FUNCTION_T ID_T OPEN_PAREN_T FormalParameters CLOSE_PAREN_T
                                     COLON_T Type SEMI_COLON_T Body SEMI_COLON_T
                                   {
+                                    $$ = new FunctionDeclarationNode($2, $4, $7, $9);
                                   }
                                 ;
 
-FormalParameters                : FormalParameterList  {}
-                                | /* λ */ {}
+FormalParameters                : FormalParameterList  { $$ = $1; }
+                                | /* λ */ { $$ = nullptr; }
                                 ;
 
-FormalParameterList             : FormalParameterList SEMI_COLON_T FormalParameter {}
-                                | FormalParameter {}
+FormalParameterList             : FormalParameterList SEMI_COLON_T FormalParameter { $$ = new ListNode<FormalParameter>($3, $1); }
+                                | FormalParameter { $$ = new ListNode<FormalParameter>($1); }
                                 ;
 
-FormalParameter                 : VAR_T IdentList COLON_T Type {}
-                                | REF_T IdentList COLON_T Type {}
-                                |       IdentList COLON_T Type {}
+FormalParameter                 : VAR_T IdentList COLON_T Type { $$ = new FormalParameter($2, $4, FormalParameter::PassBy::VAL); }
+                                | REF_T IdentList COLON_T Type { $$ = new FormalParameter($2, $4, FormalParameter::PassBy::REF); }
+                                |       IdentList COLON_T Type { $$ = new FormalParameter($1, $3); }
                                 ;
 
-Body                            : OptConstDecls OptTypeDecls OptVariableDecls Block {}
+Body                            : OptConstDecls OptTypeDecls OptVariableDecls Block { $$ = new BodyNode($1, $2, $3, $4); }
                                 ;
 
 Block                           : BEGIN_T StatementList END_T { $$ = $2; }
@@ -424,17 +459,17 @@ StatementList                   : StatementList SEMI_COLON_T Statement
                                   }
                                 ;
 
-Statement                       : Assignment {}
-                                | IfStatement {}
-                                | WhileStatement {}
-                                | RepeatStatement {}
-                                | ForStatement {}
-                                | StopStatement { $$ = $1; }
-                                | ReturnStatement {}
-                                | ReadStatement {}
-                                | WriteStatement { $$ = $1; }
-                                | ProcedureCall {}
-                                | { $$ = nullptr; }
+Statement                       : Assignment      { $$ = $1; }
+                                | IfStatement     { $$ = $1; }
+                                | WhileStatement  { $$ = $1; }
+                                | RepeatStatement { $$ = $1; }
+                                | ForStatement    { $$ = $1; }
+                                | StopStatement   { $$ = $1; }
+                                | ReturnStatement { $$ = $1; }
+                                | ReadStatement   { $$ = $1; }
+                                | WriteStatement  { $$ = $1; }
+                                | ProcedureCall   { $$ = $1; }
+                                |     /* λ */     { $$ = nullptr; }
                                 ;
 
 Assignment                      : LValue ASSIGN_T Expression
@@ -512,8 +547,8 @@ ForStatement                    : FOR_T ID_T ASSIGN_T Expression TO_T Expression
 StopStatement                   : STOP_T { $$ = new StopStatementNode(); }
                                 ;
 
-ReturnStatement                 : RETURN_T {}
-                                | RETURN_T Expression {}
+ReturnStatement                 : RETURN_T { $$ = new ReturnStatementNode(); }
+                                | RETURN_T Expression { $$ = new ReturnStatementNode($2); }
                                 ;
 
 ReadStatement                   : READ_T OPEN_PAREN_T LValueList CLOSE_PAREN_T
@@ -538,7 +573,17 @@ WriteStatement                  : WRITE_T OPEN_PAREN_T ExpressionList CLOSE_PARE
                                   }
                                 ;
 
-ProcedureCall                   : ID_T OPEN_PAREN_T OptExpressionList CLOSE_PAREN_T {}
+FunctionCall                    : ID_T OPEN_PAREN_T OptExpressionList CLOSE_PAREN_T
+                                  {
+                                    $$ = new FunctionCallNode($1, $3);
+                                  }
+
+                                ;
+
+ProcedureCall                   : ID_T OPEN_PAREN_T OptExpressionList CLOSE_PAREN_T
+                                  {
+                                    $$ = new ProcedureCallNode($1, $3);
+                                  }
                                 ;
 
 OptExpressionList               : ExpressionList { $$ = $1; }
@@ -573,7 +618,7 @@ Expression                      : Expression OR_T Expression                   {
                                 | NOT_T Expression                             { $$ = new NotNode($2); }
                                 | MINUS_T Expression %prec UNARY_MINUS_T       { $$ = makeUnaryMinusNode($2); }
                                 | OPEN_PAREN_T Expression CLOSE_PAREN_T        { $$ = $2; }
-                                | ProcedureCall                                { }
+                                | FunctionCall                                 { $$ = $1; }
                                 | CHR_T OPEN_PAREN_T Expression CLOSE_PAREN_T  { $$ = new CharacterExpressionNode($3); }
                                 | ORD_T OPEN_PAREN_T Expression CLOSE_PAREN_T  { $$ = new OrdinalExpressionNode($3); }
                                 | PRED_T OPEN_PAREN_T Expression CLOSE_PAREN_T { $$ = new PredecessorExpressionNode($3); }

@@ -2,6 +2,7 @@
 
 #include "ConstantDeclarationNode.hpp" // for ConstantDeclarationNode
 #include "ListNode.hpp"                // for ListNode
+#include "ProcedureOrFunctionDeclarationNode.hpp"
 #include "StatementNode.hpp"           // for StatementNode
 #include "SymbolTable.hpp"             // for SymbolTable, symbol_table
 #include "TypeDeclarationNode.hpp"     // for TypeDeclarationNode
@@ -13,6 +14,7 @@
 ProgramNode::ProgramNode(ListNode<ConstantDeclarationNode>*& cds,
                          ListNode<TypeDeclarationNode>*& tds,
                          ListNode<VariableDeclarationNode>*& vds,
+                         ListNode<ProcedureOrFunctionDeclarationNode>*& pfd,
                          ListNode<StatementNode>*& mBlock)
 {
   constantDecls = ListNode<ConstantDeclarationNode>::makeVector(cds);
@@ -20,6 +22,8 @@ ProgramNode::ProgramNode(ListNode<ConstantDeclarationNode>*& cds,
   typeDecls = ListNode<TypeDeclarationNode>::makeVector(tds);
 
   varDecls = ListNode<VariableDeclarationNode>::makeVector(vds);
+
+  procedureAndFunctionDecls = ListNode<ProcedureOrFunctionDeclarationNode>::makeVector(pfd);
 
   mainBlock = ListNode<StatementNode>::makeVector(mBlock);
 }
@@ -64,6 +68,14 @@ void ProgramNode::emitSource(std::string indent)
 
   // Procedure and Function Declarations
   // -----------------------------------
+  if (procedureAndFunctionDecls.size() > 0)
+  {
+    for (auto&& procedureOrFunction : procedureAndFunctionDecls)
+    {
+      procedureOrFunction->emitSource(indent);
+    }
+    std::cout << '\n';
+  }
 
   // Main Block
   // ---------------------

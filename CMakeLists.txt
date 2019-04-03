@@ -23,6 +23,8 @@ set(cpsl_srcs
   src/AndNode.hpp
   src/AssignmentStatementNode.cpp
   src/AssignmentStatementNode.hpp
+  src/BodyNode.cpp
+  src/BodyNode.hpp
   src/BooleanLiteralNode.cpp
   src/BooleanLiteralNode.hpp
   src/CharacterExpressionNode.cpp
@@ -40,6 +42,12 @@ set(cpsl_srcs
   src/ExpressionNode.hpp
   src/ForStatementNode.cpp
   src/ForStatementNode.hpp
+  src/FormalParameter.cpp
+  src/FormalParameter.hpp
+  src/FunctionCallNode.cpp
+  src/FunctionCallNode.hpp
+  src/FunctionDeclarationNode.cpp
+  src/FunctionDeclarationNode.hpp
   src/GreaterThanEqualNode.cpp
   src/GreaterThanEqualNode.hpp
   src/GreaterThanNode.cpp
@@ -74,6 +82,10 @@ set(cpsl_srcs
   src/OrdinalExpressionNode.hpp
   src/PredecessorExpressionNode.cpp
   src/PredecessorExpressionNode.hpp
+  src/ProcedureCallNode.cpp
+  src/ProcedureCallNode.hpp
+  src/ProcedureDeclarationNode.cpp
+  src/ProcedureDeclarationNode.hpp
   src/ProgramNode.cpp
   src/ProgramNode.hpp
   src/ReadStatementNode.cpp
@@ -82,6 +94,8 @@ set(cpsl_srcs
   src/RegisterPool.hpp
   src/RepeatStatementNode.cpp
   src/RepeatStatementNode.hpp
+  src/ReturnStatementNode.cpp
+  src/ReturnStatementNode.hpp
   src/StatementNode.hpp
   src/StopStatementNode.cpp
   src/StopStatementNode.hpp
@@ -102,9 +116,9 @@ set(cpsl_srcs
   src/TypeNode.hpp
   src/UnaryMinusNode.cpp
   src/UnaryMinusNode.hpp
+  src/Value.hpp
   src/VariableDeclarationNode.cpp
   src/VariableDeclarationNode.hpp
-  src/Value.hpp
   src/WhileStatementNode.cpp
   src/WhileStatementNode.hpp
   src/WriteStatementNode.cpp

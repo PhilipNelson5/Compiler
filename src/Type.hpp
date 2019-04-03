@@ -59,7 +59,7 @@ private:
 class CharacterType : public Type
 {
 public:
-  std::string name() override { return "character"; }
+  std::string name() override { return "char"; }
 
   static std::shared_ptr<Type> get()
   {
