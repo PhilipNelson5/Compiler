@@ -86,7 +86,7 @@ Value AddNode::emit()
     auto r_rhs = v_rhs.getTheeIntoARegister();
     RegisterPool::Register result;
 
-    fmt::print("addi {0}, {1}, {2} # ", result, lhs_const->value, r_rhs);
+    fmt::print("addi {0}, {1}, {2} # ", result, r_rhs, lhs_const->value);
 
     emitSource("");
     std::cout << '\n';

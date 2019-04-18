@@ -1,18 +1,26 @@
-// stacktrace.h (c) 2008, Timo Bingmann from http://idlebox.net/
+// Original stacktrace.h (c) 2008, Timo Bingmann from http://idlebox.net/
+// https://panthema.net/2008/0901-stacktrace-demangled/
 // published under the WTFPL v2.0
+//
+// Edits stacktrace.hpp (C) 2019 Philip Nelson
+// published under the WTFPL v2.0
+//
+// Compile with -export-dynamic
 
-#ifndef _STACKTRACE_H_
-#define _STACKTRACE_H_
+#ifndef STACKTRACE_HPP
+#define STACKTRACE_HPP
 
 #include <cxxabi.h>
 #include <execinfo.h>
+#include <sstream>
 #include <stdio.h>
 #include <stdlib.h>
 
-/** Print a demangled stack backtrace of the caller function to FILE* out. */
-static inline void print_stacktrace(FILE* out = stderr, unsigned int max_frames = 63)
+// return a demangled stack backtrace of the caller function
+static std::string get_stacktrace(unsigned int max_frames = 63)
 {
-  fprintf(out, "stack trace:\n");
+  std::stringstream ss;
+  ss << "stack trace:\n";
 
   // storage array for stack trace address data
   void* addrlist[max_frames + 1];
@@ -22,8 +30,8 @@ static inline void print_stacktrace(FILE* out = stderr, unsigned int max_frames 
 
   if (addrlen == 0)
   {
-    fprintf(out, "  <empty, possibly corrupt>\n");
-    return;
+    ss << "  <empty, possibly corrupt>\n";
+    return ss.str();
   }
 
   // resolve addresses into strings containing "filename(function+address)",
@@ -66,28 +74,32 @@ static inline void print_stacktrace(FILE* out = stderr, unsigned int max_frames 
       // __cxa_demangle():
 
       int status;
-      char* ret = abi::__cxa_demangle(begin_name, funcname, &funcnamesize, &status);
+      char* ret
+        = abi::__cxa_demangle(begin_name, funcname, &funcnamesize, &status);
       if (status == 0)
       {
         funcname = ret; // use possibly realloc()-ed string
-        fprintf(out, "  %s : %s+%s\n", symbollist[i], funcname, begin_offset);
+        ss << "  " << symbollist[i] << " : " << funcname << "+" << begin_offset
+           << "\n";
       }
       else
       {
         // demangling failed. Output function name as a C function with
         // no arguments.
-        fprintf(out, "  %s : %s()+%s\n", symbollist[i], begin_name, begin_offset);
+        ss << "  " << symbollist[i] << " : " << begin_name << "()+"
+           << begin_offset << "\n";
       }
     }
     else
     {
-      // couldn't parse the line? print the whole line.
-      fprintf(out, "  %s\n", symbollist[i]);
+      // couldn't parse the line? add the whole line.
+      ss << "  " << symbollist[i] << "\n";
     }
   }
 
   free(funcname);
   free(symbollist);
+  return ss.str();
 }
 
-#endif // _STACKTRACE_H_
+#endif // STACKTRACE_HPP

@@ -1,13 +1,13 @@
 #ifndef PROCEDURE_CALL_NODE_HPP
 #define PROCEDURE_CALL_NODE_HPP
 
-#include "ExpressionNode.hpp"
-#include "ListNode.hpp"
-#include "Node.hpp"
-#include "StatementNode.hpp"
+#include "ListNode.hpp"      // for ListNode
+#include "StatementNode.hpp" // for StatementNode
 
-#include <memory>
-#include <vector>
+#include <memory> // for shared_ptr, allocator
+#include <string> // for string
+#include <vector> // for vector
+class ExpressionNode;
 
 class ProcedureCallNode : public StatementNode
 {

@@ -91,6 +91,7 @@ void ProgramNode::emit()
 {
   std::cout << ".text\n";
   std::cout << "la $gp, GLOBAL_AREA\n";
+  std::cout << "j MAIN\n";
 
   // Constant Declarations
   // ---------------------
@@ -124,9 +125,17 @@ void ProgramNode::emit()
 
   // Procedure and Function Declarations
   // -----------------------------------
+  if (procedureAndFunctionDecls.size() > 0u)
+  {
+    for (auto&& procedureOrFunctionDecl : procedureAndFunctionDecls)
+    {
+      procedureOrFunctionDecl->emit();
+    }
+  }
 
   // Main Block
   // ---------------------
+  std::cout << "MAIN:\n";
   for (auto&& statement : mainBlock)
   {
     statement->emit();

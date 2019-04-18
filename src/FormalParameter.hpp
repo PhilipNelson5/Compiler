@@ -1,12 +1,13 @@
 #ifndef FORMAL_PARAMETER_HPP
 #define FORMAL_PARAMETER_HPP
 
-#include "ListNode.hpp"
-#include "Type.hpp"
-#include "TypeNode.hpp"
+#include "ListNode.hpp" // for ListNode
+#include "TypeNode.hpp" // for TypeNode
 
-#include <string>
-#include <vector>
+#include <memory> // for shared_ptr, __shared_ptr_access
+#include <string> // for string
+#include <vector> // for vector
+class Type;
 
 class FormalParameter
 {

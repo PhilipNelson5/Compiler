@@ -305,8 +305,14 @@ ProcedureAndFunctionDeclList    : ProcedureAndFunctionDeclList ProcedureDecl
                                   {
                                    $$ = new ListNode<ProcedureOrFunctionDeclarationNode>($2, $1);
                                   }
-                                | ProcedureDecl { $$ = new ListNode<ProcedureOrFunctionDeclarationNode>($1); }
-                                | FunctionDecl { $$ = new ListNode<ProcedureOrFunctionDeclarationNode>($1); }
+                                | ProcedureDecl
+                                  {
+                                    $$ = new ListNode<ProcedureOrFunctionDeclarationNode>($1);
+                                  }
+                                | FunctionDecl
+                                  {
+                                    $$ = new ListNode<ProcedureOrFunctionDeclarationNode>($1);
+                                  }
                                 ;
 
 ProcedureDecl                   : PROCEDURE_T ID_T OPEN_PAREN_T FormalParameters CLOSE_PAREN_T
@@ -339,16 +345,34 @@ FormalParameters                : FormalParameterList  { $$ = $1; }
                                 | /* λ */ { $$ = nullptr; }
                                 ;
 
-FormalParameterList             : FormalParameterList SEMI_COLON_T FormalParameter { $$ = new ListNode<FormalParameter>($3, $1); }
-                                | FormalParameter { $$ = new ListNode<FormalParameter>($1); }
+FormalParameterList             : FormalParameterList SEMI_COLON_T FormalParameter
+                                  {
+                                    $$ = new ListNode<FormalParameter>($3, $1);
+                                  }
+                                | FormalParameter
+                                  {
+                                    $$ = new ListNode<FormalParameter>($1);
+                                  }
                                 ;
 
-FormalParameter                 : VAR_T IdentList COLON_T Type { $$ = new FormalParameter($2, $4, FormalParameter::PassBy::VAL); }
-                                | REF_T IdentList COLON_T Type { $$ = new FormalParameter($2, $4, FormalParameter::PassBy::REF); }
-                                |       IdentList COLON_T Type { $$ = new FormalParameter($1, $3); }
+FormalParameter                 : VAR_T IdentList COLON_T Type
+                                  {
+                                    $$ = new FormalParameter($2, $4, FormalParameter::PassBy::VAL);
+                                  }
+                                | REF_T IdentList COLON_T Type
+                                  {
+                                    $$ = new FormalParameter($2, $4, FormalParameter::PassBy::REF);
+                                  }
+                                |       IdentList COLON_T Type
+                                  {
+                                    $$ = new FormalParameter($1, $3);
+                                  }
                                 ;
 
-Body                            : OptConstDecls OptTypeDecls OptVariableDecls Block { $$ = new BodyNode($1, $2, $3, $4); }
+Body                            : OptConstDecls OptTypeDecls OptVariableDecls Block
+                                  {
+                                    $$ = new BodyNode($1, $2, $3, $4);
+                                  }
                                 ;
 
 Block                           : BEGIN_T StatementList END_T { $$ = $2; }
@@ -535,12 +559,14 @@ RepeatStatement                 : REPEAT_T StatementList UNTIL_T Expression
 ForStatement                    : FOR_T ID_T ASSIGN_T Expression TO_T Expression
                                     DO_T StatementList END_T
                                   {
-                                    $$ = new ForStatementNode(new IdentifierNode($2), $4, $6, $8, ForStatementNode::Type::TO);
+                                    $$ = new ForStatementNode(
+                                      new IdentifierNode($2), $4, $6, $8, ForStatementNode::Type::TO);
                                   }
                                 | FOR_T ID_T ASSIGN_T Expression DOWNTO_T Expression
                                     DO_T StatementList END_T
                                   {
-                                    $$ = new ForStatementNode(new IdentifierNode($2), $4, $6, $8, ForStatementNode::Type::DOWNTO);
+                                    $$ = new ForStatementNode(
+                                      new IdentifierNode($2), $4, $6, $8, ForStatementNode::Type::DOWNTO);
                                   }
                                 ;
 

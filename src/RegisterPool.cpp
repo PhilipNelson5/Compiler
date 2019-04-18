@@ -42,6 +42,7 @@ Register::~Register()
 
 const std::vector<int> Register::getRegistersInUse()
 {
+  init();
   if (pool.size() == 18) return {};
 
   const static std::vector fullPool{
@@ -63,14 +64,53 @@ const std::vector<int> Register::getRegistersInUse()
   return inUse;
 }
 
+void spill(std::vector<int> const& registers)
+{
+  int offset = 0;
+  int size = (registers.size() + 2) * 4;
+
+  std::cout << "\n# Spill registers\n";
+  fmt::print("addi $sp, $sp, -{}\n", size);
+
+  std::for_each(std::begin(registers), std::end(registers), [&offset](int reg) {
+    fmt::print("sw ${}, {}($sp)\n", reg, offset);
+    offset += 4;
+  });
+
+  fmt::print("sw $fp, {}($sp)\n", offset);
+  offset += 4;
+
+  fmt::print("sw $ra, {}($sp)\n", offset);
+  offset += 4;
+}
+
+void unspill(std::vector<int> const& registers)
+{
+  int size = (registers.size() + 2) * 4;
+  int offset = (registers.size() + 1) * 4;
+
+  std::cout << "\n# Unspill registers\n";
+  fmt::print("lw $ra, {}($sp)\n", offset);
+  offset -= 4;
+
+  fmt::print("lw $fp, {}($sp)\n", offset);
+  offset -= 4;
+
+  std::for_each(std::rbegin(registers), std::rend(registers), [&offset](int reg) {
+    fmt::print("lw ${}, {}($sp)\n", reg, offset);
+    offset -= 4;
+  });
+
+  fmt::print("addi $sp, $sp, {}\n", size);
+}
+
 void Register::init()
 {
   static bool initialized = false;
 
-  if (initialized)
-    return;
-  else
-    initialized = true;
+  if (initialized) return;
+
+  initialized = true;
 
   pool.reserve(18);
   pool.emplace_back(8);

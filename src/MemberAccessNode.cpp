@@ -20,8 +20,8 @@ std::shared_ptr<Type> lookupId(std::shared_ptr<LvalueNode> lValue, std::string i
 {
   if (RecordType* pRecord = dynamic_cast<RecordType*>(lValue->getType().get()))
   {
-    auto member = pRecord->table.find(id);
-    if (member != std::end(pRecord->table))
+    auto member = pRecord->getTable().find(id);
+    if (member != std::end(pRecord->getTable()))
     {
       return member->second.second;
     }

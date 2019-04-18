@@ -1,14 +1,14 @@
 #ifndef PROCEDURE_DECLARATION_NODE_HPP
 #define PROCEDURE_DECLARATION_NODE_HPP
 
-#include "BodyNode.hpp"
-#include "FormalParameter.hpp"
-#include "ListNode.hpp"
-#include "Node.hpp"
-#include "ProcedureOrFunctionDeclarationNode.hpp"
+#include "BodyNode.hpp"                           // for BodyNode
+#include "ListNode.hpp"                           // for ListNode
+#include "ProcedureOrFunctionDeclarationNode.hpp" // for ProcedureOrFunctio...
 
-#include <memory>
-#include <vector>
+#include <memory> // for shared_ptr, allocator
+#include <string> // for string
+#include <vector> // for vector
+class FormalParameter;
 
 class ProcedureDeclarationNode : public ProcedureOrFunctionDeclarationNode
 {

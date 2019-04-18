@@ -5,9 +5,10 @@
 #include "FormalParameter.hpp"
 #include "ListNode.hpp"
 #include "ProcedureOrFunctionDeclarationNode.hpp"
+#include "TypeNode.hpp" // for TypeNode
 
-#include <memory>
-#include <vector>
+#include <string> // for string
+class FormalParameter;
 class Type;
 
 class FunctionDeclarationNode : public ProcedureOrFunctionDeclarationNode

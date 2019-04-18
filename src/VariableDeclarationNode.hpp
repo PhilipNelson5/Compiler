@@ -20,7 +20,6 @@ public:
   virtual void emitSource(std::string indent) override;
   void emit();
 
-private:
   const std::vector<std::string> m_ids;
   const std::shared_ptr<TypeNode> m_typeNode;
 };

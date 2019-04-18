@@ -20,6 +20,7 @@ public:
   virtual void emitSource(std::string indent) override;
   virtual Value emit() override;
   virtual bool isConstant() const override;
+  virtual const std::shared_ptr<Type> getType() override;
   virtual std::variant<std::monostate, int, char, bool> eval() const override;
 
   const std::string id;

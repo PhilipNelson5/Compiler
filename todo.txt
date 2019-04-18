@@ -17,11 +17,18 @@
 [X] [X] test/udt/simple_array.cpsl
 [X] [X] test/udt/simple_record.cpsl
 
-[ ] [ ] test/control/factorial.cpsl
-[ ] [ ] test/control/for_down.cpsl
-[ ] [ ] test/control/for_to.cpsl
+[X] [X] test/control/factorial.cpsl
+[X] [X] test/control/for_down.cpsl
+[X] [X] test/control/for_to.cpsl
 [X] [X] test/control/ifelseif_nested.cpsl
 [X] [X] test/control/repeat.cpsl
 [X] [X] test/control/simple_while.cpsl
 [X] [X] test/control/while_and_if.cpsl
 [X] [X] test/control/while_nested.cpsl
+
+[X] [X] test/function/array_sum.cpsl
+[X] [ ] test/function/function_with_args.cpsl
+[X] [ ] test/function/hanoi.cpsl
+[X] [X] test/function/procedure_no_args.cpsl
+[X] [ ] test/function/sort.cpsl
+[X] [ ] test/function/swap.cpsl

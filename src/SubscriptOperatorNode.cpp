@@ -27,8 +27,7 @@ std::shared_ptr<Type> getArrayType(std::shared_ptr<LvalueNode> lValue)
 {
   if (ArrayType* array = dynamic_cast<ArrayType*>(lValue->getType().get()))
   {
-    array->init();
-    return array->elementType;
+    return array->getElementType();
   }
 
   LOG(ERROR) << lValue->getId() << " is not an array type, can not use subscript operator[]";
@@ -73,7 +72,6 @@ Value SubscriptOperatorNode::emit()
 {
   if (ArrayType* array = dynamic_cast<ArrayType*>(lValue->getType().get()))
   {
-    array->init();
     auto v_lval = lValue->emit();
 
     std::cout << "# ";
@@ -83,10 +81,10 @@ Value SubscriptOperatorNode::emit()
     auto r_index = expr->emit().getTheeIntoARegister();
     RegisterPool::Register elementSize;
 
-    fmt::print("addi {0}, {0}, {1}", r_index, -array->lb);
+    fmt::print("addi {0}, {0}, {1}", r_index, -array->getlb());
     std::cout << " # adjust the index ( indx - lb )\n";
 
-    fmt::print("li {}, {}", elementSize, array->elementType->size());
+    fmt::print("li {}, {}", elementSize, array->getElementType()->size());
     std::cout << " # get array element size\n";
 
     fmt::print("mult {}, {}\n", r_index, elementSize);

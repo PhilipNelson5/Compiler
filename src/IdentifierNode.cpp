@@ -53,6 +53,7 @@ Value IdentifierNode::emit()
   auto lval_info = symbol_table.lookupLval(id);
   if (lval_info != nullptr)
   {
+    fmt::print("# {}, {}, {}\n", lval_info->identifier ,lval_info->offset, lval_info->memoryLocation);
     return {lval_info->offset, lval_info->memoryLocation};
   }
 

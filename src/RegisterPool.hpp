@@ -54,6 +54,13 @@ private:
   static std::vector<int> pool;
 
 }; // class Register
+
+// spill registers in use
+void spill(std::vector<int> const& registers);
+
+// spill registers in use
+void unspill(std::vector<int> const& registers);
+
 } // namespace RegisterPool
 
 namespace fmt

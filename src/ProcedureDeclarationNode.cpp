@@ -1,6 +1,10 @@
 #include "ProcedureDeclarationNode.hpp"
 
-#include "../fmt/include/fmt/core.h"
+#include "FormalParameter.hpp" // for FormalParameter
+#include "SymbolTable.hpp"
+
+#include <ext/alloc_traits.h> // for __alloc_traits<>::value_type
+#include <iostream>           // for operator<<, cout, ostream, basic_ostream
 
 void ProcedureDeclarationNode::emitSource(std::string indent)
 {
@@ -31,4 +35,41 @@ void ProcedureDeclarationNode::emitSource(std::string indent)
   }
 }
 
-void ProcedureDeclarationNode::emit() {}
+void ProcedureDeclarationNode::emit()
+{
+  std::vector<Parameter> params;
+  for (auto&& param : parameters)
+  {
+    params.emplace_back(param->ids,
+                        param->type->id,
+                        (param->passby == FormalParameter::PassBy::REF)
+                          ? Parameter::PassBy::REF
+                          : Parameter::PassBy::VAL);
+  }
+
+  // Forward Declaration
+  if (body == nullptr)
+  {
+    symbol_table.storeFunction(id, params, "__no_return__", Function::Declaration::FORWARD);
+  }
+  else
+  {
+    // if there was no forward declaration, add it to the current scope
+    if (symbol_table.lookupFunction(id) == nullptr)
+    {
+      symbol_table.storeFunction(id, params, "__no_return__", Function::Declaration::FORWARD);
+    }
+
+    symbol_table.enter_scope();
+
+    symbol_table.storeFunction(id, params, "__no_return__", Function::Declaration::DEFINITION);
+
+    fmt::print("{}:\n", id);
+
+    body->emit();
+
+    fmt::print("jr $ra\n");
+
+    symbol_table.exit_scope();
+  }
+}

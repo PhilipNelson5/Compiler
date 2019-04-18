@@ -141,14 +141,13 @@ public:
     , elementType(nullptr)
   {}
 
+private:
+  bool initialized = false;
   int lb, ub;
   const std::shared_ptr<ExpressionNode> lbExpr, ubExpr;
   const std::shared_ptr<TypeNode> elementTypeNode;
   std::shared_ptr<Type> indexType;
   std::shared_ptr<Type> elementType;
-
-private:
-  bool initialized = false;
 
 public:
   virtual std::string name() override { return "array"; }
@@ -165,6 +164,18 @@ public:
   {
     init();
     return (ub - lb + 1) * elementType->size();
+  }
+
+  int getlb()
+  {
+    init();
+    return lb;
+  }
+
+  const std::shared_ptr<Type> getElementType()
+  {
+    init();
+    return elementType;
   }
 
   void init()
@@ -246,10 +257,11 @@ public:
     , table()
   {}
 
+private:
   std::vector<std::shared_ptr<Field>> fields;
+  //          id                offset                type
   std::map<std::string, std::pair<int, std::shared_ptr<Type>>> table;
 
-private:
   bool initialized = false;
 
 public:
@@ -278,6 +290,12 @@ public:
       exit(EXIT_FAILURE);
     }
     return found->second;
+  }
+
+  const auto& getTable()
+  {
+    init();
+    return table;
   }
 
   virtual int size() override

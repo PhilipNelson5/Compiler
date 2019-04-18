@@ -1,11 +1,11 @@
 #ifndef RETURN_STATMENT_NODE_HPP
 #define RETURN_STATMENT_NODE_HPP
 
-#include "ExpressionNode.hpp"
-#include "StatementNode.hpp"
-#include "Value.hpp"
+#include "ExpressionNode.hpp" // for ExpressionNode
+#include "StatementNode.hpp"  // for StatementNode
 
-#include <memory>
+#include <memory> // for shared_ptr
+#include <string> // for string
 
 class ReturnStatementNode : public StatementNode
 {

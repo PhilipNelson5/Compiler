@@ -1,9 +1,8 @@
 #ifndef TYPE_NODE_HPP
 #define TYPE_NODE_HPP
 
-#include "SymbolTable.hpp"
-
-#include <memory> // for shared_ptr
+#include <memory> // for shared_ptr, operator==
+#include <string> // for string
 
 class Type;
 
@@ -16,21 +15,15 @@ public:
   {}
 
   TypeNode(std::shared_ptr<Type> type)
-    : id()
+    : id("")
     , type(type)
   {}
 
-  const std::shared_ptr<Type> getType()
-  {
-    if (type == nullptr)
-    {
-      type = symbol_table.lookupType(id);
-    }
-    return type;
-  }
+  const std::shared_ptr<Type> getType();
+
+  const std::string id;
 
 private:
-  std::string id;
   std::shared_ptr<Type> type;
 };
 #endif

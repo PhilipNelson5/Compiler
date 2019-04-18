@@ -1,6 +1,8 @@
 #include "FormalParameter.hpp"
 
-#include <iostream>
+#include "Type.hpp" // for Type
+
+#include <iostream> // for operator<<, cout, ostream, basic_ostream
 
 void FormalParameter::emitSource(std::string indent)
 {
