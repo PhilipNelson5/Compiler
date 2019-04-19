@@ -178,10 +178,12 @@ void SymbolTable::storeVariable(std::string id, std::shared_ptr<Type> type)
 
     // Insert in top level scope
     top->variables.emplace(id, var);
-    LOG(DEBUG) << fmt::format("{}:{} stored in variable symbol table at scope {}",
+    LOG(DEBUG) << fmt::format("{}:{} stored in variable symbol table at scope {}, {}(${})",
                               id,
                               type->name(),
-                              scopes.size() - 1);
+                              scopes.size() - 1,
+                              localOffset + var->type->size(),
+                              FP);
   }
   else // Global Scope
   {
@@ -191,10 +193,12 @@ void SymbolTable::storeVariable(std::string id, std::shared_ptr<Type> type)
 
     // Insert in top level scope
     top->variables.emplace(id, var);
-    LOG(DEBUG) << fmt::format("{}:{} stored in variable symbol table at scope {}",
+    LOG(DEBUG) << fmt::format("{}:{} stored in variable symbol table at scope {}, {}(${})",
                               id,
                               type->name(),
-                              scopes.size() - 1);
+                              scopes.size() - 1,
+                              globalOffset - var->type->size(),
+                              GP);
   }
 }
 void SymbolTable::storeVariable(std::string id,

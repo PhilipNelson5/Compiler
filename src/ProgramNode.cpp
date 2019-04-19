@@ -91,6 +91,7 @@ void ProgramNode::emit()
 {
   std::cout << ".text\n";
   std::cout << "la $gp, GLOBAL_AREA\n";
+  std::cout << "or $fp, $sp, $0\n";
   std::cout << "j MAIN\n";
 
   // Constant Declarations
