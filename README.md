@@ -1,2 +1,2 @@
 # Compiler
-Compiles a PASCAL-like language to MIPS assembly
+Compiler for a PASCAL-like language to MIPS assembly
