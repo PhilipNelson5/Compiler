@@ -61,3 +61,6 @@ cmake_install.cmake
 
 # Ctags
 tags
+
+# YCM config
+.ycm_extra_conf.py
